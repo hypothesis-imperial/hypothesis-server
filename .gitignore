@@ -109,3 +109,8 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
