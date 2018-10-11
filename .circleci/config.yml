@@ -5,7 +5,14 @@ jobs:
       - image: circleci/python:3.6.4
     steps:
       - checkout
-      - run: ./test.sh
+      - run:
+          name: Flake8
+          command: |
+            sudo pip3 install flake8
+            flake8 .
+      - run:
+          name: Tests
+          command: ./test.sh
 
 workflows:
   version: 2
