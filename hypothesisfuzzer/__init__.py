@@ -1,2 +1,2 @@
-from .fuzzer import Fuzzer
+from .fuzzer import Fuzzer # noqa
 name = "hypothesisfuzzer"
