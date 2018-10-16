@@ -3,14 +3,7 @@ import json
 import os
 from git import Repo
 
-
-application = Flask(__name__)
-app = application
-
-
-@app.route('/')
-def hello():
-    return "Hello World!"
+app = Flask(__name__)
 
 
 @app.route('/webhook', methods=['POST'])
@@ -35,5 +28,10 @@ def get_commit_hash():
             })
 
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=80)
+class Fuzzer:
+
+    def __init__(self):
+        self.app = app
+
+    def run(self, **kwargs):
+        self.app.run(**kwargs)
