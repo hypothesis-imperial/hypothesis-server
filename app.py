@@ -26,7 +26,10 @@ def on_git_push():
     url = data["repository"]["html_url"]
     Repo.clone_from(url, "code")
     os.chdir("code")
-    output = subprocess.run(['pytest', '-m', 'hypothesis', "--hypothesis-show-statistics"], universal_newlines=True, stdout=subprocess.PIPE)
+    output = subprocess.run(['pytest', '-m', 'hypothesis',
+                            "--hypothesis-show-statistics"],
+                            universal_newlines=True,
+                            stdout=subprocess.PIPE)
     os.chdir("..")
     f = open("results.txt", "w+")
     f.write(output.stdout)
