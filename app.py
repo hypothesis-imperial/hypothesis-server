@@ -26,15 +26,21 @@ def on_git_push():
     url = data["repository"]["html_url"]
     Repo.clone_from(url, "code")
     os.chdir("code")
-    output = subprocess.run(['pytest', '-m', 'hypothesis',
-                            "--hypothesis-show-statistics"],
-                            universal_newlines=True,
-                            stdout=subprocess.PIPE)
+    for i in range(10):
+        output = subprocess.run(['pytest', '-m', 'hypothesis',
+                                "--hypothesis-show-statistics"],
+                                universal_newlines=True,
+                                stdout=subprocess.PIPE)
+        write_to_results(output)
+    return 'OK'
+
+
+def write_to_results(output):
     os.chdir("..")
-    f = open("results.txt", "w+")
+    f = open("results.txt", "a")
     f.write(output.stdout)
     f.close()
-    return 'OK'
+    os.chdir("code")
 
 
 @app.route('/get_commit_hash', methods=['GET'])
