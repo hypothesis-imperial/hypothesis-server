@@ -5,9 +5,14 @@ import subprocess
 import shutil
 import threading
 from git import Repo
+from flask_sqlalchemy import SQLAlchemy
+
 
 app = Flask(__name__)
-
+app.config['SQLALCHEMY_DATABASE_URI'] = \
+    os.environ.get('DATABASE_URL', 'sqlite:///data.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
+db = SQLAlchemy(app)
 current_fuzzing_task = None
 
 
@@ -35,8 +40,19 @@ def get_commit_hash():
     sha = repo.head.object.hexsha
 
     return jsonify({
-            "sha": sha
-            })
+        "sha": sha
+    })
+
+
+"""
+SAMPLE CODE FOR A TABLE
+"""
+# class UserModel(db.Model):
+#     __tablename__ = 'users'
+
+#     uid = db.Column(db.Integer, primary_key=True)
+#     username = db.Column(db.String(80))
+#     password = db.Column(db.String(80))
 
 
 class Fuzzer:
@@ -46,6 +62,7 @@ class Fuzzer:
 
     def run(self, **kwargs):
         self.app.run(**kwargs)
+        db.create_all()
 
 
 class AsyncFuzzingTask(threading.Thread):
@@ -67,3 +84,8 @@ class AsyncFuzzingTask(threading.Thread):
                                     stdout=subprocess.PIPE)
             write_to_results(output)
             print('Did one iteration!')
+
+
+"""
+FOR TESTING PURPOSE
+"""
