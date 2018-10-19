@@ -1,3 +1,4 @@
 gitpython
 pytest
 flask
+flask_sqlalchemy
