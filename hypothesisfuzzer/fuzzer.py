@@ -1,6 +1,9 @@
 from flask import Flask, request, jsonify
 import json
 import os
+import subprocess
+import shutil
+import threading
 from git import Repo
 from flask_sqlalchemy import SQLAlchemy
 
@@ -10,16 +13,23 @@ app.config['SQLALCHEMY_DATABASE_URI'] = \
     os.environ.get('DATABASE_URL', 'sqlite:///data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
 db = SQLAlchemy(app)
+current_fuzzing_task = None
 
 
 @app.route('/webhook', methods=['POST'])
 def on_git_push():
     if os.path.exists("code"):
-        os.rmdir("code")
+        shutil.rmtree("code", ignore_errors=True)
+
+    if os.path.isfile("results.txt"):
+        os.remove("results.txt")
     os.makedirs("code")
     data = json.loads(request.data)
     url = data["repository"]["html_url"]
     Repo.clone_from(url, "code")
+
+    current_fuzzing_task = AsyncFuzzingTask()
+    current_fuzzing_task.start()
 
     return 'OK'
 
@@ -55,7 +65,27 @@ class Fuzzer:
         db.create_all()
 
 
+class AsyncFuzzingTask(threading.Thread):
+
+    def __init__(self):
+        super(AsyncFuzzingTask, self).__init__()
+        pass
+
+    def run(self):
+        def write_to_results(output):
+            f = open("results.txt", "a")
+            f.write(output.stdout)
+            f.close()
+
+        for i in range(10):
+            output = subprocess.run(['pytest', '-m', 'hypothesis',
+                                    "--hypothesis-show-statistics"],
+                                    universal_newlines=True,
+                                    stdout=subprocess.PIPE)
+            write_to_results(output)
+            print('Did one iteration!')
+
+
 """
 FOR TESTING PURPOSE
 """
-# Fuzzer().run(port=5000)
