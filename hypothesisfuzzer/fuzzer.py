@@ -21,7 +21,7 @@ current_fuzzing_task = None
 def on_git_push():
 
     global current_fuzzing_task
-    if current_fuzzing_task is not None:
+    if current_fuzzing_task:
         current_fuzzing_task.running = False
         current_fuzzing_task.join()
 
