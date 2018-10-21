@@ -79,13 +79,8 @@ class AsyncFuzzingTask(threading.Thread):
 
         for i in range(10):
             output = subprocess.run(['pytest', '-m', 'hypothesis',
-                                    "--hypothesis-show-statistics"],
+                                     "--hypothesis-show-statistics"],
                                     universal_newlines=True,
                                     stdout=subprocess.PIPE)
             write_to_results(output)
             print('Did one iteration!')
-
-
-"""
-FOR TESTING PURPOSE
-"""
