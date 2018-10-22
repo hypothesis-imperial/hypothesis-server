@@ -34,6 +34,8 @@ def on_git_push():
     os.makedirs("code")
     data = json.loads(request.data)
     url = data["repository"]["html_url"]
+    if data["repository"]["private"] == "false":
+        return private_repo()
     Repo.clone_from(url, "code")
     os.chdir("code")
 
@@ -63,12 +65,28 @@ def fuzz():
 
 @app.route('/get_commit_hash', methods=['GET'])
 def get_commit_hash():
+    if not os.path.exists("code"):
+        return no_code_dir()
     repo = Repo("code")
     sha = repo.head.object.hexsha
 
     return jsonify({
         "sha": sha
     })
+
+
+@app.errorhandler(500)
+def private_repo():
+    msg = "Cannot access a private repository." +\
+            " Make public, or add SSH keys, and try again."
+    return jsonify(error=500, text=str(msg)), 500
+
+
+@app.errorhandler(500)
+def no_code_dir():
+    msg = "No git repository has been cloned yet." + \
+            " Please push code and/or configure your webhooks."
+    return jsonify(error=500, text=str(msg)), 500
 
 
 """
