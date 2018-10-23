@@ -21,6 +21,7 @@ setuptools.setup(
     install_requires=[
         'gitpython',
         'pytest',
-        'flask'
+        'flask',
+        'flask-sqlalchemy'
     ]
 )
