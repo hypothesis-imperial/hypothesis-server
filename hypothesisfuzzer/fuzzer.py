@@ -34,7 +34,7 @@ def on_git_push():
     os.makedirs("code")
     data = json.loads(request.data)
     url = data["repository"]["html_url"]
-    if data["repository"]["private"] == "false":
+    if data["repository"]["private"] == "true":
         return private_repo()
     Repo.clone_from(url, "code")
     os.chdir("code")
