@@ -18,6 +18,10 @@ class Fuzzer:
         self.app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
         self.db = SQLAlchemy(self.app)
         self.current_fuzzing_task = None
+        self.failing_tests = [
+            {"error": "x = 1042"},
+            {"error": "x = 1322"}
+        ]
 
     def run(self, **kwargs):
         self.db.create_all()
@@ -63,17 +67,19 @@ class Fuzzer:
 
             return 'OK'
 
-        @self.app.route('/dashboard', method=['GET'])
+        @self.app.route('/dashboard', methods=['GET'])
         def dashboard():
-            print("hi")
             app = Flask('dashboard')
             with app.app_context():
-                rendered = render_template('dashboard.html', \
-                    titie = "Dashboard", \
-                    errors = [{"error": "x = 1042"}, {"error:": "x = 1322"}])
+                rendered = render_template('dashboard.html',
+                                           title="Dashboard",
+                                           errors=self.failing_tests)
                 f = open("dashboard.html", "w")
                 f.write(rendered)
                 f.close()
+
+            return rendered
+            # return self.app.send_static_file('dashboard.html')
 
         def fuzz():
             def write_to_results(output):
@@ -83,7 +89,7 @@ class Fuzzer:
                 f.close()
                 os.chdir("code")
 
-            while getattr(current_fuzzing_task, "running", True):
+            while getattr(self.current_fuzzing_task, "running", True):
                 output = subprocess.run(['pytest', '-m', 'hypothesis',
                                         "--hypothesis-show-statistics"],
                                         universal_newlines=True,
