@@ -18,7 +18,7 @@ class Fuzzer:
         self.app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
         self.db = SQLAlchemy(self.app)
         self.current_fuzzing_task = None
-        self.failing_tests = [
+        self.failing_tests = [ # Dummy failures for now
             {"error": "x = 1042"},
             {"error": "x = 1322"}
         ]
@@ -80,23 +80,6 @@ class Fuzzer:
 
             return rendered
             # return self.app.send_static_file('dashboard.html')
-
-        def fuzz():
-            def write_to_results(output):
-                os.chdir("..")
-                f = open("results.txt", "a")
-                f.write(output.stdout)
-                f.close()
-                os.chdir("code")
-
-            while getattr(self.current_fuzzing_task, "running", True):
-                output = subprocess.run(['pytest', '-m', 'hypothesis',
-                                        "--hypothesis-show-statistics"],
-                                        universal_newlines=True,
-                                        stdout=subprocess.PIPE)
-                write_to_results(output)
-                print('Did one iteration!')
-            print('Stopped now')
 
         @self.app.route('/get_commit_hash', methods=['GET'])
         def get_commit_hash():
