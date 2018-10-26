@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import json
 import os
 import subprocess
@@ -6,7 +6,6 @@ import shutil
 import threading
 from git import Repo
 from flask_sqlalchemy import SQLAlchemy
-from flask import render_template
 
 
 class Fuzzer:
@@ -18,7 +17,7 @@ class Fuzzer:
         self.app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
         self.db = SQLAlchemy(self.app)
         self.current_fuzzing_task = None
-        self.failing_tests = [ # Dummy failures for now
+        self.failing_tests = [  # Dummy failures for now
             {"error": "x = 1042"},
             {"error": "x = 1322"}
         ]
@@ -70,15 +69,11 @@ class Fuzzer:
         @self.app.route('/dashboard', methods=['GET'])
         def dashboard():
             with self.app.app_context():
-                rendered = render_template('dashboard.html',
+                rendered = render_template('dashboard.template',
                                            title="Dashboard",
                                            errors=self.failing_tests)
-                f = open("dashboard.html", "w")
-                f.write(rendered)
-                f.close()
 
             return rendered
-            # return self.app.send_static_file('dashboard.html')
 
         @self.app.route('/get_commit_hash', methods=['GET'])
         def get_commit_hash():
@@ -91,9 +86,6 @@ class Fuzzer:
 
         self.app.run(**kwargs)
 
-
-fuzzer = Fuzzer()
-fuzzer.run(host='0.0.0.0', port=8080)
 
 """
 SAMPLE CODE FOR A TABLE
