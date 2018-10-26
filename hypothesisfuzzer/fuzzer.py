@@ -69,8 +69,7 @@ class Fuzzer:
 
         @self.app.route('/dashboard', methods=['GET'])
         def dashboard():
-            app = Flask('dashboard')
-            with app.app_context():
+            with self.app.app_context():
                 rendered = render_template('dashboard.html',
                                            title="Dashboard",
                                            errors=self.failing_tests)
