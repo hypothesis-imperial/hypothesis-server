@@ -6,6 +6,7 @@ import shutil
 import threading
 from git import Repo
 from flask_sqlalchemy import SQLAlchemy
+from flask import render_template
 
 
 class Fuzzer:
@@ -48,6 +49,18 @@ class Fuzzer:
 
             return 'OK'
 
+        @self.app.route('/dashboard', method=['GET'])
+        def dashboard():
+            print("hi")
+            app = Flask('dashboard')
+            with app.app_context():
+                rendered = render_template('dashboard.html', \
+                    titie = "Dashboard", \
+                    errors = [{"error": "x = 1042"}, {"error:": "x = 1322"}])
+                f = open("dashboard.html", "w")
+                f.write(rendered)
+                f.close()
+
         def fuzz():
             def write_to_results(output):
                 os.chdir("..")
@@ -74,6 +87,9 @@ class Fuzzer:
                 "sha": sha
             })
 
+
+fuzzer = Fuzzer()
+fuzzer.run(host='0.0.0.0', port=8080)
 
 """
 SAMPLE CODE FOR A TABLE
