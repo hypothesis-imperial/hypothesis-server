@@ -1,0 +1,2 @@
+# Include the html templates
+include hypothesisfuzzer/templates
