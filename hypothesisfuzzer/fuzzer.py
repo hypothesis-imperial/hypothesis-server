@@ -8,67 +8,71 @@ from git import Repo
 from flask_sqlalchemy import SQLAlchemy
 
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = \
-    os.environ.get('DATABASE_URL', 'sqlite:///data.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
-db = SQLAlchemy(app)
+class Fuzzer:
 
-current_fuzzing_task = None
+    def __init__(self):
+        self.app = Flask(__name__)
+        self.app.config['SQLALCHEMY_DATABASE_URI'] = \
+            os.environ.get('DATABASE_URL', 'sqlite:///data.db')
+        self.app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
+        self.db = SQLAlchemy(self.app)
+        self.current_fuzzing_task = None
 
+    def run(self, **kwargs):
+        self.app.run(**kwargs)
+        self.db.create_all()
 
-@app.route('/webhook', methods=['POST'])
-def on_git_push():
+        @self.app.route('/webhook', methods=['POST'])
+        def on_git_push():
 
-    global current_fuzzing_task
-    if current_fuzzing_task:
-        current_fuzzing_task.running = False
-        current_fuzzing_task.join()
+            global current_fuzzing_task
 
-    if os.path.exists("code"):
-        shutil.rmtree("code", ignore_errors=True)
+            if current_fuzzing_task:
+                current_fuzzing_task.running = False
+                current_fuzzing_task.join()
 
-    if os.path.isfile("results.txt"):
-        os.remove("results.txt")
+            if os.path.exists("code"):
+                shutil.rmtree("code", ignore_errors=True)
 
-    os.makedirs("code")
-    data = json.loads(request.data)
-    url = data["repository"]["html_url"]
-    Repo.clone_from(url, "code")
-    os.chdir("code")
+            if os.path.isfile("results.txt"):
+                os.remove("results.txt")
 
-    current_fuzzing_task = threading.Thread(target=fuzz, args=())
-    current_fuzzing_task.start()
+            os.makedirs("code")
+            data = json.loads(request.data)
+            url = data["repository"]["html_url"]
+            Repo.clone_from(url, "code")
+            os.chdir("code")
 
-    return 'OK'
+            current_fuzzing_task = threading.Thread(target=fuzz, args=())
+            current_fuzzing_task.start()
 
+            return 'OK'
 
-def fuzz():
-    def write_to_results(output):
-        os.chdir("..")
-        f = open("results.txt", "a")
-        f.write(output.stdout)
-        f.close()
-        os.chdir("code")
+        def fuzz():
+            def write_to_results(output):
+                os.chdir("..")
+                f = open("results.txt", "a")
+                f.write(output.stdout)
+                f.close()
+                os.chdir("code")
 
-    while getattr(current_fuzzing_task, "running", True):
-        output = subprocess.run(['pytest', '-m', 'hypothesis',
-                                "--hypothesis-show-statistics"],
-                                universal_newlines=True,
-                                stdout=subprocess.PIPE)
-        write_to_results(output)
-        print('Did one iteration!')
-    print('Stopped now')
+            while getattr(current_fuzzing_task, "running", True):
+                output = subprocess.run(['pytest', '-m', 'hypothesis',
+                                        "--hypothesis-show-statistics"],
+                                        universal_newlines=True,
+                                        stdout=subprocess.PIPE)
+                write_to_results(output)
+                print('Did one iteration!')
+            print('Stopped now')
 
+        @self.app.route('/get_commit_hash', methods=['GET'])
+        def get_commit_hash():
+            repo = Repo("code")
+            sha = repo.head.object.hexsha
 
-@app.route('/get_commit_hash', methods=['GET'])
-def get_commit_hash():
-    repo = Repo("code")
-    sha = repo.head.object.hexsha
-
-    return jsonify({
-        "sha": sha
-    })
+            return jsonify({
+                "sha": sha
+            })
 
 
 """
@@ -80,13 +84,3 @@ SAMPLE CODE FOR A TABLE
 #     uid = db.Column(db.Integer, primary_key=True)
 #     username = db.Column(db.String(80))
 #     password = db.Column(db.String(80))
-
-
-class Fuzzer:
-
-    def __init__(self):
-        self.app = app
-
-    def run(self, **kwargs):
-        self.app.run(**kwargs)
-        db.create_all()
