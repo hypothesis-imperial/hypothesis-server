@@ -20,17 +20,14 @@ class Fuzzer:
         self.current_fuzzing_task = None
 
     def run(self, **kwargs):
-        self.app.run(**kwargs)
         self.db.create_all()
 
         @self.app.route('/webhook', methods=['POST'])
         def on_git_push():
 
-            global current_fuzzing_task
-
-            if current_fuzzing_task:
-                current_fuzzing_task.running = False
-                current_fuzzing_task.join()
+            if self.current_fuzzing_task:
+                self.current_fuzzing_task.running = False
+                self.current_fuzzing_task.join()
 
             if os.path.exists("code"):
                 shutil.rmtree("code", ignore_errors=True)
@@ -44,8 +41,25 @@ class Fuzzer:
             Repo.clone_from(url, "code")
             os.chdir("code")
 
-            current_fuzzing_task = threading.Thread(target=fuzz, args=())
-            current_fuzzing_task.start()
+            def fuzz():
+                def write_to_results(output):
+                    os.chdir("..")
+                    f = open("results.txt", "a")
+                    f.write(output.stdout)
+                    f.close()
+                    os.chdir("code")
+
+                while getattr(self.current_fuzzing_task, "running", True):
+                    output = subprocess.run(['pytest', '-m', 'hypothesis',
+                                            "--hypothesis-show-statistics"],
+                                            universal_newlines=True,
+                                            stdout=subprocess.PIPE)
+                    write_to_results(output)
+                    print('Did one iteration!')
+                print('Stopped now')
+
+            self.current_fuzzing_task = threading.Thread(target=fuzz, args=())
+            self.current_fuzzing_task.start()
 
             return 'OK'
 
@@ -86,6 +100,8 @@ class Fuzzer:
             return jsonify({
                 "sha": sha
             })
+
+        self.app.run(**kwargs)
 
 
 fuzzer = Fuzzer()
