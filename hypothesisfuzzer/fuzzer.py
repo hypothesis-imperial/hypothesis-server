@@ -76,14 +76,14 @@ def get_commit_hash():
 
 
 @app.errorhandler(500)
-def private_repo():
+def private_repo_error():
     msg = "Cannot access a private repository." +\
             " Make public, or add SSH keys, and try again."
     return jsonify(error=500, text=str(msg)), 500
 
 
 @app.errorhandler(500)
-def no_code_dir():
+def no_code_dir_error():
     msg = "No git repository has been cloned yet." + \
             " Please push code and/or configure your webhooks."
     return jsonify(error=500, text=str(msg)), 500
