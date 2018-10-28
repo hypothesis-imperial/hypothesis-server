@@ -35,7 +35,7 @@ def on_git_push():
     data = json.loads(request.data)
     url = data["repository"]["html_url"]
     if data["repository"]["private"] == "true":
-        return private_repo()
+        return private_repo_error()
     Repo.clone_from(url, "code")
     os.chdir("code")
 
@@ -66,7 +66,7 @@ def fuzz():
 @app.route('/get_commit_hash', methods=['GET'])
 def get_commit_hash():
     if not os.path.exists("code"):
-        return no_code_dir()
+        return no_code_dir_error()
     repo = Repo("code")
     sha = repo.head.object.hexsha
 
