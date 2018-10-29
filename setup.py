@@ -23,6 +23,7 @@ setuptools.setup(
         'pytest',
         'flask',
         'flask-sqlalchemy'
+        'pyyaml'
     ],
     include_package_data=True
 )
