@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 import json
 import os
-import sys
 import subprocess
 import shutil
 import virtualenv
@@ -46,7 +45,8 @@ class Fuzzer:
             Repo.clone_from(url, "code")
             os.chdir("code")
             virtualenv.create_environment('venv')
-            subprocess.run(['venv/bin/pip', 'install', '-r', 'requirements.txt'])
+            subprocess.run(['venv/bin/pip',
+                            'install', '-r', 'requirements.txt'])
 
             def fuzz():
                 def write_to_results(output):
@@ -90,8 +90,7 @@ class Fuzzer:
 
         self.app.run(**kwargs)
 
-fuzzer = Fuzzer()
-fuzzer.run(host='0.0.0.0', port=5000)
+
 """
 SAMPLE CODE FOR A TABLE
 """
