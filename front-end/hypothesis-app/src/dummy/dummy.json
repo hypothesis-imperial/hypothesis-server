@@ -1,3 +1,21 @@
-{
-  "error:" : "x = 1042"
+{"data": [
+  {
+    "id": 1,
+    "case": "case 1",
+    "line": 10,
+    "error" : "x = 1042"
+  },
+  {
+    "id": 2,
+    "case": "case 3",
+    "line": 12,
+    "error" : "x = 1322"
+  },
+  {
+    "id": 3,
+    "case": "case 4",
+    "line": 23,
+    "error" : "y = 1042"
+  }
+  ]
 }
