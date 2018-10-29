@@ -25,10 +25,9 @@ class Fuzzer:
         try:
             with open(config_path) as file:
                 self.config = yaml.load(file)
-        except FileNotFoundError: 
-            raise FileNotFoundError('config.yml file not found.' + \
-                ' Please create one, or specify config path.')
-
+        except FileNotFoundError:
+            raise FileNotFoundError('config.yml file not found. ' +
+                                    'Create one or specify config path.')
 
     def run(self, **kwargs):
         self.db.create_all()
