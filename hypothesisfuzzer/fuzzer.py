@@ -41,6 +41,9 @@ class Fuzzer:
 
             os.makedirs("code")
             data = json.loads(request.data)
+
+            if data["repository"]["private"] == "true":
+                return private_repo_error()
             url = data["repository"]["html_url"]
             Repo.clone_from(url, "code")
             os.chdir("code")
@@ -81,6 +84,8 @@ class Fuzzer:
 
         @self.app.route('/get_commit_hash', methods=['GET'])
         def get_commit_hash():
+            if not os.path.exists("code"):
+                return no_code_dir_error()
             repo = Repo("code")
             sha = repo.head.object.hexsha
 
@@ -88,6 +93,19 @@ class Fuzzer:
                 "sha": sha
             })
 
+        @self.app.errorhandler(500)
+        def private_repo_error():
+            msg = "Cannot access a private repository." +\
+                    " Make public, or add SSH keys, and try again."
+
+            return jsonify(error=500, text=str(msg)), 500
+
+        @self.app.errorhandler(500)
+        def no_code_dir_error():
+            msg = "No git repository has been cloned yet." + \
+                    " Please push code and/or configure your webhooks."
+
+            return jsonify(error=500, text=str(msg)), 500
         self.app.run(**kwargs)
 
 
