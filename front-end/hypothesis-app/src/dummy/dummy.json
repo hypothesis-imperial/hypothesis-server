@@ -10,12 +10,6 @@
     "case": "case 3",
     "line": 12,
     "error" : "x = 1322"
-  },
-  {
-    "id": 3,
-    "case": "case 4",
-    "line": 23,
-    "error" : "y = 1042"
   }
   ]
 }

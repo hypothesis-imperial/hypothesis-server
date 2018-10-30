@@ -1,42 +1,61 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import data from './dummy/dummy.json';
+import result from './dummy/dummy.json';
+import axios from 'axios';
+import TextReader from './text_reader.js';
+//import data from './dummy/data.txt';
 
 class App extends Component {
+
+  getData() {
+    axios.get('http://0.0.0.0:80/')
+      .then(response => console.log(response))
+  }
 
   constructor(props) {
     super(props);
 
     this.state = {
-       data2: data
+      //data1: data,
+      data2: result
     }
   }
 
   render() {
 
-    // var __template = require('./templates/dashboard.template');
-
-    //var data = require('./dummy/dummy.json');
-    // var item = data.map((case) =>
-    //   <li>{case}</li>
-    // );
+    var data = require('./dummy/data.txt');
+    //this.readTextFile(file);
 
     var test = JSON.stringify(this.state.data2);
 
-    console.log(data);
+    //console.log(data);
+    //console.log(result);
+    //this.getData();
+
+  //   render: function(){
+  //   return (
+  //     <div>
+  //       <ul>
+  //         {
+  //          this.state.data.map(function(item, i){
+  //            console.log('test');
+  //            <li>Test</li>
+  //          })
+  //        }
+  //       </ul>
+  //     </div>
+  //   )
+  // }
 
     const render = (
 
        <div className="App">
          <header className="App-header">
            <img src={logo} className="App-logo" alt="logo" />
-           <p>
-             {test}
-           </p>
-           <ul>
-            <li>test1</li>
-           </ul>
+           <TextReader
+		         txt={data}
+	         />
          </header>
        </div>
     )
