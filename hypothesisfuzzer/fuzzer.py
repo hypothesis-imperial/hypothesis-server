@@ -25,6 +25,11 @@ class Fuzzer:
 
     def run(self, **kwargs):
         self.db.create_all()
+        self._setup_routes()
+
+        self.app.run(**kwargs)
+
+    def _setup_routes(self):
 
         @self.app.route('/webhook', methods=['POST'])
         def on_git_push():
@@ -106,7 +111,6 @@ class Fuzzer:
                     " Please push code and/or configure your webhooks."
 
             return jsonify(error=500, text=str(msg)), 500
-        self.app.run(**kwargs)
 
 
 """
