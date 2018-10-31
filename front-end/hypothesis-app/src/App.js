@@ -10,8 +10,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      //data1: data,
-      data2: result
+      data: result
     }
   }
 
@@ -19,22 +18,24 @@ class App extends Component {
 
     var data = require('./dummy/data.txt');
 
-    var test = JSON.stringify(this.state.data2);
-
+    var test = JSON.stringify(this.state.data);
 
     const render = (
 
        <div className="App">
          <header className="App-header">
-           <TextReader
-		         txt={data}
-	         />
          </header>
+         <TextReader
+           txt={data}
+         />
        </div>
+
     )
 
     return render;
+
   }
+
 }
 
 export default App;

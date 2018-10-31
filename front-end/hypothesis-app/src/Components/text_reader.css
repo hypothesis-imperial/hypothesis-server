@@ -1,3 +1,28 @@
-.Variable li {
-  list-style-type: none;
+.Test {
+  width: 90%;
+  margin: auto;
+  padding: 1%;
+  border-style: solid;
+  border-width: 1px;
+}
+
+.Test span {
+  display: block;
+  padding: 1%;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.Test table {
+  width: 100%;
+}
+
+.Test table tr td {
+  vertical-align: top;
+}
+
+.Test table tr td:first-child {
+  width: 20%;
+  text-align: right;
+  padding-right: 1%;
 }
