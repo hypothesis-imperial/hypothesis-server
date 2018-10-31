@@ -3,8 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import result from './dummy/dummy.json';
 import axios from 'axios';
-import TextReader from './text_reader.js';
-//import data from './dummy/data.txt';
+import TextReader from './Components/text_reader.js';
 
 class App extends Component {
 
@@ -52,7 +51,6 @@ class App extends Component {
 
        <div className="App">
          <header className="App-header">
-           <img src={logo} className="App-logo" alt="logo" />
            <TextReader
 		         txt={data}
 	         />
