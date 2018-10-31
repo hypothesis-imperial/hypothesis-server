@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './text_reader.css';
 
 class TextReader extends Component {
 
@@ -71,7 +72,7 @@ class TextReader extends Component {
 	render() {
 		return (
 			<div>
-				<p>There is an error: </p>
+				<p className="Error-message">There is an error: </p>
 				<ul>
 					{this.listVariables()}
 				</ul>

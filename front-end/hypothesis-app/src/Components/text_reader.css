@@ -1,3 +1,7 @@
 .Variable li {
   list-style-type: none;
 }
+
+.Error-message {
+  font-weight: bold;
+}
