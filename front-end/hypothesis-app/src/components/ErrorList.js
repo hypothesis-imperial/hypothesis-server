@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
-import './text_reader.css';
+import './ErrorList.css';
 
-class TextReader extends Component {
+class ErrorList extends Component {
 
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			text: "",
-			name: "",
-			value: "",
-			error_type: "",
-			error_name: "",
-			traceback: "",
-			variables: [],
+			testName: "",
+			errorList: [],
 		};
 	}
 
@@ -32,12 +28,8 @@ class TextReader extends Component {
 					var content = JSON.parse(text);
 					this.setState({
 						text: text,
-						name: JSON.stringify(content.Variables[0]['Variable name']),
-						value: JSON.stringify(content.Variables[0]['variable value']),
-						error_type: JSON.stringify(content['Error type']),
-						error_name: JSON.stringify(content['Error name']),
-						traceback: JSON.stringify(content.Traceback),
-						variables: content.Variables,
+						testName: "testExample",
+						errorList: content.errors,
 					});
 				}
 			}
@@ -45,21 +37,33 @@ class TextReader extends Component {
 		rawFile.send(null);
 	};
 
-	listVariables() {
-		console.log(JSON.stringify(this.state.variables));
-		var vars = this.state.variables;
-		var varsNo = vars.length;
-		var i = 0;
-		console.log(varsNo);
+	listErrors() {
+		var errors = this.state.errorList;
+		var i = 0;	//counter for errors
 		return (
 			<div>
-	      {vars.map(variable => {
-	        var varName = JSON.stringify(variable['Variable name']);
-	        var varVal = JSON.stringify(variable['variable value']);
-	        i++;
+				{errors.map(e => {
+					i++;
+					return (this.listVariables(e, i));
+				})}
+			</div>
+		);
+	}
+
+	listVariables(error, i) {
+		var varName = "";
+		var varVal = "";
+		var j = 0;	//counter for variables
+		return (
+			<div>
+				<p>Error {i}</p>
+	      {error.map(variable => {
+	        varName = JSON.stringify(variable['Variable name']);
+	        varVal = JSON.stringify(variable['variable value']);
+	        j++;
 	        return (
 	          <div className="Test">
-	            <span>Test case {i}</span>
+	            <span>Variable {j}</span>
 	            <table>
 	              <tr>
 	                <td>Variable name</td>
@@ -92,11 +96,11 @@ class TextReader extends Component {
 	render() {
 		return (
 			<div>
-				<h1>Test failures</h1>
-				{this.listVariables()}
+				<h1 style={{ textAlign:'center' }}>Test Name: {this.state.testName}</h1>
+				{this.listErrors()}
 			</div>
 		);
 	}
 }
 
-export default TextReader;
+export default ErrorList;

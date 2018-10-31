@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import result from './dummy/dummy.json';
-import TextReader from './Components/text_reader.js';
+import ErrorList from './components/ErrorList.js';
 
 class App extends Component {
 
@@ -15,14 +15,14 @@ class App extends Component {
 
   render() {
 
-    var data = require('./dummy/data.txt');
+    var data = require('./dummy/example.txt');
 
     const render = (
        <div className="App">
          <header className="App-header">
          </header>
          <div className="Container">
-           <TextReader
+           <ErrorList
              txt={data}
            />
          </div>
