@@ -52,30 +52,48 @@ class TextReader extends Component {
 		var i = 0;
 		console.log(varsNo);
 		return (
-      <ul>
-        {vars.map(variable => {
-					var varName = JSON.stringify(variable['Variable name']);
-				 	var varVal = JSON.stringify(variable['variable value']);
-					i++;
-          return (
-						<div className="Variable">
-							<p>Test case {i}: </p>
-							<li>{varName}</li>
-							<li>{varVal}</li>
-						</div>
-					);
-        })}
-      </ul>
+			<div>
+	      {vars.map(variable => {
+	        var varName = JSON.stringify(variable['Variable name']);
+	        var varVal = JSON.stringify(variable['variable value']);
+	        i++;
+	        return (
+	          <div className="Test">
+	            <span>Test case {i}</span>
+	            <table>
+	              <tr>
+	                <td>Variable name</td>
+	                <td>{varName}</td>
+	              </tr>
+	              <tr>
+	                <td>Variable value</td>
+	                <td>{varVal}</td>
+	              </tr>
+	              <tr>
+	                <td>Optional field</td>
+	                <td>field</td>
+	              </tr>
+	              <tr>
+	                <td>Optional long field</td>
+	                <td>lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum</td>
+	              </tr>
+	              <tr>
+	                <td>Optional long long long long long long long long long long label</td>
+	                <td>lorem ipsum</td>
+	              </tr>
+	            </table>
+	          </div>
+	        );
+	      })}
+			</div>
     );
 	}
 
 	render() {
 		return (
 			<div>
-				<p className="Error-message">There is an error: </p>
-				<ul>
-					{this.listVariables()}
-				</ul>
+				<h1>Test failures</h1>
+				{this.listVariables()}
 			</div>
 		);
 	}

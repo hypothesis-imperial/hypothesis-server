@@ -9,8 +9,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      //data1: data,
-      data2: result
+      data: result
     }
   }
 
@@ -20,14 +19,21 @@ class App extends Component {
 
     const render = (
        <div className="App">
-         <TextReader
-	         txt={data}
-         />
+         <header className="App-header">
+         </header>
+         <div className="Container">
+           <TextReader
+             txt={data}
+           />
+         </div>
        </div>
+
     )
 
     return render;
+
   }
+
 }
 
 export default App;
