@@ -57,7 +57,7 @@ class TextReader extends Component {
 				 	var varVal = JSON.stringify(variable['variable value']);
 					i++;
           return (
-						<div>
+						<div className="Variable">
 							<p>Test case {i}: </p>
 							<li>{varName}</li>
 							<li>{varVal}</li>
@@ -70,9 +70,12 @@ class TextReader extends Component {
 
 	render() {
 		return (
+			<div>
+				<p>There is an error: </p>
 				<ul>
 					{this.listVariables()}
 				</ul>
+			</div>
 		);
 	}
 }
