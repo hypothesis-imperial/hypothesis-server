@@ -64,6 +64,7 @@ class TextReader extends Component {
 
 	render() {
 		return (
+      This is an error
 			<div>
 				<ul>
 					{this.listVariables()}
