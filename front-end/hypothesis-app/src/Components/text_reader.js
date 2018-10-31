@@ -7,11 +7,12 @@ class TextReader extends Component {
 
 		this.state = {
 			text: "",
-			variables: "",
+			name: "",
 			value: "",
 			error_type: "",
 			error_name: "",
 			traceback: "",
+			variables: [],
 		};
 	}
 
@@ -25,16 +26,17 @@ class TextReader extends Component {
 		rawFile.onreadystatechange = () => {
 			if (rawFile.readyState === 4) {
 				if (rawFile.status === 200 || rawFile.status == 0) {
-					console.log(rawFile);
+					//console.log(rawFile);
 					var text = rawFile.responseText;
 					var content = JSON.parse(text);
 					this.setState({
 						text: text,
-						variables: JSON.stringify(content.Variables[0]['Variable name']),
+						name: JSON.stringify(content.Variables[0]['Variable name']),
 						value: JSON.stringify(content.Variables[0]['variable value']),
 						error_type: JSON.stringify(content['Error type']),
 						error_name: JSON.stringify(content['Error name']),
 						traceback: JSON.stringify(content.Traceback),
+						variables: content.Variables,
 					});
 				}
 			}
@@ -42,12 +44,29 @@ class TextReader extends Component {
 		rawFile.send(null);
 	};
 
+	listVariables() {
+		//console.log(JSON.stringify(this.state.variables));
+		var vars = this.state.variables;
+		var varsNo = vars.length;
+		//console.log(varsNo);
+		for (var i = 0; i < varsNo; i++) {
+			//alert(vars[i]);
+			var varName = JSON.stringify(vars[i]['Variable name']);
+			var varVal = JSON.stringify(vars[i]['variable value']);
+			return (
+				<div>
+					<li>Variable name: {varName}</li>
+					<li>Variable value: {varVal}</li>
+				</div>
+			)
+		}
+	}
+
 	render() {
 		return (
 			<div>
 				<ul>
-					<li>Variable name: {this.state.variables}</li>
-					<li>Variable value: {this.state.value}</li>
+					{this.listVariables()}
 				</ul>
 			</div>
 		);
