@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import 'text_reader.css'
 
 class TextReader extends Component {
 
@@ -25,8 +26,7 @@ class TextReader extends Component {
 		rawFile.open("GET", file, false);
 		rawFile.onreadystatechange = () => {
 			if (rawFile.readyState === 4) {
-				if (rawFile.status === 200 || rawFile.status == 0) {
-					//console.log(rawFile);
+				if (rawFile.status === 200 || rawFile.status === 0) {
 					var text = rawFile.responseText;
 					var content = JSON.parse(text);
 					this.setState({
@@ -48,27 +48,49 @@ class TextReader extends Component {
 		//console.log(JSON.stringify(this.state.variables));
 		var vars = this.state.variables;
 		var varsNo = vars.length;
-		//console.log(varsNo);
-		for (var i = 0; i < varsNo; i++) {
-			//alert(vars[i]);
-			var varName = JSON.stringify(vars[i]['Variable name']);
-			var varVal = JSON.stringify(vars[i]['variable value']);
-			return (
-				<div>
-					<li>Variable name: {varName}</li>
-					<li>Variable value: {varVal}</li>
-				</div>
-			)
-		}
+		var i = 0;
+		console.log(varsNo);
+		return (
+      {vars.map(variable => {
+        var varName = JSON.stringify(variable['Variable name']);
+        var varVal = JSON.stringify(variable['variable value']);
+        i++;
+        return (
+          <div className="Test">
+            <span>Test case {i}</span>
+            <table>
+              <tr>
+                <td>Variable name</td>
+                <td>{varName}</td>
+              </tr>
+              <tr>
+                <td>Variable value</td>
+                <td>{varVal}</td>
+              </tr>
+              <tr>
+                <td>Optional field</td>
+                <td>field</td>
+              </tr>
+              <tr>
+                <td>Optional long field</td>
+                <td>lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum</td>
+              </tr>
+              <tr>
+                <td>Optional long long long long long long long long long long label</td>
+                <td>lorem ipsum</td>
+              </tr>
+            </table>
+          </div>
+        );
+      })}
+    );
 	}
 
 	render() {
 		return (
-      This is an error
 			<div>
-				<ul>
-					{this.listVariables()}
-				</ul>
+				<h1>Test failures</h1>
+				{this.listVariables()}
 			</div>
 		);
 	}

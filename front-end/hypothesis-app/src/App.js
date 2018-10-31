@@ -16,50 +16,32 @@ class App extends Component {
     super(props);
 
     this.state = {
-      //data1: data,
-      data2: result
+      data: result
     }
   }
 
   render() {
 
     var data = require('./dummy/data.txt');
-    //this.readTextFile(file);
 
-    var test = JSON.stringify(this.state.data2);
-
-    //console.log(data);
-    //console.log(result);
-    //this.getData();
-
-  //   render: function(){
-  //   return (
-  //     <div>
-  //       <ul>
-  //         {
-  //          this.state.data.map(function(item, i){
-  //            console.log('test');
-  //            <li>Test</li>
-  //          })
-  //        }
-  //       </ul>
-  //     </div>
-  //   )
-  // }
+    var test = JSON.stringify(this.state.data);
 
     const render = (
 
        <div className="App">
          <header className="App-header">
-           <TextReader
-		         txt={data}
-	         />
          </header>
+         <TextReader
+           txt={data}
+         />
        </div>
+
     )
 
     return render;
+
   }
+
 }
 
 export default App;
