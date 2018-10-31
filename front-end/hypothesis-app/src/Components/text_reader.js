@@ -27,6 +27,7 @@ class TextReader extends Component {
 		rawFile.onreadystatechange = () => {
 			if (rawFile.readyState === 4) {
 				if (rawFile.status === 200 || rawFile.status === 0) {
+					//console.log(rawFile);
 					var text = rawFile.responseText;
 					var content = JSON.parse(text);
 					this.setState({
@@ -45,7 +46,7 @@ class TextReader extends Component {
 	};
 
 	listVariables() {
-		//console.log(JSON.stringify(this.state.variables));
+		console.log(JSON.stringify(this.state.variables));
 		var vars = this.state.variables;
 		var varsNo = vars.length;
 		var i = 0;
