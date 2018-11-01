@@ -3,6 +3,7 @@ import json
 import os
 import subprocess
 import shutil
+import virtualenv
 import threading
 import yaml
 from git import Repo
@@ -53,6 +54,9 @@ class Fuzzer:
             url = data["repository"]["html_url"]
             Repo.clone_from(url, "code")
             os.chdir("code")
+            virtualenv.create_environment('venv')
+            subprocess.run(['venv/bin/pip',
+                            'install', '-r', 'requirements.txt'])
 
             if self.current_fuzzing_task:
                 self.current_fuzzing_task.running = False
