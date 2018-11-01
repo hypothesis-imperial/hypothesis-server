@@ -52,25 +52,17 @@ class Fuzzer:
                             'install', '-r', 'requirements.txt'])
 
             def fuzz():
-                def write_to_results(output):
-                    os.chdir("..")
-                    f = open("results.txt", "a")
-                    f.write(output.stdout)
-                    f.close()
-                    os.chdir("code")
 
                 while getattr(self.current_fuzzing_task, "running", True):
-                    output = subprocess.run(['pytest'],
-                                            universal_newlines=True,
-                                            stdout=subprocess.PIPE)
-                    write_to_results(output)
+                    subprocess.run(['pytest'],
+                                   universal_newlines=True,
+                                   stdout=subprocess.PIPE)
                     print('Did one iteration!')
-                os.chdir("..")
                 print('Stopped now')
 
-            os.chdir("..")
             self.current_fuzzing_task = threading.Thread(target=fuzz, args=())
             self.current_fuzzing_task.start()
+            os.chdir("..")
 
             return 'OK'
 
