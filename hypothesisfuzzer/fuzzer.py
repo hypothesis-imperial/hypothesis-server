@@ -65,6 +65,7 @@ class Fuzzer:
                                             stdout=subprocess.PIPE)
                     write_to_results(output)
                     print('Did one iteration!')
+                os.chdir("..")
                 print('Stopped now')
 
             self.current_fuzzing_task = threading.Thread(target=fuzz, args=())
@@ -91,6 +92,13 @@ class Fuzzer:
             return jsonify({
                 "sha": sha
             })
+
+        @self.app.route('/get_errors', methods=['GET'])
+        def get_errors():
+            if not os.path.exists("code"):
+                return no_code_dir_error()
+            with open('code/data.txt', 'r') as file_data:
+                return jsonify(json.load(file_data))
 
         @self.app.errorhandler(500)
         def private_repo_error():
