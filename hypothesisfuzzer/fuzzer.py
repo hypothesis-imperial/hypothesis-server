@@ -60,8 +60,7 @@ class Fuzzer:
                     os.chdir("code")
 
                 while getattr(self.current_fuzzing_task, "running", True):
-                    output = subprocess.run(['pytest', '-m', 'hypothesis',
-                                            "--hypothesis-show-statistics"],
+                    output = subprocess.run(['pytest'],
                                             universal_newlines=True,
                                             stdout=subprocess.PIPE)
                     write_to_results(output)
