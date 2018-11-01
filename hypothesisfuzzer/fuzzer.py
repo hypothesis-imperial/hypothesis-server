@@ -31,9 +31,14 @@ class Fuzzer:
         @self.app.route('/webhook', methods=['POST'])
         def on_git_push():
 
-            if self.current_fuzzing_task:
-                self.current_fuzzing_task.running = False
-                self.current_fuzzing_task.join()
+            data = json.loads(request.data)
+
+            # Check if repo is the same name as the one set in config
+            try:
+                if data["repository"]["name"] != self.config['repo_name']:
+                    return
+            except KeyError:
+                pass
 
             if os.path.exists("code"):
                 shutil.rmtree("code", ignore_errors=True)
@@ -42,13 +47,16 @@ class Fuzzer:
                 os.remove("results.txt")
 
             os.makedirs("code")
-            data = json.loads(request.data)
 
             if data["repository"]["private"] == "true":
                 return private_repo_error()
             url = data["repository"]["html_url"]
             Repo.clone_from(url, "code")
             os.chdir("code")
+
+            if self.current_fuzzing_task:
+                self.current_fuzzing_task.running = False
+                self.current_fuzzing_task.join()
 
             def fuzz():
                 def write_to_results(output):
