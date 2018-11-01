@@ -58,8 +58,10 @@ class Fuzzer:
                                    universal_newlines=True,
                                    stdout=subprocess.PIPE)
                     print('Did one iteration!')
+                os.chdir("..")
                 print('Stopped now')
 
+            os.chdir("..")
             self.current_fuzzing_task = threading.Thread(target=fuzz, args=())
             self.current_fuzzing_task.start()
             os.chdir("..")
