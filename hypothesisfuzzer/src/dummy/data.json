@@ -1,0 +1,27 @@
+{
+
+    "test_name" : "somename",
+    "errors": [
+      {
+        [
+          {
+              "Variable name": "x",
+              "variable value": "9"
+          },
+          {
+
+              "Variable name": "y",
+              "variable value": "2"
+          }
+        ]
+      },
+      {
+        [
+          {
+              "Variable name": "x",
+              "variable value": "0"
+          }
+        ]
+      }
+    ]
+}
