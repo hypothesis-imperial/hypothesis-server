@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 import json
 import os
 import subprocess
@@ -13,6 +14,7 @@ class Fuzzer:
 
     def __init__(self):
         self.app = Flask(__name__)
+        CORS(self.app)
         self.app.config['SQLALCHEMY_DATABASE_URI'] = \
             os.environ.get('DATABASE_URL', 'sqlite:///data.db')
         self.app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
