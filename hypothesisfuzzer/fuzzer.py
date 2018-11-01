@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, send_from_directory
 import json
 import os
 import subprocess
@@ -11,7 +11,7 @@ from flask_sqlalchemy import SQLAlchemy
 class Fuzzer:
 
     def __init__(self):
-        self.app = Flask(__name__)
+        self.app = Flask(__name__, static_url_path='/build')
         self.app.config['SQLALCHEMY_DATABASE_URI'] = \
             os.environ.get('DATABASE_URL', 'sqlite:///data.db')
         self.app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
@@ -88,6 +88,10 @@ class Fuzzer:
             return jsonify({
                 "sha": sha
             })
+
+        @self.app.route('/<path:path>')
+        def serve_static(path):
+            return send_from_directory('build', path)
 
         @self.app.errorhandler(500)
         def private_repo_error():
