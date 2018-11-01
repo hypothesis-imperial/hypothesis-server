@@ -90,7 +90,7 @@ class Fuzzer:
         def get_errors():
             if not os.path.exists("code"):
                 return no_code_dir_error()
-            with open('code/data.txt', 'r') as file_data:
+            with open('data.txt', 'r') as file_data:
                 return jsonify(json.load(file_data))
 
         @self.app.errorhandler(500)
