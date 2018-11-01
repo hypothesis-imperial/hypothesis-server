@@ -1,3 +1,4 @@
-from .invalid_config_exception import \
-    ConfigMissingOptionException, \
+from .invalid_config_exception import (  # noqa
+    ConfigMissingOptionException,
     InvalidConfigException
+)
