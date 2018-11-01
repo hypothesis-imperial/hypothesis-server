@@ -6,13 +6,16 @@ import subprocess
 import shutil
 import virtualenv
 import threading
+import yaml
 from git import Repo
 from flask_sqlalchemy import SQLAlchemy
+from .exceptions import ConfigMissingOptionException
 
 
 class Fuzzer:
 
-    def __init__(self):
+    def __init__(self, config_path='config.yml'):
+        self._load_config(config_path)
         self.app = Flask(__name__)
         CORS(self.app)
         self.app.config['SQLALCHEMY_DATABASE_URI'] = \
@@ -31,9 +34,14 @@ class Fuzzer:
         @self.app.route('/webhook', methods=['POST'])
         def on_git_push():
 
-            if self.current_fuzzing_task:
-                self.current_fuzzing_task.running = False
-                self.current_fuzzing_task.join()
+            data = json.loads(request.data)
+
+            # Check if repo is the same name as the one set in config
+            try:
+                if data["repository"]["name"] != self.config['repo_name']:
+                    return
+            except KeyError:
+                pass
 
             if os.path.exists("code"):
                 shutil.rmtree("code", ignore_errors=True)
@@ -42,7 +50,6 @@ class Fuzzer:
                 os.remove("results.txt")
 
             os.makedirs("code")
-            data = json.loads(request.data)
 
             if data["repository"]["private"] == "true":
                 return private_repo_error()
@@ -52,6 +59,10 @@ class Fuzzer:
             virtualenv.create_environment('venv')
             subprocess.run(['venv/bin/pip',
                             'install', '-r', 'requirements.txt'])
+
+            if self.current_fuzzing_task:
+                self.current_fuzzing_task.running = False
+                self.current_fuzzing_task.join()
 
             def fuzz():
 
@@ -109,6 +120,26 @@ class Fuzzer:
 
             return jsonify(error=500, text=str(msg)), 500
         self.app.run(**kwargs)
+
+    def _load_config(self, config_path):
+        try:
+            with open(config_path) as file:
+                self.config = yaml.load(file)
+
+                if 'git_url' not in self.config:
+                    raise \
+                        ConfigMissingOptionException("Configuration file" +
+                                                     "missing a 'git_url'" +
+                                                     "value")
+
+                if 'branch' not in self.config:
+                    raise \
+                        ConfigMissingOptionException("Configuration file" +
+                                                     "missing a 'branch'" +
+                                                     "value")
+        except FileNotFoundError:
+            raise FileNotFoundError('config.yml file not found. ' +
+                                    'Create one or specify config path.')
 
 
 """
