@@ -7,11 +7,13 @@ import threading
 import yaml
 from git import Repo
 from flask_sqlalchemy import SQLAlchemy
+from .exceptions import ConfigMissingOptionException
 
 
 class Fuzzer:
 
     def __init__(self, config_path='config.yml'):
+        self._load_config(config_path)
         self.app = Flask(__name__)
         self.app.config['SQLALCHEMY_DATABASE_URI'] = \
             os.environ.get('DATABASE_URL', 'sqlite:///data.db')
@@ -22,12 +24,6 @@ class Fuzzer:
             {"error": "x = 1042"},
             {"error": "x = 1322"}
         ]
-        try:
-            with open(config_path) as file:
-                self.config = yaml.load(file)
-        except FileNotFoundError:
-            raise FileNotFoundError('config.yml file not found. ' +
-                                    'Create one or specify config path.')
 
     def run(self, **kwargs):
         self.db.create_all()
@@ -110,6 +106,26 @@ class Fuzzer:
 
             return jsonify(error=500, text=str(msg)), 500
         self.app.run(**kwargs)
+
+    def _load_config(self, config_path):
+        try:
+            with open(config_path) as file:
+                self.config = yaml.load(file)
+
+                if 'git_url' not in self.config:
+                    raise \
+                        ConfigMissingOptionException("Configuration file" +
+                                                     "missing a 'git_url'" +
+                                                     "value")
+
+                if 'branch' not in self.config:
+                    raise \
+                        ConfigMissingOptionException("Configuration file" +
+                                                     "missing a 'branch'" +
+                                                     "value")
+        except FileNotFoundError:
+            raise FileNotFoundError('config.yml file not found. ' +
+                                    'Create one or specify config path.')
 
 
 """
