@@ -1,21 +1,23 @@
-from flask import Flask, request, jsonify, render_template
 import json
 import os
 import subprocess
 import shutil
-import virtualenv
 import threading
+
+from fuzzer import Fuzzer
 from git import Repo
 from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, Api, request, jsonify, render_template
 
 
-class Fuzzer:
+class FuzzServer:
 
     def __init__(self):
         self.app = Flask(__name__)
         self.app.config['SQLALCHEMY_DATABASE_URI'] = \
             os.environ.get('DATABASE_URL', 'sqlite:///data.db')
         self.app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
+        self.fuzzer = Fuzzer()
         self.db = SQLAlchemy(self.app)
         self.current_fuzzing_task = None
         self.failing_tests = [  # Dummy failures for now
@@ -34,10 +36,6 @@ class Fuzzer:
         @self.app.route('/webhook', methods=['POST'])
         def on_git_push():
 
-            if self.current_fuzzing_task:
-                self.current_fuzzing_task.running = False
-                self.current_fuzzing_task.join()
-
             if os.path.exists("code"):
                 shutil.rmtree("code", ignore_errors=True)
 
@@ -52,9 +50,6 @@ class Fuzzer:
             url = data["repository"]["html_url"]
             Repo.clone_from(url, "code")
             os.chdir("code")
-            virtualenv.create_environment('venv')
-            subprocess.run(['venv/bin/pip',
-                            'install', '-r', 'requirements.txt'])
 
             def fuzz():
                 def write_to_results(output):
