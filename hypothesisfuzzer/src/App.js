@@ -1,40 +1,31 @@
 import React, { Component } from 'react';
+import FalsifyTest from './components/FalsifyTest';
 import './App.css';
-import result from './dummy/dummy.json';
-import ErrorList from './components/ErrorList.js';
 
 class App extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      data: result
+  state = {
+    falsifyTestCase: {
+      testName: "testName",
+      errors: []
     }
+  };
+
+  componentDidMount() {
+      const url = "http://ec2-18-130-116-158.eu-west-2.compute.amazonaws.com/get_errors";
+      fetch(url)
+      .then(result => result.json())
+      .then(result => {this.setState({falsifyTestCase: result})});
   }
+
 
   render() {
-
-    var data = require('./dummy/example.txt');
-
-    const render = (
-       <div className="App">
-         <header className="App-header">
-          <p>some header</p>
-         </header>
-         <div className="Container">
-           <ErrorList
-             txt={data}
-           />
-         </div>
-       </div>
-
-    )
-
-    return render;
-
+    const { testName, errors } = this.state.falsifyTestCase;
+    return (
+      <div className="App">
+        <FalsifyTest testName={testName} errors={errors} />
+      </div>
+    );
   }
-
 }
 
 export default App;
