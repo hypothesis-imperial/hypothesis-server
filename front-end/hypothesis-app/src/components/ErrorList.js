@@ -55,8 +55,8 @@ class ErrorList extends Component {
 		var varVal = "";
 		var j = 0;	//counter for variables
 		return (
-			<div>
-				<p>Error {i}</p>
+			<div className="Error">
+				<span>Error {i}</span>
 	      {error.map(variable => {
 	        varName = JSON.stringify(variable['Variable name']);
 	        varVal = JSON.stringify(variable['variable value']);
@@ -96,7 +96,7 @@ class ErrorList extends Component {
 	render() {
 		return (
 			<div>
-				<h1 style={{ textAlign:'center' }}>Test Name: {this.state.testName}</h1>
+				<h1 style={{ textAlign:'center', color:'white' }}>Test Name: {this.state.testName}</h1>
 				{this.listErrors()}
 			</div>
 		);

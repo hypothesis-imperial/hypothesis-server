@@ -20,6 +20,7 @@ class App extends Component {
     const render = (
        <div className="App">
          <header className="App-header">
+          <p>some header</p>
          </header>
          <div className="Container">
            <ErrorList
