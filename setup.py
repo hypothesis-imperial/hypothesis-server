@@ -22,7 +22,8 @@ setuptools.setup(
         'gitpython',
         'pytest',
         'flask',
-        'flask-sqlalchemy'
+        'flask-sqlalchemy',
+        'virtualenv'
     ],
     include_package_data=True
 )
