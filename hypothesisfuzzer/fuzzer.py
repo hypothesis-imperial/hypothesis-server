@@ -60,9 +60,9 @@ class Fuzzer:
                     print('Did one iteration!')
                 print('Stopped now')
 
-            os.chdir("..")
             self.current_fuzzing_task = threading.Thread(target=fuzz, args=())
             self.current_fuzzing_task.start()
+            os.chdir("..")
 
             return 'OK'
 
