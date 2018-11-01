@@ -22,8 +22,10 @@ setuptools.setup(
         'gitpython',
         'pytest',
         'flask',
+        'pyyaml',
+        'flask-cors',
         'flask-sqlalchemy',
-        'pyyaml'
+        'virtualenv'
     ],
     include_package_data=True
 )
