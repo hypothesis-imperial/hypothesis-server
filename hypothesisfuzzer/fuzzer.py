@@ -37,9 +37,6 @@ class Fuzzer:
             shutil.rmtree("code", ignore_errors=True)
         os.makedirs("code")
 
-        if os.path.isfile("results.txt"):
-            os.remove("results.txt")
-
         Repo.clone_from(self.config["git_url"], "code")
 
         os.chdir("code")
@@ -49,21 +46,12 @@ class Fuzzer:
         os.chdir("..")
 
     def _fuzz(self):
-        def write_to_results(output):
-            os.chdir("..")
-            f = open("results.txt", "a")
-            f.write(output.stdout)
-            f.close()
-            os.chdir("code")
-
         os.chdir("code")
 
         while getattr(self.current_fuzzing_task, "running", True):
-            output = subprocess.run(['pytest', '-m', 'hypothesis',
-                                    "--hypothesis-show-statistics"],
-                                    universal_newlines=True,
-                                    stdout=subprocess.PIPE)
-            write_to_results(output)
+            subprocess.run(['pytest'],
+                           universal_newlines=True,
+                           stdout=subprocess.PIPE)
             print('Did one iteration!')
         print('Stopped now')
 
