@@ -4,11 +4,13 @@ import subprocess
 import shutil
 import threading
 import yaml
+import virtualenv
 
 from fuzzer import Fuzzer
 from git import Repo
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
+from flask import Flask, request, jsonify, send_from_directory
 from .exceptions import ConfigMissingOptionException
 
 
@@ -16,7 +18,8 @@ class FuzzServer:
 
     def __init__(self, config_path='config.yml'):
         self._load_config(config_path)
-        self.app = Flask(__name__)
+        self.app = Flask(__name__, static_url_path='/build')
+        CORS(self.app)
         self.app.config['SQLALCHEMY_DATABASE_URI'] = \
             os.environ.get('DATABASE_URL', 'sqlite:///data.db')
         self.app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
@@ -27,6 +30,34 @@ class FuzzServer:
             {"error": "x = 1042"},
             {"error": "x = 1322"}
         ]
+        self.clone_code()
+        self.current_fuzzing_task = threading.Thread(target=self._fuzz,
+                                                     args=())
+        self.current_fuzzing_task.start()
+
+    def clone_code(self):
+        if os.path.exists("code"):
+            shutil.rmtree("code", ignore_errors=True)
+        os.makedirs("code")
+
+        Repo.clone_from(self.config["git_url"], "code")
+
+        os.chdir("code")
+        virtualenv.create_environment('venv')
+        subprocess.run(['venv/bin/pip',
+                        'install', '-r', 'requirements.txt'])
+        os.chdir("..")
+
+    def _fuzz(self):
+        iteration = 0
+
+        while getattr(self.current_fuzzing_task, "running", True):
+            subprocess.run(['pytest'],
+                           universal_newlines=True,
+                           stdout=subprocess.PIPE)
+            print('Fuzzing iteration: ', iteration)
+            iteration += 1
+        print('Fuzzing stopped after', iteration, 'iterations')
 
     def run(self, **kwargs):
         self.db.create_all()
@@ -48,54 +79,21 @@ class FuzzServer:
             except KeyError:
                 pass
 
-            if os.path.exists("code"):
-                shutil.rmtree("code", ignore_errors=True)
-
-            if os.path.isfile("results.txt"):
-                os.remove("results.txt")
-
-            os.makedirs("code")
-
             if data["repository"]["private"] == "true":
                 return private_repo_error()
-            url = data["repository"]["html_url"]
-            Repo.clone_from(url, "code")
+            self.clone_code()
             os.chdir("code")
 
             if self.current_fuzzing_task:
                 self.current_fuzzing_task.running = False
                 self.current_fuzzing_task.join()
 
-            def fuzz():
-                def write_to_results(output):
-                    os.chdir("..")
-                    f = open("results.txt", "a")
-                    f.write(output.stdout)
-                    f.close()
-                    os.chdir("code")
-
-                while getattr(self.current_fuzzing_task, "running", True):
-                    output = subprocess.run(['pytest', '-m', 'hypothesis',
-                                            "--hypothesis-show-statistics"],
-                                            universal_newlines=True,
-                                            stdout=subprocess.PIPE)
-                    write_to_results(output)
-                    print('Did one iteration!')
-                print('Stopped now')
-
-            self.current_fuzzing_task = threading.Thread(target=fuzz, args=())
+            self.current_fuzzing_task = threading.Thread(target=self._fuzz,
+                                                         args=())
             self.current_fuzzing_task.start()
+            os.chdir("..")
 
             return 'OK'
-
-        @self.app.route('/dashboard', methods=['GET'])
-        def dashboard():
-            with self.app.app_context():
-                rendered = render_template('dashboard.template',
-                                           title="Dashboard",
-                                           errors=self.failing_tests)
-
-            return rendered
 
         @self.app.route('/get_commit_hash', methods=['GET'])
         def get_commit_hash():
@@ -107,6 +105,21 @@ class FuzzServer:
             return jsonify({
                 "sha": sha
             })
+
+        @self.app.route('/', methods=['GET'])
+        def home():
+            return send_from_directory('build', 'index.html')
+
+        @self.app.route('/<path:path>', methods=['GET'])
+        def serve_static(path):
+            return send_from_directory('build', path)
+
+        @self.app.route('/get_errors', methods=['GET'])
+        def get_errors():
+            if not os.path.exists("code"):
+                return no_code_dir_error()
+            with open('data.txt', 'r') as file_data:
+                return jsonify(json.load(file_data))
 
         @self.app.errorhandler(500)
         def private_repo_error():

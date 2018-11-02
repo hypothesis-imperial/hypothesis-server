@@ -1,4 +1,5 @@
-from hypothesisfuzzer import Fuzzer
+from .hypothesisfuzzer import Fuzzer
 
-app = Fuzzer(config_path='sample_config')
+app = Fuzzer(config_path='sample_config.yml')
 print(app.config)
+app.run()
