@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 import json
 import os
 import subprocess
@@ -16,6 +17,7 @@ class Fuzzer:
     def __init__(self, config_path='config.yml'):
         self._load_config(config_path)
         self.app = Flask(__name__)
+        CORS(self.app)
         self.app.config['SQLALCHEMY_DATABASE_URI'] = \
             os.environ.get('DATABASE_URL', 'sqlite:///data.db')
         self.app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
@@ -26,7 +28,8 @@ class Fuzzer:
             {"error": "x = 1322"}
         ]
         self.clone_code()
-        self.current_fuzzing_task = threading.Thread(target=self.fuzz, args=())
+        self.current_fuzzing_task = threading.Thread(target=self._fuzz,
+                                                     args=())
         self.current_fuzzing_task.start()
 
     def clone_code(self):
@@ -45,7 +48,7 @@ class Fuzzer:
                         'install', '-r', 'requirements.txt'])
         os.chdir("..")
 
-    def fuzz(self):
+    def _fuzz(self):
         def write_to_results(output):
             os.chdir("..")
             f = open("results.txt", "a")
@@ -54,6 +57,7 @@ class Fuzzer:
             os.chdir("code")
 
         os.chdir("code")
+
         while getattr(self.current_fuzzing_task, "running", True):
             output = subprocess.run(['pytest', '-m', 'hypothesis',
                                     "--hypothesis-show-statistics"],
@@ -82,14 +86,18 @@ class Fuzzer:
                 return private_repo_error()
             self.clone_code()
             os.chdir("code")
+            virtualenv.create_environment('venv')
+            subprocess.run(['venv/bin/pip',
+                            'install', '-r', 'requirements.txt'])
 
             if self.current_fuzzing_task:
                 self.current_fuzzing_task.running = False
                 self.current_fuzzing_task.join()
 
-            self.current_fuzzing_task = threading.Thread(target=self.fuzz,
+            self.current_fuzzing_task = threading.Thread(target=self._fuzz,
                                                          args=())
             self.current_fuzzing_task.start()
+            os.chdir("..")
 
             return 'OK'
 
@@ -112,6 +120,13 @@ class Fuzzer:
             return jsonify({
                 "sha": sha
             })
+
+        @self.app.route('/get_errors', methods=['GET'])
+        def get_errors():
+            if not os.path.exists("code"):
+                return no_code_dir_error()
+            with open('data.txt', 'r') as file_data:
+                return jsonify(json.load(file_data))
 
         @self.app.errorhandler(500)
         def private_repo_error():
