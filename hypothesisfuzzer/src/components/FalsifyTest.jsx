@@ -1,15 +1,13 @@
 import React from 'react'
-import { Card, CardTitle, CardText } from 'reactstrap'
+import { Card, CardTitle } from 'reactstrap'
 import './FalsifyTest.css'
 
 const FalsifyTest = (props) => {
-  var i = 0;
   const errorList = props.errors.map((variables, index) => {
-    i++;
     return (
       <div>
         <Card className="Error">
-          <CardTitle>Error {i}</CardTitle>
+          <CardTitle>Error {index}</CardTitle>
           <Error key={index} variables={variables} />
         </Card>
       </div>
