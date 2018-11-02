@@ -46,18 +46,6 @@ const Variable = (props) => {
           <td>Variable Value: </td>
           <td>{props.v_value}</td>
         </tr>
-        <tr>
-          <td>Optional field</td>
-          <td>field</td>
-        </tr>
-        <tr>
-          <td>Optional long field</td>
-          <td>lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum</td>
-        </tr>
-        <tr>
-          <td>Optional long long long long long long long long long long label</td>
-          <td>lorem ipsum</td>
-        </tr>
       </table>
     </div>
   )
