@@ -1,0 +1,18 @@
+.Error {
+  margin: 1%;
+  padding: 1%
+}
+
+.Test {
+  padding: 2%;
+}
+
+.TestName {
+  padding-top: 1%;
+}
+
+.Variable {
+  border-top: 1px dotted grey;
+  padding-top: 0.3%;
+  padding-bottom: 0.3%;
+}
