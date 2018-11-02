@@ -46,7 +46,6 @@ class Fuzzer:
         os.chdir("..")
 
     def _fuzz(self):
-        os.chdir("code")
         iteration = 0
 
         while getattr(self.current_fuzzing_task, "running", True):
