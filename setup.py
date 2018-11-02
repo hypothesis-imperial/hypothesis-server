@@ -1,18 +1,14 @@
 import setuptools
+import subprocess
 
-from setuptools.command.build_py import build_py
+from setuptools.command.install import install
 
 
-class NPMInstall(build_py):
+class BuildFrontEnd(install):
     def run(self):
-        self.run_command('npm install')
-        build_py.run(self)
-
-
-class NPMBuild(build_py):
-    def run(self):
-        self.run_command('npm run build')
-        build_py.run(self)
+        subprocess.check_call(['npm install'.split()])
+        subprocess.check_call(['npm run build'.split()])
+        install.run(self)
 
 
 with open("README.md", "r") as fh:
@@ -44,7 +40,6 @@ setuptools.setup(
     ],
     include_package_data=True,
     cmdclass={
-        'npm_install': NPMInstall,
-        'npm_build': NPMBuild
+        'build_front_end': BuildFrontEnd,
     }
 )
