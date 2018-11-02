@@ -1,2 +1,4 @@
 # Include the html templates
-include hypothesisfuzzer/templates/*
+include hypothesisfuzzer/build/*
+include hypothesisfuzzer/package.json
+include hypothesisfuzzer/package-lock.json
