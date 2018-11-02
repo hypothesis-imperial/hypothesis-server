@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardTitle, CardText } from 'reactstrap'
+import { Card, CardTitle } from 'reactstrap'
 import './FalsifyTest.css'
 
 const FalsifyTest = (props) => {
