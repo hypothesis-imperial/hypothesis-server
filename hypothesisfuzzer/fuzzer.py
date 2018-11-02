@@ -47,13 +47,15 @@ class Fuzzer:
 
     def _fuzz(self):
         os.chdir("code")
+        iteration = 0
 
         while getattr(self.current_fuzzing_task, "running", True):
             subprocess.run(['pytest'],
                            universal_newlines=True,
                            stdout=subprocess.PIPE)
-            print('Did one iteration!')
-        print('Stopped now')
+            print('Fuzzing iteration: ', iteration)
+            iteration += 1
+        print('Fuzzing stopped after', iteration, 'iterations')
 
     def run(self, **kwargs):
         self.db.create_all()
