@@ -1,7 +1,4 @@
 import setuptools
-import subprocess
-
-from setuptools.command.install import install
 
 
 # class BuildFrontEnd(install):
