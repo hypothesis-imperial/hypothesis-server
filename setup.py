@@ -1,5 +1,20 @@
 import setuptools
 
+from setuptools.command.build_py import build_py
+
+
+class NPMInstall(build_py):
+    def run(self):
+        self.run_command('npm install')
+        build_py.run(self)
+
+
+class NPMBuild(build_py):
+    def run(self):
+        self.run_command('npm run build')
+        build_py.run(self)
+
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
@@ -24,5 +39,9 @@ setuptools.setup(
         'flask',
         'flask-sqlalchemy'
     ],
-    include_package_data=True
+    include_package_data=True,
+    cmdclass={
+        'npm_install': NPMInstall,
+        'npm_build': NPMBuild
+    }
 )

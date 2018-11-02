@@ -89,7 +89,11 @@ class Fuzzer:
                 "sha": sha
             })
 
-        @self.app.route('/<path:path>')
+        @self.app.route('/', methods=['GET'])
+        def home():
+            return send_from_directory('build', 'index.html')
+
+        @self.app.route('/<path:path>', methods=['GET'])
         def serve_static(path):
             return send_from_directory('build', path)
 
