@@ -1,2 +1,7 @@
 # Include the html templates
-include hypothesisfuzzer/templates/*
+include hypothesisfuzzer/package.json
+include hypothesisfuzzer/package-lock.json
+recursive-include hypothesisfuzzer/public *
+recursive-include hypothesisfuzzer/src *
+recursive-include hypothesisfuzzer/static *
+recursive-include hypothesisfuzzer/build *

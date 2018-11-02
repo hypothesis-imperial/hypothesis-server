@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, send_from_directory
 from flask_cors import CORS
 import json
 import os
@@ -16,7 +16,7 @@ class Fuzzer:
 
     def __init__(self, config_path='config.yml'):
         self._load_config(config_path)
-        self.app = Flask(__name__)
+        self.app = Flask(__name__, static_url_path='/build')
         CORS(self.app)
         self.app.config['SQLALCHEMY_DATABASE_URI'] = \
             os.environ.get('DATABASE_URL', 'sqlite:///data.db')
@@ -109,6 +109,14 @@ class Fuzzer:
             return jsonify({
                 "sha": sha
             })
+
+        @self.app.route('/', methods=['GET'])
+        def home():
+            return send_from_directory('build', 'index.html')
+
+        @self.app.route('/<path:path>', methods=['GET'])
+        def serve_static(path):
+            return send_from_directory('build', path)
 
         @self.app.route('/get_errors', methods=['GET'])
         def get_errors():

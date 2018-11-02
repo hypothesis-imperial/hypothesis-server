@@ -1,5 +1,13 @@
 import setuptools
 
+
+# class BuildFrontEnd(install):
+#     def run(self):
+#         subprocess.check_call(['npm install'.split()])
+#         subprocess.check_call(['npm run build'.split()])
+#         install.run(self)
+
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
@@ -28,4 +36,7 @@ setuptools.setup(
         'virtualenv'
     ],
     include_package_data=True
+    # cmdclass={
+    #     'build_front_end': BuildFrontEnd,
+    # }
 )
