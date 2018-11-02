@@ -13,9 +13,23 @@ jobs:
       - run:
           name: Tests
           command: ./test.sh
+  deploy:
+    docker:
+      - image: circleci/python:3.6.4
+    steps:
+      - checkout
+      - run:
+          name: SSH into poc-server, redeploy with latest version
+          command: ssh -o "StrictHostKeyChecking=no" -v ubuntu@ec2-18-130-116-158.eu-west-2.compute.amazonaws.com "update-fuzzer" 
 
 workflows:
   version: 2
   feature_branch:
     jobs:
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
       - test
