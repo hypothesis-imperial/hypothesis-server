@@ -4,11 +4,11 @@ import subprocess
 from setuptools.command.install import install
 
 
-class BuildFrontEnd(install):
-    def run(self):
-        subprocess.check_call(['npm install'.split()])
-        subprocess.check_call(['npm run build'.split()])
-        install.run(self)
+# class BuildFrontEnd(install):
+#     def run(self):
+#         subprocess.check_call(['npm install'.split()])
+#         subprocess.check_call(['npm run build'.split()])
+#         install.run(self)
 
 
 with open("README.md", "r") as fh:
@@ -38,8 +38,8 @@ setuptools.setup(
         'flask-sqlalchemy',
         'virtualenv'
     ],
-    include_package_data=True,
-    cmdclass={
-        'build_front_end': BuildFrontEnd,
-    }
+    include_package_data=True
+    # cmdclass={
+    #     'build_front_end': BuildFrontEnd,
+    # }
 )

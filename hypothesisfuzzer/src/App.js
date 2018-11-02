@@ -15,7 +15,6 @@ class App extends Component {
     fetch(url)
     .then(result => result.json())
     .then(result => {
-      console.log(result)
       this.setState({falsifyTestCase: result})
     });
   }
