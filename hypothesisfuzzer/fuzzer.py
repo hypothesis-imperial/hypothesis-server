@@ -27,6 +27,35 @@ class Fuzzer:
             {"error": "x = 1042"},
             {"error": "x = 1322"}
         ]
+        self.clone_code()
+        self.current_fuzzing_task = threading.Thread(target=self._fuzz,
+                                                     args=())
+        self.current_fuzzing_task.start()
+
+    def clone_code(self):
+        if os.path.exists("code"):
+            shutil.rmtree("code", ignore_errors=True)
+        os.makedirs("code")
+
+        Repo.clone_from(self.config["git_url"], "code")
+
+        os.chdir("code")
+        virtualenv.create_environment('venv')
+        subprocess.run(['venv/bin/pip',
+                        'install', '-r', 'requirements.txt'])
+        os.chdir("..")
+
+    def _fuzz(self):
+        os.chdir("code")
+        iteration = 0
+
+        while getattr(self.current_fuzzing_task, "running", True):
+            subprocess.run(['pytest'],
+                           universal_newlines=True,
+                           stdout=subprocess.PIPE)
+            print('Fuzzing iteration: ', iteration)
+            iteration += 1
+        print('Fuzzing stopped after', iteration, 'iterations')
 
     def run(self, **kwargs):
         self.db.create_all()
@@ -43,18 +72,9 @@ class Fuzzer:
             except KeyError:
                 pass
 
-            if os.path.exists("code"):
-                shutil.rmtree("code", ignore_errors=True)
-
-            if os.path.isfile("results.txt"):
-                os.remove("results.txt")
-
-            os.makedirs("code")
-
             if data["repository"]["private"] == "true":
                 return private_repo_error()
-            url = data["repository"]["html_url"]
-            Repo.clone_from(url, "code")
+            self.clone_code()
             os.chdir("code")
             virtualenv.create_environment('venv')
             subprocess.run(['venv/bin/pip',
@@ -64,16 +84,8 @@ class Fuzzer:
                 self.current_fuzzing_task.running = False
                 self.current_fuzzing_task.join()
 
-            def fuzz():
-
-                while getattr(self.current_fuzzing_task, "running", True):
-                    subprocess.run(['pytest'],
-                                   universal_newlines=True,
-                                   stdout=subprocess.PIPE)
-                    print('Did one iteration!')
-                print('Stopped now')
-
-            self.current_fuzzing_task = threading.Thread(target=fuzz, args=())
+            self.current_fuzzing_task = threading.Thread(target=self._fuzz,
+                                                         args=())
             self.current_fuzzing_task.start()
             os.chdir("..")
 
