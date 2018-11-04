@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardTitle } from 'reactstrap'
+import { Card, CardTitle, Container, Row, Col } from 'reactstrap'
 import './FalsifyTest.css'
 
 const FalsifyTest = (props) => {
@@ -37,16 +37,16 @@ const Error = (props) => {
 const Variable = (props) => {
   return (
     <div className="Variable">
-      <table>
-        <tr>
-          <td>Variable Name: </td>
-          <td>{props.v_name}</td>
-        </tr>
-        <tr>
-          <td>Variable Value: </td>
-          <td>{props.v_value}</td>
-        </tr>
-      </table>
+      <Container>
+        <Row>
+          <Col>Variable Name: </Col>
+          <Col>{props.v_name}</Col>
+        </Row>
+        <Row>
+          <Col>Variable Value: </Col>
+          <Col>{props.v_value}</Col>
+        </Row>
+      </Container>
     </div>
   )
 }
