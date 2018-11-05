@@ -35,12 +35,8 @@ class RepoFuzzer:
             return generic_error(msg="Error cloning Git Repo! " +
                                      "Please ensure you have access.")
 
-        os.chdir("code")
-
         self._stop_fuzzing()
         self._start_fuzzing()
-
-        os.chdir("..")
 
         return 'OK'
 
@@ -75,6 +71,7 @@ class RepoFuzzer:
         virtualenv.create_environment('venv')
         subprocess.run(['venv/bin/pip',
                         'install', '-r', 'requirements.txt'])
+        os.chdir('..')
 
     def _stop_fuzzing(self):
         if self._current_fuzzing_task:
@@ -83,10 +80,12 @@ class RepoFuzzer:
 
     def _start_fuzzing(self):
 
+        os.chdir("code")
         self._current_fuzzing_task = \
             threading.Thread(target=self.uzz_task,
                              args=())
         self._current_fuzzing_task.start()
+        os.chdir("..")
 
     def _fuzz_task(self):
         iteration = 0
