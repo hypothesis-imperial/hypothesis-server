@@ -1,12 +1,31 @@
-# Project Title
+# Hypothesis Server
 
-One Paragraph of project description goes here
+An addon for the [Hypothesis](https://github.com/HypothesisWorks/hypothesis) testing library that enables continuous fuzzing tests on a dedicated server.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+Install the package
 
-### Prerequisites
+```
+pip install hypothesisfuzzer
+```
+
+Then, create a server:
+
+```python
+from hypothesisfuzzer import FuzzServer
+
+app = FuzzServer(config_path='config.yml')
+app.run()
+```
+
+This will automatically start running a server which will read from the supplied config path.
+
+The server does 3 things:
+  - When it received a GitHub webhook HTTP request to its `/webhook` route, it will (provided the configuration has been set up correctly, it will start running indefinite Hypothesis tests.
+  -
+
+## Config file
 
 What things you need to install the software and how to install them
 
