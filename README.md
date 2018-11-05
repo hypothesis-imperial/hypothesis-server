@@ -23,7 +23,8 @@ This will automatically start running a server which will read from the supplied
 
 The server does 3 things:
   - When it received a GitHub webhook HTTP request to its `/webhook` route, it will (provided the configuration has been set up correctly, it will start running indefinite Hypothesis tests.
-  -
+  - There is a `/get_errors` route which will return all the error inputs for the tests which were found through the continuous fuzzing process. You may choose to integrate this with CI and local development testing.
+  - Last but not least, there is a front end web UI in React that allows you to see current fuzzing progress, failing test cases for different repos, etc.
 
 ## Config file
 
