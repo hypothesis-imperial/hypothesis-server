@@ -1,1 +1,1 @@
-from .fuzzer import Fuzzer  # noqa
+from .repo_fuzzer import RepoFuzzer  # noqa
