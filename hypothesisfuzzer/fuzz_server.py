@@ -2,7 +2,7 @@ import json
 import os
 import yaml
 
-from fuzzer import RepoFuzzer
+from .fuzzing import RepoFuzzer
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask import Flask, request, send_from_directory

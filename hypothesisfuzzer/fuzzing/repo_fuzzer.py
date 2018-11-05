@@ -19,7 +19,8 @@ class RepoFuzzer:
         self.config = config
         self._clone_git(config['git_url'], folder_name=folder_name)
         self._create_venv(folder_name=folder_name)
-        self._start_fuzzing(folder_name=folder_name)
+        #give this an argument
+        self._start_fuzzing()
 
     def on_webhook(self, payload):
         # Check if repo is the same name as the one set in config
@@ -63,7 +64,7 @@ class RepoFuzzer:
         if os.path.exists(folder_name):
             shutil.rmtree(folder_name, ignore_errors=True)
 
-        os.mkdirs(folder_name)
+        os.makedirs(folder_name)
         GitRepo.clone_from(git_url, folder_name)
 
     def _create_venv(self, folder_name="code"):
@@ -80,9 +81,10 @@ class RepoFuzzer:
 
     def _start_fuzzing(self):
 
+        self._create_venv()
         os.chdir("code")
         self._current_fuzzing_task = \
-            threading.Thread(target=self.uzz_task,
+            threading.Thread(target=self._fuzz_task,
                              args=())
         self._current_fuzzing_task.start()
         os.chdir("..")
@@ -90,7 +92,7 @@ class RepoFuzzer:
     def _fuzz_task(self):
         iteration = 0
 
-        while getattr(self.current_fuzzing_task, "running", True):
+        while getattr(self._current_fuzzing_task, "running", True):
             subprocess.run(['pytest'],
                            universal_newlines=True,
                            stdout=subprocess.PIPE)
