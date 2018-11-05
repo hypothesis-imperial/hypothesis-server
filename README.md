@@ -28,10 +28,24 @@ The server does 3 things:
 
 ## Config file
 
-What things you need to install the software and how to install them
+In a YAML configuration file, 
+```YAML
+repos:
+  -repo1:
+    git_url: https://github.com/hypothesis-imperial/fuzzing-sample-product-poc.git
+    project_root: "" #optional; assume just git directory root
+    branch: master #optional; assume master
+    requirements_file: requirements.txt # assume in project root normally; otherwise give path
+    tests_folder: tests # default is dir test in project_root
+    fuzz_on_start: True
 
-```
-Give examples
+  -repo2:
+    git_url: https://github.com/hypothesis-imperial/not-a-real-repo.git
+    project_root: part-one
+    branch: develop
+    requirements_file: ../requirements.txt
+    tests_folder: tests #in part-one
+    fuzz_on_start: False
 ```
 
 ### Installing
