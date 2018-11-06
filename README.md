@@ -28,16 +28,16 @@ The server does 3 things:
 
 ## Config file
 
-In a YAML configuration file, 
+In a YAML configuration file,
 ```YAML
 repos:
   -repo1:
     git_url: https://github.com/hypothesis-imperial/fuzzing-sample-product-poc.git
-    project_root: "" #optional; assume just git directory root
-    branch: master #optional; assume master
-    requirements_file: requirements.txt # assume in project root normally; otherwise give path
-    tests_folder: tests # default is dir test in project_root
-    fuzz_on_start: True
+    project_root: "" # optional; Default is just git directory root
+    branch: master #optional; Default master
+    requirements_file: requirements.txt # Default in project_root normally; otherwise give path relative to project_root
+    tests_folder: tests # default is "test" in project_root
+    fuzz_on_start: True # Whether to pull and start fuzzing on server start, Default True
 
   -repo2:
     git_url: https://github.com/hypothesis-imperial/not-a-real-repo.git
