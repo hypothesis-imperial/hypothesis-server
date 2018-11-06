@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FalsifyTest from './components/FalsifyTest';
 import './App.css';
+import example from './example/example.json';
 
 class App extends Component {
   state = {
@@ -11,12 +12,13 @@ class App extends Component {
   };
 
   componentDidMount() {
-    const url = "http://ec2-18-130-116-158.eu-west-2.compute.amazonaws.com/get_errors";
-    fetch(url)
-    .then(result => result.json())
-    .then(result => {
-      this.setState({falsifyTestCase: result})
-    });
+    // const url = "http://ec2-18-130-116-158.eu-west-2.compute.amazonaws.com/get_errors";
+    // fetch(url)
+    // .then(result => result.json())
+    // .then(result => {
+    //   this.setState({falsifyTestCase: result})
+    // });
+    this.setState({falsifyTestCase: example});
   }
 
 

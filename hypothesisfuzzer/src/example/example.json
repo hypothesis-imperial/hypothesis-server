@@ -1,21 +1,7 @@
 {
-   "test_name":"test_carmichael",
-   "errors":[
-      [
-         {
-            "v_name":"v",
-            "v_value":"561"
-         },
-         {
-            "v_name":"u",
-            "v_value":"8911"
-         }
-      ],
-      [
-         {
-            "v_name":"w",
-            "v_value":"1105"
-         }
-      ]
-   ]
+  "errors":[
+    [{"v_name":"v","v_value":"0"}],
+    [{"v_name":"w","v_value":"1"}]
+  ],
+  "test_name":"test_carmichael"
 }
