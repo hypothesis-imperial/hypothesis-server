@@ -19,7 +19,6 @@ class RepoFuzzer:
         self.config = config
         self._clone_git(config['git_url'], folder_name=folder_name)
         self._create_venv(folder_name=folder_name)
-        #give this an argument
         self._start_fuzzing()
 
     def on_webhook(self, payload):
