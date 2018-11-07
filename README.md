@@ -53,6 +53,7 @@ repos:
 * **Jack Pordi** [jackel119](https://github.com/jackel119)
 * **Romaine de Spoelberch** [romdespoel](https://github.com/romdespoel)
 * **David Kurniadi Angdinata** [Multramate](https://github.com/Multramate)
+* **Cassie Ying** [cassie-ying](https://github.com/cassie-ying)
 
 See also the list of [contributors](https://github.com/hypothesis-imperial/hypothesis-server/contributors) who participated in this project.
 
