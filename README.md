@@ -4,7 +4,7 @@ An addon for the [Hypothesis](https://github.com/HypothesisWorks/hypothesis) tes
 
 ## Getting Started
 
-Install the package
+Install the package:
 
 ```
 pip install hypothesisfuzzer
@@ -22,7 +22,7 @@ app.run()
 This will automatically start running a server which will read from the supplied config path.
 
 The server does 3 things:
-  - When it received a GitHub webhook HTTP request to its `/webhook` route, it will (provided the configuration has been set up correctly, it will start running indefinite Hypothesis tests.
+  - When it receives a GitHub webhook HTTP request to its `/webhook` route, it will (provided the configuration has been set up correctly), it will start running indefinite Hypothesis tests.
   - There is a `/get_errors` route which will return all the error inputs for the tests which were found through the continuous fuzzing process. You may choose to integrate this with CI and local development testing.
   - Last but not least, there is a front end web UI in React that allows you to see current fuzzing progress, failing test cases for different repos, etc.
 
@@ -33,11 +33,11 @@ In a YAML configuration file,
 repos:
   -repo1:
     git_url: https://github.com/hypothesis-imperial/fuzzing-sample-product-poc.git
-    project_root: "" # optional; Default is just git directory root
-    branch: master #optional; Default master
-    requirements_file: requirements.txt # Default in project_root normally; otherwise give path relative to project_root
-    tests_folder: tests # default is "test" in project_root
-    fuzz_on_start: True # Whether to pull and start fuzzing on server start, Default True
+    project_root: "" # Optional; Default is just git directory root
+    branch: master # optional; Default master
+    requirements_file: requirements.txt # Optional: Default in project_root normally; otherwise give path relative to project_root
+    tests_folder: tests # Optional: Default is "test" in project_root
+    fuzz_on_start: True # Optional: Whether to pull and start fuzzing on server start, Default True
 
   -repo2:
     git_url: https://github.com/hypothesis-imperial/not-a-real-repo.git
@@ -50,13 +50,14 @@ repos:
 
 ## Authors
 
-* **Jack Pordi** - *Initial work* - [jackel119](https://github.com/jackel119)
+* **Jack Pordi** [jackel119](https://github.com/jackel119)
+* **Romaine de Spoelberch** [romdespoel](https://github.com/romdespoel)
 
 See also the list of [contributors](https://github.com/hypothesis-imperial/hypothesis-server/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## Acknowledgments
 
