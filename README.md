@@ -54,8 +54,7 @@ repos:
 * **Romaine de Spoelberch** [romdespoel](https://github.com/romdespoel)
 * **David Kurniadi Angdinata** [Multramate](https://github.com/Multramate)
 * **Cassie Ying** [cassie-ying](https://github.com/cassie-ying)
-* **Lan Yi**
-[lanyielaine](https://github.com/lanyielaine)
+* **Lan Yi** [lanyielaine](https://github.com/lanyielaine)
 
 See also the list of [contributors](https://github.com/hypothesis-imperial/hypothesis-server/contributors) who participated in this project.
 
