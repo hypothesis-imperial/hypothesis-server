@@ -1,25 +1,25 @@
 import React from 'react'
-import { Card, CardTitle, Container, Row, Col } from 'reactstrap'
+import { Card, CardTitle, CardBody, Container, Row, Col } from 'reactstrap'
 import './FalsifyTest.css'
 
 const FalsifyTest = (props) => {
   const errorList = props.errors.map((variables, index) => {
     return (
-      <div>
-        <Card className="Error">
+      <Card>
+        <CardBody>
           <CardTitle>Error {index}</CardTitle>
           <Error key={index} variables={variables} />
-        </Card>
-      </div>
+        </CardBody>
+      </Card>
     )
   })
   return (
-    <div className="Test">
-      <Card>
-        <CardTitle className="TestName">Test Name: {props.test_name}</CardTitle>
+    <Card>
+      <CardBody>
+        <CardTitle>Test Name: {props.test_name}</CardTitle>
         {errorList}
-      </Card>
-    </div>
+      </CardBody>
+    </Card>
   )
 }
 
