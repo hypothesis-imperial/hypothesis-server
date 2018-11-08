@@ -42,21 +42,21 @@ class RepoFuzzer:
 
         return 'OK'
 
-    def get_commit_hash():
+    def get_commit_hash(self):
 
-        if not os.path.exists("code"):
+        if not os.path.exists(self.name):
             return no_code_dir_error()
-        repo = GitRepo("code")
+        repo = GitRepo(self.name)
         sha = repo.head.object.hexsha
 
         return jsonify({
             "sha": sha
         })
 
-    def get_errors():
-        if not os.path.exists("code"):
+    def get_errors(self):
+        if not os.path.exists(self.name):
             return no_code_dir_error()
-        with open('data.txt', 'r') as file_data:
+        with open(self.name+'/data.txt', 'r') as file_data:
             return jsonify(json.load(file_data))
 
     def _clone_git(self, git_url):
