@@ -24,7 +24,9 @@ class FuzzServer:
         self._load_config(config_path)
         self.db = SQLAlchemy(self.app)
         self.current_fuzzing_task = None
-        self.fuzzer = RepoFuzzer(self.config)
+
+        for name, repo_config in self.config['repos']:
+            self.fuzzer = RepoFuzzer(name, repo_config)
 
     def run(self, **kwargs):
 

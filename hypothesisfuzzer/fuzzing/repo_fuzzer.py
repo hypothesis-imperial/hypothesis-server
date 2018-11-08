@@ -15,27 +15,29 @@ from ..errors import (
 
 class RepoFuzzer:
 
-    def __init__(self, config, folder_name="code"):
+    def __init__(self, name, config):
+        self.name = name
         self.config = config
-        self._clone_git(config['git_url'], folder_name=folder_name)
-        self._create_venv(folder_name=folder_name)
+        self._clone_git(config['git_url'])
+        self._create_venv()
         self._start_fuzzing()
 
     def on_webhook(self, payload):
         # Check if repo is the same name as the one set in config
         try:
             if payload["repository"]["name"] != self.config['repo_name']:
-                return
+                return 'OK'
         except KeyError:
             pass
 
         try:
-            self._clone_git(self.config['git_url'], folder_name="code")
+            self._clone_git(self.config['git_url'])
         except Exception:
             return generic_error(msg="Error cloning Git Repo! " +
                                      "Please ensure you have access.")
 
         self._stop_fuzzing()
+        self._create_venv()
         self._start_fuzzing()
 
         return 'OK'
@@ -57,17 +59,20 @@ class RepoFuzzer:
         with open('data.txt', 'r') as file_data:
             return jsonify(json.load(file_data))
 
-    def _clone_git(self, git_url, folder_name="code"):
+    def _clone_git(self, git_url):
         # Delete old code folder
 
-        if os.path.exists(folder_name):
-            shutil.rmtree(folder_name, ignore_errors=True)
+        if os.path.exists(self.name):
+            shutil.rmtree(self.name, ignore_errors=True)
 
-        os.makedirs(folder_name)
-        GitRepo.clone_from(git_url, folder_name)
+        os.makedirs(self.name)
+        GitRepo.clone_from(git_url, self.name)
 
-    def _create_venv(self, folder_name="code"):
-        os.chdir(folder_name)
+    def _create_venv(self):
+
+        os.chdir(self.name)
+        assert os.path.basename(os.getcwd()) == self.name
+
         virtualenv.create_environment('venv')
         subprocess.run(['venv/bin/pip',
                         'install', '-r', 'requirements.txt'])
@@ -80,8 +85,8 @@ class RepoFuzzer:
 
     def _start_fuzzing(self):
 
-        self._create_venv()
-        os.chdir("code")
+        os.chdir(self.name)
+        assert os.path.basename(os.getcwd()) == self.name
         self._current_fuzzing_task = \
             threading.Thread(target=self._fuzz_task,
                              args=())
@@ -89,10 +94,13 @@ class RepoFuzzer:
         os.chdir("..")
 
     def _fuzz_task(self):
+
+        assert os.path.basename(os.getcwd()) == self.name
+
         iteration = 0
 
         while getattr(self._current_fuzzing_task, "running", True):
-            subprocess.run(['pytest'],
+            subprocess.run(['venv/bin/pytest'],
                            universal_newlines=True,
                            stdout=subprocess.PIPE)
             print('Fuzzing iteration: ', iteration)
