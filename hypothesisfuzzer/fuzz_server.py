@@ -24,7 +24,9 @@ class FuzzServer:
         self._load_config(config_path)
         self.db = SQLAlchemy(self.app)
         self.current_fuzzing_task = None
-        self.fuzzer = RepoFuzzer(self.config)
+
+        for name, repo_config in self.config['repos'].items():
+            self.fuzzer = RepoFuzzer(name, repo_config)
 
     def run(self, **kwargs):
 
@@ -60,17 +62,11 @@ class FuzzServer:
             with open(config_path) as file:
                 self.config = yaml.load(file)
 
-                if 'git_url' not in self.config:
+                if 'repos' not in self.config:
                     raise \
                         ConfigMissingOptionException("Configuration file" +
-                                                     "missing a 'git_url'" +
-                                                     "value")
-
-                if 'branch' not in self.config:
-                    raise \
-                        ConfigMissingOptionException("Configuration file" +
-                                                     "missing a 'branch'" +
-                                                     "value")
+                                                     "missing a 'repos'" +
+                                                     "attribute")
         except FileNotFoundError:
             raise FileNotFoundError('config.yml file not found. ' +
                                     'Create one or specify config path.')
