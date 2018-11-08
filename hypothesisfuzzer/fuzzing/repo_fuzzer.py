@@ -72,7 +72,6 @@ class RepoFuzzer:
 
         os.chdir(self.name)
         assert os.path.basename(os.getcwd()) == self.name
-
         virtualenv.create_environment('venv')
         subprocess.run(['venv/bin/pip',
                         'install', '-r', 'requirements.txt'])
