@@ -1,4 +1,6 @@
 repos:
-  samplerepo1:
+  samplerepo:
+    owner: hypothesis-imperial
+    name: fuzzing-sample-product-poc
     git_url: https://github.com/hypothesis-imperial/fuzzing-sample-product-poc.git
     branch: master # optional; Default master

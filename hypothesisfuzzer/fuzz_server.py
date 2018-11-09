@@ -22,11 +22,8 @@ class FuzzServer:
         self.app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
 
         self._load_config(config_path)
+        self._init_fuzzers()
         self.db = SQLAlchemy(self.app)
-        self.current_fuzzing_task = None
-
-        for name, repo_config in self.config['repos'].items():
-            self.fuzzer = RepoFuzzer(name, repo_config)
 
     def run(self, **kwargs):
 
@@ -39,11 +36,17 @@ class FuzzServer:
 
         @self.app.route('/webhook', methods=['POST'])
         def on_git_push():
-            return self.fuzzer.on_webhook(json.loads(request.data))
+            data = json.loads(request.data)
+            name = data['repository']['name']
+            owner = data['repository']['owner']['name']
 
-        @self.app.route('/get_commit_hash', methods=['GET'])
-        def get_commit_hash():
-            return self.fuzzer.get_commit_hash()
+            try:
+                fuzzer = self.fuzzers[(name, owner)]
+
+                return fuzzer.on_webhook(data)
+
+            except KeyError:
+                return 'Not OK', 404
 
         @self.app.route('/', methods=['GET'])
         def home():
@@ -53,9 +56,18 @@ class FuzzServer:
         def serve_static(path):
             return send_from_directory('build', path)
 
-        @self.app.route('/get_errors', methods=['GET'])
+        @self.app.route('/get_errors', methods=['POST'])
         def get_errors():
-            return self.fuzzer.get_errors()
+            data = json.loads(request.data)
+            name = data['name']
+            owner = data['owner']
+            try:
+                fuzzer = self.fuzzers[(name, owner)]
+
+                return fuzzer.get_errors()
+
+            except KeyError:
+                return 'Not OK', 404
 
     def _load_config(self, config_path):
         try:
@@ -70,3 +82,14 @@ class FuzzServer:
         except FileNotFoundError:
             raise FileNotFoundError('config.yml file not found. ' +
                                     'Create one or specify config path.')
+
+    def _init_fuzzers(self):
+        self.fuzzers = {}
+
+        for repo, repo_config in self.config['repos'].items():
+
+            repo_name = repo_config['name']
+            repo_owner = repo_config['owner']
+
+            self.fuzzers[(repo_name, repo_owner)] = \
+                RepoFuzzer(repo, repo_config)

@@ -9,7 +9,8 @@ from flask import jsonify
 from git import Repo as GitRepo
 from ..errors import (
     no_code_dir_error,
-    generic_error
+    generic_error,
+    ConfigMissingOptionException
 )
 
 
@@ -17,7 +18,7 @@ class RepoFuzzer:
 
     def __init__(self, name, config):
         self.name = name
-        self.config = config
+        self._load_config(config)
         self._clone_git(config['git_url'])
         self._create_venv()
         self._start_fuzzing()
@@ -105,3 +106,18 @@ class RepoFuzzer:
             print('Fuzzing iteration: ', iteration)
             iteration += 1
         print('Fuzzing stopped after', iteration, 'iterations')
+
+    def _load_config(self, config):
+        if 'name' not in self.config:
+            raise \
+                ConfigMissingOptionException("Repo configuration" +
+                                             "missing a 'name'" +
+                                             "attribute")
+
+        if 'owner' not in self.config:
+            raise \
+                ConfigMissingOptionException("Repo configuration" +
+                                             "missing a 'owner'" +
+                                             "attribute")
+
+        self.config = config

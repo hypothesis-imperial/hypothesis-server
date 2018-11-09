@@ -31,7 +31,9 @@ The server does 3 things:
 In a YAML configuration file,
 ```YAML
 repos:
-  -repo1:
+  repo1:
+    owner: owner_name # Mandatory
+    name: github_repo_name # Mandatory
     git_url: https://github.com/hypothesis-imperial/fuzzing-sample-product-poc.git
     project_root: "" # Optional; Default is just git directory root
     branch: master # optional; Default master
@@ -39,7 +41,7 @@ repos:
     tests_folder: tests # Optional: Default is "test" in project_root
     fuzz_on_start: True # Optional: Whether to pull and start fuzzing on server start, Default True
 
-  -repo2:
+  repo2:
     git_url: https://github.com/hypothesis-imperial/not-a-real-repo.git
     project_root: part-one
     branch: develop
@@ -47,6 +49,10 @@ repos:
     tests_folder: tests #in part-one
     fuzz_on_start: False
 ```
+
+## Usage
+
+To get started fuzzing, add a webhook to your GitHub repository pointing to the `/webhook` route, and push a commit!
 
 ## Authors
 
@@ -60,7 +66,7 @@ See also the list of [contributors](https://github.com/hypothesis-imperial/hypot
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.txt) file for details.
 
 ## Acknowledgments
 
