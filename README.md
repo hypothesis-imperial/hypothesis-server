@@ -32,8 +32,8 @@ In a YAML configuration file,
 ```YAML
 repos:
   repo1:
-    owner: owner_name # Mandatory
-    name: github_repo_name # Mandatory
+    owner: hypothesis-imperial # Mandatory
+    name: fuzzing-sample-product-poc # Mandatory
     git_url: https://github.com/hypothesis-imperial/fuzzing-sample-product-poc.git
     project_root: "" # Optional; Default is just git directory root
     branch: master # optional; Default master
@@ -42,7 +42,9 @@ repos:
     fuzz_on_start: True # Optional: Whether to pull and start fuzzing on server start, Default True
 
   repo2:
-    git_url: https://github.com/hypothesis-imperial/not-a-real-repo.git
+    owner: owner_McOwnerson
+    name: not-a-real-repo
+    git_url: https://github.com/owner_McOwnerson/not-a-real-repo.git
     project_root: part-one
     branch: develop
     requirements_file: ../requirements.txt
