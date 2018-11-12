@@ -4,6 +4,7 @@ import shutil
 import virtualenv
 import subprocess
 import threading
+import datetime
 
 from flask import jsonify
 from git import Repo as GitRepo
@@ -87,6 +88,7 @@ class RepoFuzzer:
 
         os.chdir(self.name)
         assert os.path.basename(os.getcwd()) == self.name
+        self._fuzz_start_time = datetime.datetime.now()
         self._current_fuzzing_task = \
             threading.Thread(target=self._fuzz_task,
                              args=())
