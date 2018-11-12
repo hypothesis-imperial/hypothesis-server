@@ -22,7 +22,6 @@ class RepoFuzzer:
         self._load_config(config)
         self._clone_git(config['git_url'])
         self._create_venv()
-        self._start_fuzzing()
 
     def start(self):
         self._start_fuzzing()
@@ -65,7 +64,6 @@ class RepoFuzzer:
             return json.load(file_data)
 
     def _clone_git(self, git_url):
-        # Delete old code folder
 
         if os.path.exists(self.name):
             shutil.rmtree(self.name, ignore_errors=True)
@@ -75,8 +73,8 @@ class RepoFuzzer:
 
     def _create_venv(self):
 
-        virtualenv.create_environment(self.name +'/venv')
-        subprocess.run([self.name + '/venv/bin/pip',
+        virtualenv.create_environment(self.name + '/venv')
+        subprocess.call([self.name + '/venv/bin/pip',
                         'install', '-r', self.name + '/requirements.txt'])
 
     def _stop_fuzzing(self):
@@ -97,9 +95,9 @@ class RepoFuzzer:
         iteration = 0
 
         while getattr(self._current_fuzzing_task, "running", True):
-            subprocess.run([self.name + '/venv/bin/pytest', self.name],
-                           universal_newlines=True,
-                           stdout=subprocess.PIPE)
+            subprocess.call([self.name + '/venv/bin/pytest', self.name],
+                            universal_newlines=True,
+                            stdout=subprocess.PIPE)
             print('Fuzzing iteration: ', iteration)
             iteration += 1
         print('Fuzzing stopped after', iteration, 'iterations')
