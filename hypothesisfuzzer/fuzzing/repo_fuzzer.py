@@ -5,7 +5,6 @@ import virtualenv
 import subprocess
 import threading
 
-from flask import jsonify
 from git import Repo as GitRepo
 from ..errors import (
     no_code_dir_error,
@@ -50,15 +49,15 @@ class RepoFuzzer:
         repo = GitRepo(self.name)
         sha = repo.head.object.hexsha
 
-        return jsonify({
+        return {
             "sha": sha
-        })
+        }
 
     def get_errors(self):
         if not os.path.exists(self.name):
             return no_code_dir_error()
         with open(self.name+'/data.txt', 'r') as file_data:
-            return jsonify(json.load(file_data))
+            return json.load(file_data)
 
     def _clone_git(self, git_url):
         # Delete old code folder
@@ -108,13 +107,13 @@ class RepoFuzzer:
         print('Fuzzing stopped after', iteration, 'iterations')
 
     def _load_config(self, config):
-        if 'name' not in self.config:
+        if 'name' not in config:
             raise \
                 ConfigMissingOptionException("Repo configuration" +
                                              "missing a 'name'" +
                                              "attribute")
 
-        if 'owner' not in self.config:
+        if 'owner' not in config:
             raise \
                 ConfigMissingOptionException("Repo configuration" +
                                              "missing a 'owner'" +

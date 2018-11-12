@@ -5,7 +5,7 @@ import yaml
 from .fuzzing import RepoFuzzer
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, send_from_directory, jsonify
 from .errors import (
     ConfigMissingOptionException,
 )
@@ -46,7 +46,12 @@ class FuzzServer:
                 return fuzzer.on_webhook(data)
 
             except KeyError:
-                return 'Not OK', 404
+                err_message = (
+                    'Hypothesis Server has not been configured to'
+                    'fuzz this repository.'
+                )
+
+                return err_message, 404
 
         @self.app.route('/', methods=['GET'])
         def home():
@@ -64,10 +69,15 @@ class FuzzServer:
             try:
                 fuzzer = self.fuzzers[(name, owner)]
 
-                return fuzzer.get_errors()
+                return jsonify(fuzzer.get_errors())
 
             except KeyError:
-                return 'Not OK', 404
+                err_message = (
+                    'Hypothesis Server has not been configured to'
+                    'fuzz this repository.'
+                )
+
+                return err_message, 404
 
     def _load_config(self, config_path):
         try:
