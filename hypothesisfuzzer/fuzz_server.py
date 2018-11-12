@@ -30,6 +30,9 @@ class FuzzServer:
         self.db.create_all()
         self._setup_routes()
 
+        for (name, owner), fuzzer in self.fuzzers.items():
+            fuzzer.start()
+
         self.app.run(**kwargs)
 
     def _setup_routes(self):

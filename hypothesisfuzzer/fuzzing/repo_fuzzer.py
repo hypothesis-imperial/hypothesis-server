@@ -24,6 +24,9 @@ class RepoFuzzer:
         self._create_venv()
         self._start_fuzzing()
 
+    def start(self):
+        self._start_fuzzing()
+
     def on_webhook(self, payload):
         # Check if repo is the same name as the one set in config
         try:
