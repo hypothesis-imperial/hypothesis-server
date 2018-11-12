@@ -9,7 +9,8 @@ from git import Repo as GitRepo
 from ..errors import (
     no_code_dir_error,
     generic_error,
-    ConfigMissingOptionException
+    ConfigMissingOptionException,
+    WrongDirectoryException
 )
 
 
@@ -71,7 +72,7 @@ class RepoFuzzer:
     def _create_venv(self):
 
         os.chdir(self.name)
-        assert os.path.basename(os.getcwd()) == self.name
+        self._check_dir()
         virtualenv.create_environment('venv')
         subprocess.run(['venv/bin/pip',
                         'install', '-r', 'requirements.txt'])
@@ -84,17 +85,15 @@ class RepoFuzzer:
 
     def _start_fuzzing(self):
 
-        os.chdir(self.name)
-        assert os.path.basename(os.getcwd()) == self.name
         self._current_fuzzing_task = \
             threading.Thread(target=self._fuzz_task,
                              args=())
         self._current_fuzzing_task.start()
-        os.chdir("..")
 
     def _fuzz_task(self):
 
-        assert os.path.basename(os.getcwd()) == self.name
+        os.chdir(self.name)
+        self._check_dir()
 
         iteration = 0
 
@@ -104,6 +103,7 @@ class RepoFuzzer:
                            stdout=subprocess.PIPE)
             print('Fuzzing iteration: ', iteration)
             iteration += 1
+        os.chdir("..")
         print('Fuzzing stopped after', iteration, 'iterations')
 
     def _load_config(self, config):
@@ -120,3 +120,8 @@ class RepoFuzzer:
                                              "attribute")
 
         self.config = config
+
+    def _check_dir(self):
+        if os.path.basename(os.getcwd()) != self.name:
+            raise WrongDirectoryException(os.path.basename(os.getcwd()),
+                                          self.name)
