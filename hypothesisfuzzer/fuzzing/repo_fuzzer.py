@@ -72,12 +72,9 @@ class RepoFuzzer:
 
     def _create_venv(self):
 
-        os.chdir(self.name)
-        self._check_dir()
-        virtualenv.create_environment('venv')
-        subprocess.run(['venv/bin/pip',
-                        'install', '-r', 'requirements.txt'])
-        os.chdir('..')
+        virtualenv.create_environment(self.name +'/venv')
+        subprocess.run([self.name + '/venv/bin/pip',
+                        'install', '-r', self.name + '/requirements.txt'])
 
     def _stop_fuzzing(self):
         if self._current_fuzzing_task:
@@ -94,18 +91,14 @@ class RepoFuzzer:
 
     def _fuzz_task(self):
 
-        os.chdir(self.name)
-        self._check_dir()
-
         iteration = 0
 
         while getattr(self._current_fuzzing_task, "running", True):
-            subprocess.run(['venv/bin/pytest'],
+            subprocess.run([self.name + '/venv/bin/pytest', self.name],
                            universal_newlines=True,
                            stdout=subprocess.PIPE)
             print('Fuzzing iteration: ', iteration)
             iteration += 1
-        os.chdir("..")
         print('Fuzzing stopped after', iteration, 'iterations')
 
     def _load_config(self, config):
