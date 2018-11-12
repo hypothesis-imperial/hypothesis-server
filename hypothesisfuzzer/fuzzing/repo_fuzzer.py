@@ -4,6 +4,7 @@ import shutil
 import virtualenv
 import subprocess
 import threading
+import datetime
 
 from git import Repo as GitRepo
 from ..errors import (
@@ -85,6 +86,7 @@ class RepoFuzzer:
 
     def _start_fuzzing(self):
 
+        self._fuzz_start_time = datetime.datetime.now()
         self._current_fuzzing_task = \
             threading.Thread(target=self._fuzz_task,
                              args=())
