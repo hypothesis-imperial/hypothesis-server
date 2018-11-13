@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardTitle, CardBody, CardDeck, CardHeader, Container, Row, Col } from 'reactstrap'
+import { Card, CardTitle, CardBody, CardHeader, Container, Row, Col } from 'reactstrap'
 import './FalsifyTest.css'
 
 const FalsifyTest = (props) => {
@@ -17,9 +17,11 @@ const FalsifyTest = (props) => {
     <Card>
       <CardBody>
         <CardTitle>Test Name: {props.test_name}</CardTitle>
-        <CardDeck>
+        <Row>
+          <Col sm="12" md={{ size: 6, offset: 3 }}>
           {errorList}
-        </CardDeck>
+          </Col>
+        </Row>
       </CardBody>
     </Card>
   )
@@ -31,7 +33,7 @@ const Error = (props) => {
   })
   return (
     <div>
-      {variableList}
+        {variableList}
     </div>
   )
 }
