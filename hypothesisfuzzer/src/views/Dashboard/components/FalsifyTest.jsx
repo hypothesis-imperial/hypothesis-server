@@ -1,13 +1,23 @@
 import React from 'react'
-import { Card, CardTitle, CardBody, CardHeader, Container, Row, Col } from 'reactstrap'
+import {
+  Card,
+  CardTitle,
+  CardBody,
+  CardHeader,
+  Container,
+  Row,
+  Col,
+  Table,
+  Thread,
+ } from 'reactstrap'
 import './FalsifyTest.css'
 
 const FalsifyTest = (props) => {
   const errorList = props.errors.map((variables, index) => {
     return (
       <Card>
+        <CardHeader>Error {index}</CardHeader>
         <CardBody>
-          <CardHeader>Error {index}</CardHeader>
           <Error key={index} variables={variables} />
         </CardBody>
       </Card>
@@ -16,10 +26,15 @@ const FalsifyTest = (props) => {
   return (
     <Card>
       <CardBody>
-        <CardTitle>Test Name: {props.test_name}</CardTitle>
         <Row>
-          <Col sm="12" md={{ size: 6, offset: 3 }}>
-          {errorList}
+          <Col sm="5">
+            <CardTitle className="mb-0">{props.test_name}</CardTitle>
+            <div className="small text-muted">Test Name</div>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            {errorList}
           </Col>
         </Row>
       </CardBody>
@@ -32,26 +47,33 @@ const Error = (props) => {
     return <Variable key={index} v_name={variable.v_name} v_value={variable.v_value} />
   })
   return (
-    <div>
+    <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
+      <thead className="thead-light">
+      <tr>
+        <th>Variable Name</th>
+        <th className="text-center">Value</th>
+      </tr>
+      </thead>
+      <tbody>
         {variableList}
-    </div>
+      </tbody>
+    </Table>
   )
 }
 
 const Variable = (props) => {
   return (
-    <div className="Variable">
-      <Container>
-        <Row>
-          <Col>Variable Name: </Col>
-          <Col>{props.v_name}</Col>
-        </Row>
-        <Row>
-          <Col>Variable Value: </Col>
-          <Col>{props.v_value}</Col>
-        </Row>
-      </Container>
-    </div>
+    <tr>
+      <td>
+        <div>{props.v_name}</div>
+        <div className="small text-muted">
+          <span>New</span> | some details
+        </div>
+      </td>
+      <td className="text-center">
+        <div>{props.v_value}</div>
+      </td>
+    </tr>
   )
 }
 
