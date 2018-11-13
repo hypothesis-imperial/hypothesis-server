@@ -24,8 +24,6 @@ class FuzzServer:
 
         logging.info('Fuzz server initialising.')
 
-        print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
-
         self.app = Flask(__name__, static_url_path='/build')
         CORS(self.app)
         self.app.config['SQLALCHEMY_DATABASE_URI'] = \
