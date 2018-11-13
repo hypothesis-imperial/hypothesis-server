@@ -111,7 +111,7 @@ class RepoFuzzer:
     def _create_venv(self):
 
         self.log.debug('Creating virtual environment for repository %s.',
-                      self.name)
+                       self.name)
 
         os.chdir(self.name)
         assert os.path.basename(os.getcwd()) == self.name
@@ -121,7 +121,7 @@ class RepoFuzzer:
         os.chdiry("..")
 
         self.log.debug('Virtual environment for repository %s created.',
-                      self.name)
+                       self.name)
 
     def _stop_fuzzing(self):
 

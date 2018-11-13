@@ -14,10 +14,10 @@ class FuzzServer:
 
     def __init__(self, config_path='config.yml'):
 
-        logging.basicConfig(datefmt='%d-%b-%y %H:%M:%S'
-                           , filename='fuzz_server.log'
-                           , format='%(asctime)s - %(levelname)s - %(message)s'
-                           , level=logging.DEBUG)
+        logging.basicConfig(datefmt='%d-%b-%y %H:%M:%S',
+                            filename='fuzz_server.log',
+                            format='%(asctime)s - %(levelname)s - %(message)s',
+                            level=logging.DEBUG)
 
         self.log = logging.getLogger('logger')
         self.log.debug('Initialising fuzzing server.')
@@ -89,8 +89,8 @@ class FuzzServer:
                 self.config = yaml.load(file)
 
                 if 'repos' not in self.config:
-                    self.log.error('Configuration file missing repos attribute.'
-                                  , exc_info=True)
+                    self.log.error('Configuration file missing repos.',
+                                   exc_info=True)
                     raise \
                         ConfigMissingOptionException("Configuration file" +
                                                      "missing a 'repos'" +
