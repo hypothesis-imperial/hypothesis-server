@@ -19,7 +19,7 @@ class RepoFuzzer:
     def __init__(self, name, config):
 
         self.log = logging.getLogger('logger')
-        self.log.debug('Initialising repository fuzzer.')
+        self.log.debug('Initialising repository %s fuzzer.', name)
 
         self.name = name
         self.config = config
@@ -27,7 +27,7 @@ class RepoFuzzer:
         self._create_venv()
         self._start_fuzzing()
 
-        self.log.debug('Repository fuzzer initialised.')
+        self.log.debug('Repository %s fuzzer initialised.', name)
 
     def on_webhook(self, payload):
 
@@ -97,11 +97,13 @@ class RepoFuzzer:
 
     def _clone_git(self, git_url):
 
-        self.log.debug('Deleting repository %s.', self.name)
+        self.log.debug('Cloning repository %s.', self.name)
 
-        # Delete old code folder
+        # Delete old code folder - might want to do git pull instead
         if os.path.exists(self.name):
+            self.log.debug('Deleting old repository %s.', self.name)
             shutil.rmtree(self.name, ignore_errors=True)
+            self.log.debug('Old repository %s deleted.', self.name)
 
         os.makedirs(self.name)
         GitRepo.clone_from(git_url, self.name)
@@ -128,8 +130,10 @@ class RepoFuzzer:
         self.log.debug('Stopping fuzzing for repository %s.', self.name)
 
         if self._current_fuzzing_task:
+            self.log.debug('Stopping fuzzing for repository %s.', self.name)
             self._current_fuzzing_task.running = False
             self._current_fuzzing_task.join()
+            self.log.debug('Fuzzing for repository %s stopped.', self.name)
 
         self.log.debug('Fuzzing for repository %s stopped.', self.name)
 
@@ -143,7 +147,7 @@ class RepoFuzzer:
             threading.Thread(target=self._fuzz_task,
                              args=())
         self._current_fuzzing_task.start()
-        os.chdir("..")
+        os.chdir('..')
 
         self.log.debug('Fuzzing for repository %s started.', self.name)
 

@@ -10,14 +10,15 @@ from flask import Flask, request, send_from_directory
 from .errors import ConfigMissingOptionException
 
 
+logging.basicConfig(datefmt='%d-%b-%y %H:%M:%S',
+                    filename='fuzz_server.log',
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    level=logging.DEBUG)
+
+
 class FuzzServer:
 
     def __init__(self, config_path='config.yml'):
-
-        logging.basicConfig(datefmt='%d-%b-%y %H:%M:%S',
-                            filename='fuzz_server.log',
-                            format='%(asctime)s - %(levelname)s - %(message)s',
-                            level=logging.DEBUG)
 
         self.log = logging.getLogger('logger')
         self.log.debug('Initialising fuzzing server.')
@@ -54,12 +55,13 @@ class FuzzServer:
 
         @self.app.route('/webhook', methods=['POST'])
         def on_git_push():
-            self.log.info('Git push occurred.')
+            self.log.info('Git push for repository %s occurred.',
+                          self.fuzzer.name)
             return self.fuzzer.on_webhook(json.loads(request.data))
 
         @self.app.route('/get_commit_hash', methods=['GET'])
         def get_commit_hash():
-            self.log.info('Getting commit hash.')
+            self.log.debug('Getting commit hash.')
             return self.fuzzer.get_commit_hash()
 
         @self.app.route('/', methods=['GET'])
@@ -74,7 +76,7 @@ class FuzzServer:
 
         @self.app.route('/get_errors', methods=['GET'])
         def get_errors():
-            self.log.info('Getting errors.')
+            self.log.debug('Getting errors.')
             return self.fuzzer.get_errors()
 
         self.log.debug('Routes set up.')
@@ -95,9 +97,8 @@ class FuzzServer:
                         ConfigMissingOptionException("Configuration file" +
                                                      "missing a 'repos'" +
                                                      "attribute")
-                self.log.debug('File config.yml loaded.')
         except FileNotFoundError:
-            self.log.error('File config.yml not found.', exc_info=True)
+            self.log.debug('File config.yml not found.', exc_info=True)
             raise FileNotFoundError('config.yml file not found. ' +
                                     'Create one or specify config path.')
 
