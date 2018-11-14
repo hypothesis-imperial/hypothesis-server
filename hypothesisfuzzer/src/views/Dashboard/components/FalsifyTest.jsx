@@ -16,7 +16,7 @@ const FalsifyTest = (props) => {
   const errorList = props.errors.map((variables, index) => {
     return (
       <Card>
-        <CardHeader>Error {index}</CardHeader>
+        <CardHeader className="cardheader-danger">Error {index}</CardHeader>
         <CardBody>
           <Error key={index} variables={variables} />
         </CardBody>
@@ -33,7 +33,7 @@ const FalsifyTest = (props) => {
           </Col>
         </Row>
         <Row>
-          <Col>
+          <Col style={{ marginTop: 30 + 'px' }}>
             {errorList}
           </Col>
         </Row>
@@ -47,8 +47,8 @@ const Error = (props) => {
     return <Variable key={index} v_name={variable.v_name} v_value={variable.v_value} />
   })
   return (
-    <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
-      <thead className="thead-light">
+    <Table hover responsive>
+      <thead>
       <tr>
         <th>Variable Name</th>
         <th className="text-center">Value</th>

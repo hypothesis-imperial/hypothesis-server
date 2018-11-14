@@ -384,11 +384,7 @@ class Dashboard extends Component {
         <Row>
           <Col>
             <CardBody>
-              <Row>
-                <Col>
-                  <FalsifyTest test_name={test_name} errors={errors}/>
-                </Col>
-              </Row>
+              <FalsifyTest test_name={test_name} errors={errors}/>
             </CardBody>
             <CardFooter>
               <Row className="text-center">
