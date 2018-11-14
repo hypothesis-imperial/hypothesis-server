@@ -1,9 +1,8 @@
-import os
 import json
-import shutil
-import virtualenv
+import os
 import subprocess
 import threading
+import virtualenv
 
 from flask import jsonify
 from git import Repo as GitRepo
