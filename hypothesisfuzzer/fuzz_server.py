@@ -35,7 +35,18 @@ class FuzzServer:
 
         self.app.run(**kwargs)
 
+
     def _setup_routes(self):
+
+        @self.app.route('/all_info', methods=['GET'])
+        def get_data():
+            datas = {}
+            for (name, owner), fuzzer in self.fuzzers.items():
+                with open(name + '.json') as f:
+                    data = json.load(f)
+                    datas[name] = data
+            return json.dumps(datas)
+
 
         @self.app.route('/webhook', methods=['POST'])
         def on_git_push():
@@ -105,4 +116,4 @@ class FuzzServer:
             repo_owner = repo_config['owner']
 
             self.fuzzers[(repo_name, repo_owner)] = \
-                RepoFuzzer(repo, repo_config)
+                RepoFuzzer(repo_name, repo_config)

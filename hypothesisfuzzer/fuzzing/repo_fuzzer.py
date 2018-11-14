@@ -60,7 +60,7 @@ class RepoFuzzer:
     def get_errors(self):
         if not os.path.exists(self.name):
             return no_code_dir_error()
-        with open(self.name+'/data.txt', 'r') as file_data:
+        with open(self.name + '.json', 'r') as file_data:
             return json.load(file_data)
 
     def _clone_git(self, git_url):
@@ -95,7 +95,9 @@ class RepoFuzzer:
         iteration = 0
 
         while getattr(self._current_fuzzing_task, "running", True):
-            subprocess.call([self.name + '/venv/bin/pytest', self.name],
+            subprocess.call([self.name + '/venv/bin/pytest',\
+                            '--hypothesis-output=' + self.name + '.json',\
+                            self.name],
                             universal_newlines=True,
                             stdout=subprocess.PIPE)
             print('Fuzzing iteration: ', iteration)
