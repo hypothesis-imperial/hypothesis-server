@@ -1,19 +1,25 @@
 import json
 import logging
+import logging.handlers
 import os
 import yaml
 
+from .errors import ConfigMissingOptionException
 from .fuzzing import RepoFuzzer
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask import Flask, request, send_from_directory
-from .errors import ConfigMissingOptionException
+from sys import platform
 
 
 logging.basicConfig(datefmt='%d-%b-%y %H:%M:%S',
                     filename='fuzz_server.log',
                     format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.DEBUG)
+
+if platform.startswith('linux'):
+    handler = logging.handlers.SysLogHandler(address='/dev/log')
+    logging.getLogger('logger').addHandler(handler)
 
 
 class FuzzServer:
@@ -61,7 +67,6 @@ class FuzzServer:
 
         @self.app.route('/get_commit_hash', methods=['GET'])
         def get_commit_hash():
-            self.log.debug('Getting commit hash.')
             return self.fuzzer.get_commit_hash()
 
         @self.app.route('/', methods=['GET'])
@@ -74,7 +79,6 @@ class FuzzServer:
 
         @self.app.route('/get_errors', methods=['GET'])
         def get_errors():
-            self.log.debug('Getting errors.')
             return self.fuzzer.get_errors()
 
         self.log.debug('Routes set up.')
