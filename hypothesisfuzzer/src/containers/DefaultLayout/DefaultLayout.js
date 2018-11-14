@@ -37,7 +37,7 @@ class DefaultLayout extends Component {
             <AppSidebarFooter />
             <AppSidebarMinimizer />
           </AppSidebar>
-          <main className="main">
+          <main style={{ backgroundColor: "#F6F5F5" }} className="main">
             <AppBreadcrumb appRoutes={routes}/>
             <Container fluid>
               <Switch>
