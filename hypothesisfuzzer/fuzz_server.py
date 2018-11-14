@@ -66,12 +66,10 @@ class FuzzServer:
 
         @self.app.route('/', methods=['GET'])
         def home():
-            self.log.info('Home.')
             return send_from_directory('build', 'index.html')
 
         @self.app.route('/<path:path>', methods=['GET'])
         def serve_static(path):
-            self.log.info('Serve static.')
             return send_from_directory('build', path)
 
         @self.app.route('/get_errors', methods=['GET'])
@@ -87,7 +85,7 @@ class FuzzServer:
 
         try:
             with open(config_path) as file:
-                self.log.debug('Opening file config.yml.')
+                self.log.debug('Opening file config_path.')
                 self.config = yaml.load(file)
 
                 if 'repos' not in self.config:
@@ -97,6 +95,7 @@ class FuzzServer:
                         ConfigMissingOptionException("Configuration file" +
                                                      "missing a 'repos'" +
                                                      "attribute")
+                    self.log.debug('File config_path loaded.', exc_info=True)
         except FileNotFoundError:
             self.log.debug('File config.yml not found.', exc_info=True)
             raise FileNotFoundError('config.yml file not found. ' +

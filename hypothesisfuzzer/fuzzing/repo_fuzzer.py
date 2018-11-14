@@ -127,15 +127,11 @@ class RepoFuzzer:
 
     def _stop_fuzzing(self):
 
-        self.log.debug('Stopping fuzzing for repository %s.', self.name)
-
         if self._current_fuzzing_task:
             self.log.debug('Stopping fuzzing for repository %s.', self.name)
             self._current_fuzzing_task.running = False
             self._current_fuzzing_task.join()
             self.log.debug('Fuzzing for repository %s stopped.', self.name)
-
-        self.log.debug('Fuzzing for repository %s stopped.', self.name)
 
     def _start_fuzzing(self):
 
