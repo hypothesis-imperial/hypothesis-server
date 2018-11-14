@@ -60,13 +60,18 @@ class RepoFuzzer:
             return jsonify(json.load(file_data))
 
     def _clone_git(self, git_url):
-        # Delete old code folder
 
+        # Pull repository if already exists
         if os.path.exists(self.name):
-            shutil.rmtree(self.name, ignore_errors=True)
-
-        os.makedirs(self.name)
-        GitRepo.clone_from(git_url, self.name)
+            # self.log.debug('Updating existing repository %s.', self.name)
+            GitRepo(self.name).git.pull()
+            # self.log.debug('Existing repository %s updated.', self.name)
+        # Clone repository otherwise
+        else:
+            # self.log.debug('Creating new repository %s.', self.name)
+            os.makedirs(self.name)
+            GitRepo.clone_from(git_url, self.name)
+            # self.log.debug('New repository %s created.', self.name)
 
     def _create_venv(self):
 
