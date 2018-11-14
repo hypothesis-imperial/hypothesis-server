@@ -1,9 +1,10 @@
-import os
 import json
+import logging
+import os
 import shutil
-import virtualenv
 import subprocess
 import threading
+import virtualenv
 
 from flask import jsonify
 from git import Repo as GitRepo
@@ -16,11 +17,17 @@ from ..errors import (
 class RepoFuzzer:
 
     def __init__(self, name, config):
+
+        self.log = logging.getLogger('logger')
+        self.log.debug('Initialising repository %s fuzzer.', name)
+
         self.name = name
         self.config = config
         self._clone_git(config['git_url'])
         self._create_venv()
         self._start_fuzzing()
+
+        self.log.debug('Repository %s fuzzer initialised.', name)
 
     def on_webhook(self, payload):
         # Check if repo is the same name as the one set in config
@@ -60,9 +67,12 @@ class RepoFuzzer:
             return jsonify(json.load(file_data))
 
     def _clone_git(self, git_url):
-        # Delete old code folder
 
+        self.log.debug('Cloneing repository %s.', self.name)
+
+        # Delete old code folder - might want to do git pull instead
         if os.path.exists(self.name):
+            self.log.debug('Deleting old repository %s.', self.name)
             shutil.rmtree(self.name, ignore_errors=True)
 
         os.makedirs(self.name)
@@ -78,9 +88,12 @@ class RepoFuzzer:
         os.chdir('..')
 
     def _stop_fuzzing(self):
+
         if self._current_fuzzing_task:
+            self.log.debug('Stopping fuzzing for repository %s.', self.name)
             self._current_fuzzing_task.running = False
             self._current_fuzzing_task.join()
+            self.log.debug('Fuzzing for repository %s stopped.', self.name)
 
     def _start_fuzzing(self):
 
@@ -90,7 +103,7 @@ class RepoFuzzer:
             threading.Thread(target=self._fuzz_task,
                              args=())
         self._current_fuzzing_task.start()
-        os.chdir("..")
+        os.chdir('..')
 
     def _fuzz_task(self):
 

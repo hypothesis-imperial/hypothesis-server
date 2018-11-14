@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import yaml
 
@@ -11,9 +12,18 @@ from .errors import (
 )
 
 
+logging.basicConfig(datefmt='%d-%b-%y %H:%M:%S',
+                    filename='fuzz_server.log',
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    level=logging.DEBUG)
+
+
 class FuzzServer:
 
     def __init__(self, config_path='config.yml'):
+
+        self.log = logging.getLogger('logger')
+        self.log.debug('Initialising fuzzing server.')
 
         self.app = Flask(__name__, static_url_path='/build')
         CORS(self.app)
@@ -39,10 +49,13 @@ class FuzzServer:
 
         @self.app.route('/webhook', methods=['POST'])
         def on_git_push():
+            self.log.info('Git push for repository %s occurred.',
+                          self.fuzzer.name)
             return self.fuzzer.on_webhook(json.loads(request.data))
 
         @self.app.route('/get_commit_hash', methods=['GET'])
         def get_commit_hash():
+            self.log.debug('Getting commit hash.')
             return self.fuzzer.get_commit_hash()
 
         @self.app.route('/', methods=['GET'])
@@ -55,6 +68,7 @@ class FuzzServer:
 
         @self.app.route('/get_errors', methods=['GET'])
         def get_errors():
+            self.log.debug('Getting errors.')
             return self.fuzzer.get_errors()
 
     def _load_config(self, config_path):
@@ -68,5 +82,6 @@ class FuzzServer:
                                                      "missing a 'repos'" +
                                                      "attribute")
         except FileNotFoundError:
+            self.log.debug('File config.yml not found.', exc_info=True)
             raise FileNotFoundError('config.yml file not found. ' +
                                     'Create one or specify config path.')
