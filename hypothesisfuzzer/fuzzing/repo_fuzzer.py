@@ -41,8 +41,7 @@ class RepoFuzzer:
         try:
             if payload_name != config_name:
                 logger.warning('Repository %s is different from %s.',
-                                 payload_name,
-                                 config_name)
+                               payload_name, config_name)
                 return 'OK'
         except KeyError:
             logger.info('Repository %s is as configured.', payload_name)
@@ -54,7 +53,7 @@ class RepoFuzzer:
             logger.debug('Repository %s cloned.', payload_name)
         except Exception:
             logger.error('Unable to access repository %s for cloning.',
-                           payload_name)
+                         payload_name)
             return generic_error(msg="Error cloning Git repository! " +
                                      "Please ensure you have access.")
 
@@ -74,7 +73,7 @@ class RepoFuzzer:
 
         if not os.path.exists(self.name):
             logger.error('When getting commit hash, path of %s not found.',
-                           self.name)
+                         self.name)
             return no_code_dir_error()
         repo = GitRepo(self.name)
         sha = repo.head.object.hexsha
@@ -91,7 +90,7 @@ class RepoFuzzer:
 
         if not os.path.exists(self.name):
             logger.error('When getting errors, path of %s not found.',
-                           self.name)
+                         self.name)
             return no_code_dir_error()
         with open(self.name+'/data.txt', 'r') as file_data:
             logger.debug('Errors for repository %s obtained.', self.name)
@@ -115,7 +114,7 @@ class RepoFuzzer:
     def _create_venv(self):
 
         logger.debug('Creating virtual environment for repository %s.',
-                       self.name)
+                     self.name)
 
         os.chdir(self.name)
         assert os.path.basename(os.getcwd()) == self.name
@@ -125,7 +124,7 @@ class RepoFuzzer:
         os.chdiry("..")
 
         logger.debug('Virtual environment for repository %s created.',
-                       self.name)
+                     self.name)
 
     def _stop_fuzzing(self):
 

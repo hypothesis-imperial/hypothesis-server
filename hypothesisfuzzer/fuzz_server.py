@@ -63,7 +63,7 @@ class FuzzServer:
         @self.app.route('/webhook', methods=['POST'])
         def on_git_push():
             logger.debug('Git push for repository %s occurred.',
-                          self.fuzzer.name)
+                         self.fuzzer.name)
             return self.fuzzer.on_webhook(json.loads(request.data))
 
         @self.app.route('/get_commit_hash', methods=['GET'])
@@ -95,7 +95,7 @@ class FuzzServer:
 
                 if 'repos' not in self.config:
                     logger.error('Configuration file missing repos.',
-                                   exc_info=True)
+                                 exc_info=True)
                     raise \
                         ConfigMissingOptionException("Configuration file" +
                                                      "missing a 'repos'" +
