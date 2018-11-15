@@ -121,3 +121,6 @@ dmypy.json
 
 # JetBrains IDEs
 **.idea
+
+# CTags
+tags
