@@ -95,9 +95,9 @@ class RepoFuzzer:
         iteration = 0
 
         while getattr(self._current_fuzzing_task, "running", True):
-            subprocess.call([self.name + '/venv/bin/pytest',\
-                            '--hypothesis-output=' + self.name + '.json',\
-                            self.name],
+            subprocess.call([self.name + '/venv/bin/pytest',
+                             '--hypothesis-output=' + self.name + '.json',
+                             self.name],
                             universal_newlines=True,
                             stdout=subprocess.PIPE)
             print('Fuzzing iteration: ', iteration)
