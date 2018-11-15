@@ -1,16 +1,17 @@
+import datetime
 import json
 import logging
 import os
 import shutil
 import subprocess
 import threading
-import virtualenv
 
-from flask import jsonify
 from git import Repo as GitRepo
 from ..errors import (
     no_code_dir_error,
-    generic_error
+    generic_error,
+    ConfigMissingOptionException,
+    WrongDirectoryException
 )
 
 
@@ -24,9 +25,11 @@ class RepoFuzzer:
         logger.info('Initialising repository %s fuzzer.', name)
 
         self.name = name
-        self.config = config
+        self._load_config(config)
         self._clone_git(config['git_url'])
         self._create_venv()
+
+    def start(self):
         self._start_fuzzing()
 
         logger.info('Repository %s fuzzer initialised.', name)
@@ -80,9 +83,9 @@ class RepoFuzzer:
 
         logger.debug('Commit hash for repository %s obtained.', self.name)
 
-        return jsonify({
+        return {
             "sha": sha
-        })
+        }
 
     def get_errors(self):
 
@@ -92,9 +95,10 @@ class RepoFuzzer:
             logger.error('When getting errors, path of %s not found.',
                          self.name)
             return no_code_dir_error()
-        with open(self.name+'/data.txt', 'r') as file_data:
+
+        with open(self.name + '.json', 'r') as file_data:
             logger.debug('Errors for repository %s obtained.', self.name)
-            return jsonify(json.load(file_data))
+            return json.load(file_data)
 
     def _clone_git(self, git_url):
 
@@ -115,14 +119,9 @@ class RepoFuzzer:
 
         logger.debug('Creating virtual environment for repository %s.',
                      self.name)
-
-        os.chdir(self.name)
-        assert os.path.basename(os.getcwd()) == self.name
-        virtualenv.create_environment('venv')
-        subprocess.run(['venv/bin/pip',
-                        'install', '-r', 'requirements.txt'])
-        os.chdiry("..")
-
+        virtualenv.create_environment(self.name + '/venv')
+        subprocess.call([self.name + '/venv/bin/pip',
+                        'install', '-r', self.name + '/requirements.txt'])
         logger.debug('Virtual environment for repository %s created.',
                      self.name)
 
@@ -138,13 +137,11 @@ class RepoFuzzer:
 
         logger.debug('Starting fuzzing for repository %s.', self.name)
 
-        os.chdir(self.name)
-        assert os.path.basename(os.getcwd()) == self.name
+        self._fuzz_start_time = datetime.datetime.now()
         self._current_fuzzing_task = \
             threading.Thread(target=self._fuzz_task,
                              args=())
         self._current_fuzzing_task.start()
-        os.chdir('..')
 
         logger.debug('Fuzzing for repository %s started.', self.name)
 
@@ -152,17 +149,39 @@ class RepoFuzzer:
 
         logger.debug('Fuzzing task of repository %s.', self.name)
 
-        assert os.path.basename(os.getcwd()) == self.name
-
         iteration = 0
 
         while getattr(self._current_fuzzing_task, "running", True):
             logger.info('Fuzzing iteration %s.', iteration)
-            subprocess.run(['venv/bin/pytest'],
-                           universal_newlines=True,
-                           stdout=subprocess.PIPE)
+            subprocess.call([self.name + '/venv/bin/pytest',
+                             '--hypothesis-output=' + self.name + '.json',
+                             self.name],
+                            universal_newlines=True,
+                            stdout=subprocess.PIPE)
             print('Fuzzing iteration: ', iteration)
             iteration += 1
         print('Fuzzing stopped after', iteration, 'iterations')
 
         logger.debug('Task of repository %s fuzzed.', self.name)
+
+    def _load_config(self, config):
+
+        if 'name' not in config:
+            logger.error('Repo configuration missing name.', exc_info=True)
+            raise ConfigMissingOptionException("Repo configuration" +
+                                               "missing a 'name' attribute")
+
+        if 'owner' not in config:
+            logger.error('Repo configuration missing owner.', exc_info=True)
+            raise ConfigMissingOptionException("Repo configuration" +
+                                               "missing an 'owner' attribute")
+
+        self.config = config
+
+    def _check_dir(self):
+
+        logger.debug('Checking directory of repository %s.', self.name)
+
+        if os.path.basename(os.getcwd()) != self.name:
+            raise WrongDirectoryException(os.path.basename(os.getcwd()),
+                                          self.name)
