@@ -5,6 +5,7 @@ import os
 import shutil
 import subprocess
 import threading
+import virtualenv
 
 from git import Repo as GitRepo
 from ..errors import (
@@ -29,10 +30,15 @@ class RepoFuzzer:
         self._clone_git(config['git_url'])
         self._create_venv()
 
+        logger.info('Repository %s fuzzer initialised.', name)
+
     def start(self):
+
+        logger.debug('Starting fuzzing for repository %s.', self.name)
+
         self._start_fuzzing()
 
-        logger.info('Repository %s fuzzer initialised.', name)
+        logger.debug('Fuzzing for repository %s started.', self.name)
 
     def on_webhook(self, payload):
 

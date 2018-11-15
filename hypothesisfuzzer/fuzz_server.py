@@ -154,4 +154,5 @@ class FuzzServer:
 
         logger.debug('Fuzzers initialised.')
 
+
 logging.shutdown()
