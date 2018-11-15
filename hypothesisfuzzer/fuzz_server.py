@@ -21,13 +21,14 @@ if platform.startswith('linux'):
     handler = logging.handlers.SysLogHandler(address='/dev/log')
     logging.getLogger('logger').addHandler(handler)
 
+logger = logging.getLogger(__name__)
+
 
 class FuzzServer:
 
     def __init__(self, config_path='config.yml'):
 
-        self.log = logging.getLogger('logger')
-        self.log.debug('Initialising fuzzing server.')
+        logger.debug('Initialising fuzzing server.')
 
         self.app = Flask(__name__, static_url_path='/build')
         CORS(self.app)
@@ -42,26 +43,26 @@ class FuzzServer:
         for name, repo_config in self.config['repos'].items():
             self.fuzzer = RepoFuzzer(name, repo_config)
 
-        self.log.debug('Fuzzing server initialised.')
+        logger.debug('Fuzzing server initialised.')
 
     def run(self, **kwargs):
 
-        self.log.debug('Fuzzing server started running.')
+        logger.debug('Fuzzing server started running.')
 
         self.db.create_all()
         self._setup_routes()
 
         self.app.run(**kwargs)
 
-        self.log.debug('Fuzzing server stopped running.')
+        logger.debug('Fuzzing server stopped running.')
 
     def _setup_routes(self):
 
-        self.log.debug('Setting up routes.')
+        logger.debug('Setting up routes.')
 
         @self.app.route('/webhook', methods=['POST'])
         def on_git_push():
-            self.log.info('Git push for repository %s occurred.',
+            logger.debug('Git push for repository %s occurred.',
                           self.fuzzer.name)
             return self.fuzzer.on_webhook(json.loads(request.data))
 
@@ -81,28 +82,28 @@ class FuzzServer:
         def get_errors():
             return self.fuzzer.get_errors()
 
-        self.log.debug('Routes set up.')
+        logger.debug('Routes set up.')
 
     def _load_config(self, config_path):
 
-        self.log.debug('Loading configurations.')
+        logger.debug('Loading configurations.')
 
         try:
             with open(config_path) as file:
-                self.log.debug('Opening file config_path.')
+                logger.info('Opening file config_path.')
                 self.config = yaml.load(file)
 
                 if 'repos' not in self.config:
-                    self.log.error('Configuration file missing repos.',
+                    logger.error('Configuration file missing repos.',
                                    exc_info=True)
                     raise \
                         ConfigMissingOptionException("Configuration file" +
                                                      "missing a 'repos'" +
                                                      "attribute")
-                    self.log.debug('File config_path loaded.', exc_info=True)
+                logger.info('File config_path loaded.', exc_info=True)
         except FileNotFoundError:
-            self.log.debug('File config.yml not found.', exc_info=True)
+            logger.error('File config.yml not found.', exc_info=True)
             raise FileNotFoundError('config.yml file not found. ' +
                                     'Create one or specify config path.')
 
-        self.log.debug('Configurations loaded.')
+        logger.debug('Configurations loaded.')
