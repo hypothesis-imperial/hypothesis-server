@@ -63,14 +63,17 @@ class FuzzServer:
 
         @self.app.route('/all_info', methods=['GET'])
         def get_data():
-            repo_infos = {}
+            repositories = []
 
             for (name, owner), fuzzer in self.fuzzers.items():
                 with open(name + '.json') as f:
                     data = json.load(f)
-                    repo_infos[name] = data
+                    data["name"] = name
+                    repositories.append(data)
 
-            return jsonify(repo_infos)
+            return jsonify({
+                "repositories": repositories
+            })
 
         @self.app.route('/webhook', methods=['POST'])
         def on_git_push():
