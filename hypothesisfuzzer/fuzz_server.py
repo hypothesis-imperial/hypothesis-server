@@ -14,6 +14,7 @@ from sys import platform
 
 logging.basicConfig(datefmt='%d-%b-%y %H:%M:%S',
                     filename='fuzz_server.log',
+
                     format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.DEBUG)
 
@@ -40,11 +41,11 @@ class FuzzServer:
         self._init_fuzzers()
         self.db = SQLAlchemy(self.app)
 
-        logger.debug('Fuzzing server initialised.')
+        logger.info('Fuzzing server initialised.')
 
     def run(self, **kwargs):
 
-        logger.debug('Fuzzing server started running.')
+        logger.info('Fuzzing server started running.')
 
         self.db.create_all()
         self._setup_routes()
@@ -58,15 +59,17 @@ class FuzzServer:
 
     def _setup_routes(self):
 
-        logger.debug('Setting up routes.')
+        logger.info('Setting up routes.')
 
         @self.app.route('/all_info', methods=['GET'])
         def get_data():
             repo_infos = {}
+
             for (name, owner), fuzzer in self.fuzzers.items():
                 with open(name + '.json') as f:
                     data = json.load(f)
                     repo_infos[name] = data
+
             return jsonify(repo_infos)
 
         @self.app.route('/webhook', methods=['POST'])
@@ -79,6 +82,7 @@ class FuzzServer:
 
             try:
                 fuzzer = self.fuzzers[(name, owner)]
+
                 return fuzzer.on_webhook(data)
             except KeyError:
                 logger.error('Server not configured to fuzz this repository.',
@@ -87,6 +91,7 @@ class FuzzServer:
                     'Hypothesis server has not been configured to'
                     'fuzz this repository.'
                 )
+
                 return err_message, 404
 
         @self.app.route('/', methods=['GET'])
@@ -104,6 +109,7 @@ class FuzzServer:
             owner = data['owner']
             try:
                 fuzzer = self.fuzzers[(name, owner)]
+
                 return jsonify(fuzzer.get_errors())
             except KeyError:
                 logger.error('Server not configured to fuzz this repository.')
@@ -111,6 +117,7 @@ class FuzzServer:
                     'Hypothesis server has not been configured to'
                     'fuzz this repository.'
                 )
+
                 return err_message, 404
 
         logger.debug('Routes set up.')
@@ -136,7 +143,7 @@ class FuzzServer:
             raise FileNotFoundError('config.yml file not found. ' +
                                     'Create one or specify config path.')
 
-        logger.debug('Configurations loaded.')
+        logger.info('Server Configuration loaded.')
 
     def _init_fuzzers(self):
 
@@ -152,7 +159,7 @@ class FuzzServer:
             self.fuzzers[(repo_name, repo_owner)] = RepoFuzzer(repo_name,
                                                                repo_config)
 
-        logger.debug('Fuzzers initialised.')
+        logger.info('Fuzzers initialised.')
 
 
 logging.shutdown()

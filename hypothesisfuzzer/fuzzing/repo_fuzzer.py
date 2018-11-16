@@ -23,7 +23,7 @@ class RepoFuzzer:
 
     def __init__(self, name, config):
 
-        logger.info('Initialising repository %s fuzzer.', name)
+        logger.debug('Initialising repository %s fuzzer.', name)
 
         self.name = name
         self._load_config(config)
@@ -42,7 +42,7 @@ class RepoFuzzer:
 
     def on_webhook(self, payload):
 
-        logger.debug('Webhook event began.')
+        logger.debug('Webhook event triggered')
 
         # Check if repo is the same name as the one set in config
         payload_name = payload["repository"]["name"]
@@ -51,6 +51,7 @@ class RepoFuzzer:
             if payload_name != config_name:
                 logger.warning('Repository %s is different from %s.',
                                payload_name, config_name)
+
                 return 'OK'
         except KeyError:
             logger.info('Repository %s is as configured.', payload_name)
@@ -63,6 +64,7 @@ class RepoFuzzer:
         except Exception:
             logger.error('Unable to access repository %s for cloning.',
                          payload_name)
+
             return generic_error(msg="Error cloning Git repository! " +
                                      "Please ensure you have access.")
 
@@ -71,8 +73,6 @@ class RepoFuzzer:
         self._create_venv()
         logger.debug('Virtual environment created and fuzzing restarted.')
         self._start_fuzzing()
-
-        logger.debug('Webhook event ended.')
 
         return 'OK'
 
@@ -83,6 +83,7 @@ class RepoFuzzer:
         if not os.path.exists(self.name):
             logger.error('When getting commit hash, path of %s not found.',
                          self.name)
+
             return no_code_dir_error()
         repo = GitRepo(self.name)
         sha = repo.head.object.hexsha
@@ -100,10 +101,12 @@ class RepoFuzzer:
         if not os.path.exists(self.name):
             logger.error('When getting errors, path of %s not found.',
                          self.name)
+
             return no_code_dir_error()
 
         with open(self.name + '.json', 'r') as file_data:
             logger.debug('Errors for repository %s obtained.', self.name)
+
             return json.load(file_data)
 
     def _clone_git(self, git_url):
@@ -111,6 +114,7 @@ class RepoFuzzer:
         logger.debug('Cloning repository %s.', self.name)
 
         # Delete old code folder - might want to do git pull instead
+
         if os.path.exists(self.name):
             logger.debug('Deleting old repository %s.', self.name)
             shutil.rmtree(self.name, ignore_errors=True)
