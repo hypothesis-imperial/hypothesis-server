@@ -13,17 +13,32 @@
                     "error_type": "AssertionError",
                     "error_message": "assert False",
                     "traceback": "Traceback (most recent call last):\n  File \"/Users/yingxiaokage/fuzzing-sample-product-poc/tests/test_carmichael.py\", line 59, in test_carmichael\n    assert False#is_prime(v) == is_probably_prime(v), \"Catch a Carmichael number \" + str(v)\nAssertionError: assert False\n"
+                },
+                {
+                    "variables": [
+                        {
+                            "v_name": "v1",
+                            "v_value": "0000"
+                        },
+                        {
+                            "v_name": "v3",
+                            "v_value": "9000"
+                        }
+                    ],
+                    "error_type": "AssertionError",
+                    "error_message": "assert False",
+                    "traceback": "Traceback (most recent call last):\n  File \"/Users/yingxiaokage/fuzzing-sample-product-poc/tests/test_carmichael.py\", line 59, in test_carmichael\n    assert False#is_prime(v) == is_probably_prime(v), \"Catch a Carmichael number \" + str(v)\nAssertionError: assert False\n"
                 }
             ],
             "repo_name": "name"
         },
         {
-            "test_name": "test_carmichael",
+            "test_name": "test_dummy",
             "errors": [
                 {
                     "variables": [
                         {
-                            "v_name": "v",
+                            "v_name": "w",
                             "v_value": "0"
                         }
                     ],

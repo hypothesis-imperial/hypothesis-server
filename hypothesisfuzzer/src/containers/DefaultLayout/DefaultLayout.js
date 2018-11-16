@@ -12,8 +12,6 @@ import {
   AppSidebarHeader,
   AppSidebarNav,
 } from '@coreui/react';
-// sidebar nav config
-import navigation from '../../_nav';
 // routes config
 import routes from '../../routes';
 import DefaultFooter from './DefaultFooter';
@@ -21,6 +19,42 @@ import DefaultHeader from './DefaultHeader';
 
 class DefaultLayout extends Component {
   render() {
+    //get repo list
+    const repos = this.props.repos;
+    var repoNum = 0;
+    const repolist = [];
+
+    repos.map(() =>{
+      repolist.push(
+        {
+          name: 'Repo ' + repoNum,
+          url: `/dashboard/${repoNum}`,
+          icon: 'icon-check',
+        }
+      );
+      repoNum++;
+      return repolist;
+    });
+
+    //nav for sidebar
+    const navigation = {
+      items: [
+        {
+          name: 'Dashboard',
+          url: '#',
+          icon: 'icon-speedometer',
+          badge: {
+            variant: 'info',
+            text: 'NEW',
+          },
+        },
+        {
+          title: true,
+          name: 'Repositories',
+        },
+      ].concat(repolist),
+    };
+
     return (
       <div className="app">
         <AppHeader fixed>
