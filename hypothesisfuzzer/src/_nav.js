@@ -6,7 +6,7 @@ const repolist = [];
 repos.map(() =>{
   repolist.push(
     {
-      name: 'Repo' + repoNum,
+      name: 'Repo ' + repoNum,
       url: `/dashboard/${repoNum}`,
       icon: 'icon-check',
     }
@@ -19,7 +19,7 @@ export default {
   items: [
     {
       name: 'Dashboard',
-      url: '/dashboard/',
+      url: '#',
       icon: 'icon-speedometer',
       badge: {
         variant: 'info',
