@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Badge, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLink } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 
@@ -16,20 +15,13 @@ class DefaultHeader extends Component {
     const { children, ...attributes } = this.props;
 
     return (
-      <React.Fragment>
-        <AppSidebarToggler className="d-md-down-none" display="lg" />
-
-        <Nav className="d-md-down-none" navbar>
-          <NavItem className="px-3">
-            <NavLink href="/">Dashboard</NavLink>
-          </NavItem>
-          <NavItem className="px-3">
-            <NavLink href="#">Settings</NavLink>
-          </NavItem>
-        </Nav>
-        <Nav className="ml-auto" navbar>
-        </Nav>
-      </React.Fragment>
+      <div>
+        <React.Fragment>
+          <AppSidebarToggler className="d-lg-none" display="md" mobile />
+          <AppSidebarToggler className="d-md-down-none" display="lg" />
+            Hypothesis
+        </React.Fragment>
+      </div>
     );
   }
 }

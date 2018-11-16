@@ -1,0 +1,41 @@
+{
+  "repo1":[
+    [
+      {
+        "errors": [
+          {
+            "error_message": "local variable 'character' referenced before assignment",
+            "error_type": "UnboundLocalError",
+            "traceback": "Traceback (most recent call last):\n  File \"/home/sossexy/fuzzing-sample-product-poc/tests/test_different_error.py\", line 31, in test_decode_inverts_encode\n    assert decode(encode(s)) == s\n  File \"/home/sossexy/fuzzing-sample-product-poc/tests/test_different_error.py\", line 18, in encode\n    entry = (character, count)\nUnboundLocalError: local variable 'character' referenced before assignment\n",
+            "variables": [
+              {
+                "v_name": "s",
+                "v_value": "u''"
+              }
+            ]
+          }
+        ],
+        "test_name": "test_decode_inverts_encode"
+      }
+    ],
+    [
+      {
+        "errors": [
+          {
+            "error_message": "local variable 'character' referenced before assignment",
+            "error_type": "UnboundLocalError",
+            "traceback": "Traceback (most recent call last):\n  File \"/home/sossexy/fuzzing-sample-product-poc/tests/test_different_error.py\", line 31, in test_decode_inverts_encode\n    assert decode(encode(s)) == s\n  File \"/home/sossexy/fuzzing-sample-product-poc/tests/test_different_error.py\", line 18, in encode\n    entry = (character, count)\nUnboundLocalError: local variable 'character' referenced before assignment\n",
+            "variables": [
+              {
+                "v_name": "s",
+                "v_value": "u''"
+              }
+            ]
+          }
+        ],
+        "test_name": "test_dummy"
+      }
+    ]
+  ]
+
+}

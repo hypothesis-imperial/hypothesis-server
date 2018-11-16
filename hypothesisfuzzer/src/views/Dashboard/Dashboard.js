@@ -24,6 +24,7 @@ import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities'
 import FalsifyTest from './components/FalsifyTest';
 import example from './components/example/example.json';
+import example2 from './../../example2.json';
 
 const Loading = () => <div>Loading...</div>
 
@@ -173,6 +174,7 @@ const cardChartOpts4 = {
 
 class Dashboard extends Component {
   state = {
+    repos: example2.repo1,
     falsifyTestCase: {
       test_name: "",
       errors: []
@@ -186,11 +188,20 @@ class Dashboard extends Component {
     // .then(result => {
     //   this.setState({falsifyTestCase: result})
     // });
-    this.setState({falsifyTestCase: example});
+    const repo = this.state.repos[this.props.match.params.id];
+    this.setState({falsifyTestCase: repo[0]});
+  }
+
+  ComponentWillReceiveProps(nextProps) {
+    if (true) {
+      const newRepo = this.state.repos[nextProps.match.params.id];
+      this.setState({falsifyTestCase: newRepo[0]});
+    }
   }
 
   render() {
-    const { test_name, errors } = this.state.falsifyTestCase;
+    const { test_name, errors }
+      = this.state.repos[this.props.match.params.id][0];
     return (
       <div className="animated fadeIn">
         <Row>
@@ -232,7 +243,7 @@ class Dashboard extends Component {
         </Row>
         <Row>
           <Col>
-              <FalsifyTest test_name={test_name} errors={errors}/>
+            <FalsifyTest test_name={test_name} errors={errors}/>
           </Col>
         </Row>
       </div>

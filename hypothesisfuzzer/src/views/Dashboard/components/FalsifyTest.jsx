@@ -69,7 +69,7 @@ const FalsifyTest = (props) => {
 }
 
 const Error = (props) => {
-  const variableList = props.variables.map((variable, index) => {
+  const variableList = props.variables.variables.map((variable, index) => {
     return <Variable key={index} v_name={variable.v_name} v_value={variable.v_value} />
   })
   return (

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { Container } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 
 import {
-  AppAside,
   AppBreadcrumb,
   AppFooter,
   AppHeader,
@@ -11,14 +10,12 @@ import {
   AppSidebarFooter,
   AppSidebarForm,
   AppSidebarHeader,
-  AppSidebarMinimizer,
   AppSidebarNav,
 } from '@coreui/react';
 // sidebar nav config
 import navigation from '../../_nav';
 // routes config
 import routes from '../../routes';
-import DefaultAside from './DefaultAside';
 import DefaultFooter from './DefaultFooter';
 import DefaultHeader from './DefaultHeader';
 
@@ -35,10 +32,14 @@ class DefaultLayout extends Component {
             <AppSidebarForm />
             <AppSidebarNav navConfig={navigation} {...this.props} />
             <AppSidebarFooter />
-            <AppSidebarMinimizer />
           </AppSidebar>
           <main style={{ backgroundColor: "#F6F5F5" }} className="main">
-            <AppBreadcrumb appRoutes={routes}/>
+            <Row>
+              <Col>
+                <AppBreadcrumb appRoutes={routes}/>
+              </Col>
+            </Row>
+
             <Container fluid>
               <Switch>
                 {routes.map((route, idx) => {
@@ -52,9 +53,6 @@ class DefaultLayout extends Component {
               </Switch>
             </Container>
           </main>
-          <AppAside fixed>
-            <DefaultAside />
-          </AppAside>
         </div>
         <AppFooter>
           <DefaultFooter />

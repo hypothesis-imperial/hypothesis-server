@@ -14,7 +14,8 @@ const Dashboard = Loadable({
 
 
 const routes = [
-  { path: '/dashboard', name: 'Dashboard', component: Dashboard },
+  { path: '/', exact: true, name: 'Home', component: DefaultLayout },
+  { path: '/dashboard/:id', exact: true, name: 'Dashboard', component: Dashboard },
 ];
 
 export default routes;
