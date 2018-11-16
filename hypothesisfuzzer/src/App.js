@@ -5,11 +5,9 @@ import { DefaultLayout } from './containers';
 import './App.scss';
 import '@coreui/coreui';
 
-import example from './example2.json';
-
 
 class App extends Component {
-  
+
   render() {
     return (
       <HashRouter>

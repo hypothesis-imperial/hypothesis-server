@@ -14,7 +14,6 @@ repos.map(() =>{
   repoNum++;
 });
 
-console.log(repolist);
 
 export default {
   items: [

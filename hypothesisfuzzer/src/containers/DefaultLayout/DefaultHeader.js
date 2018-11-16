@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
+import { AppSidebarToggler } from '@coreui/react';
 
 const propTypes = {
   children: PropTypes.node,

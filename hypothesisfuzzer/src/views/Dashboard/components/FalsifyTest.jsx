@@ -4,11 +4,9 @@ import {
   CardTitle,
   CardBody,
   CardHeader,
-  Container,
   Row,
   Col,
   Table,
-  Thread,
   CardFooter,
   Progress,
  } from 'reactstrap'
@@ -17,7 +15,7 @@ import './FalsifyTest.css'
 const FalsifyTest = (props) => {
   const errorList = props.errors.map((variables, index) => {
     return (
-      <Card>
+      <Card key={index}>
         <CardHeader className="cardheader-danger">Error {index}</CardHeader>
         <CardBody>
           <Error key={index} variables={variables} />
