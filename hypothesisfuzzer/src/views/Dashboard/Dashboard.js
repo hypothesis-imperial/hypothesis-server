@@ -162,7 +162,8 @@ class Dashboard extends Component {
     repos: example.repositories,
     falsifyTestCase: {
       test_name: "",
-      errors: []
+      errors: [],
+      repo_name: "",
     }
   }
 
@@ -185,8 +186,8 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { test_name, errors }
-      = this.state.repos[this.props.match.params.id].info;
+    const { test_name, errors, repo_name }
+      = this.state.repos[this.props.match.params.id];
     return (
       <div className="animated fadeIn">
         <Row>
