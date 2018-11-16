@@ -68,7 +68,7 @@ class FuzzServer:
             for (name, owner), fuzzer in self.fuzzers.items():
                 with open(name + '.json') as f:
                     data = json.load(f)
-                    data["name"] = name
+                    data["repo_name"] = name
                     repositories.append(data)
 
             return jsonify({
