@@ -9,7 +9,7 @@ import {
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle } from '@coreui/coreui/dist/js/coreui-utilities'
 import FalsifyTest from './components/FalsifyTest';
-import example2 from './../../example2.json';
+import example from './../../example3.json';
 
 const Loading = () => <div>Loading...</div>
 
@@ -159,7 +159,7 @@ const cardChartOpts4 = {
 
 class Dashboard extends Component {
   state = {
-    repos: example2.repo1,
+    repos: example.repositories,
     falsifyTestCase: {
       test_name: "",
       errors: []
@@ -186,7 +186,7 @@ class Dashboard extends Component {
 
   render() {
     const { test_name, errors }
-      = this.state.repos[this.props.match.params.id][0];
+      = this.state.repos[this.props.match.params.id].info;
     return (
       <div className="animated fadeIn">
         <Row>

@@ -1,8 +1,10 @@
-import example from "./example2.json";
+import example from "./example3.json";
+
 
 var repoNum = 0;
-const repos = example.repo1;
+const repos = example.repositories;
 const repolist = [];
+
 repos.map(() =>{
   repolist.push(
     {
