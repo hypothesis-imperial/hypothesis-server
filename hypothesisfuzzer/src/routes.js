@@ -12,9 +12,14 @@ const Dashboard = Loadable({
   loading: Loading,
 });
 
+const Homepage = Loadable({
+  loader: () => import('./views/Homepage'),
+  loading: Loading,
+});
 
 const routes = [
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
+  { path: '/homepage', exact: true, component: Homepage },
   { path: '/dashboard/:id', exact: true, name: 'Dashboard', component: Dashboard },
 ];
 

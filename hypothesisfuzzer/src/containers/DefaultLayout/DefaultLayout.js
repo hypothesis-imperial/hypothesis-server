@@ -43,10 +43,6 @@ class DefaultLayout extends Component {
           name: 'Dashboard',
           url: '#',
           icon: 'icon-speedometer',
-          badge: {
-            variant: 'info',
-            text: 'NEW',
-          },
         },
         {
           title: true,
@@ -83,7 +79,7 @@ class DefaultLayout extends Component {
                       : (null);
                   },
                 )}
-                <Redirect from="/" to="/dashboard" />
+                <Redirect from="/" to="/homepage" />
               </Switch>
             </Container>
           </main>

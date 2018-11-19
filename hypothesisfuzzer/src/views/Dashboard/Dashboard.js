@@ -16,10 +16,9 @@ class Dashboard extends Component {
     fetch(url)
     .then(result => result.json())
     .then(result => {
-      console.log("result", (result.repositories));
       this.setState({repos: result.repositories})
     });
-    //const repo = this.state.repos[this.props.match.params.id];
+    // this.setState({repos: example.repositories})
   }
 
   ComponentWillReceiveProps(nextProps) {
