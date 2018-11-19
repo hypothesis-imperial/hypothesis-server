@@ -19,7 +19,15 @@ class Errormessage extends Component {
           </tr>
           <tr>
             <th>traceback</th>
-            <td>{this.props.traceback.toString()}</td>
+            <td>{this.props.traceback.split('\n').map(function(item, key) {
+                return (
+                  <span key={key}>
+                    {item}
+                    <br/>
+                  </span>
+                )
+              })}
+            </td>
           </tr>
         </tbody>
       </Table>
