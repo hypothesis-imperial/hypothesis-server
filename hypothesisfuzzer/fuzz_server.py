@@ -51,7 +51,8 @@ class FuzzServer:
         self._setup_routes()
 
         for (name, owner), fuzzer in self.fuzzers.items():
-            fuzzer.start()
+            if fuzzer.config["fuzz_on_start"]:
+                fuzzer.start()
 
         self.app.run(**kwargs)
 
@@ -155,7 +156,6 @@ class FuzzServer:
         self.fuzzers = {}
 
         for repo, repo_config in self.config['repos'].items():
-
             repo_name = repo_config['name']
             repo_owner = repo_config['owner']
 
