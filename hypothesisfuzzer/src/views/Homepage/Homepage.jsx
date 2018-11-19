@@ -3,7 +3,6 @@ import {
   Col,
   Row,
   Card,
-  CardHeader,
   CardBody,
 } from 'reactstrap';
 
