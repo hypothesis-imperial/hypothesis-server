@@ -21,18 +21,16 @@ class DefaultLayout extends Component {
   render() {
     //get repo list
     const repos = this.props.repos;
-    var repoNum = 0;
     const repolist = [];
 
-    repos.map(() =>{
+    repos.map((variables, index) =>{
       repolist.push(
         {
-          name: 'Repo ' + repoNum,
-          url: `/dashboard/${repoNum}`,
+          name: (variables.repo_name),
+          url: `/dashboard/${index}`,
           icon: 'icon-check',
         }
       );
-      repoNum++;
       return repolist;
     });
 

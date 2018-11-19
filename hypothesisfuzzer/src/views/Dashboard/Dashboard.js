@@ -3,7 +3,7 @@ import {
   Col,
   Row,
 } from 'reactstrap';
-import FalsifyTest from './components/FalsifyTest';
+import RepoInfo from './components/RepoInfo';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -11,7 +11,14 @@ class Dashboard extends Component {
     this.state = {
       repos: [
         {
-          errors: [],
+          errors: [
+            {
+              error_message: "",
+              error_type: "",
+              traceback: "",
+              variables: [],
+            }
+          ],
           test_name: "",
           repo_name: "",
         }
@@ -20,21 +27,20 @@ class Dashboard extends Component {
   }
 
   componentDidMount(props) {
-    if(this.props.repos != []) {
+    if(this.props.repos !== []) {
       this.setState({repos: this.props.repos});
     }
   }
 
-
   render() {
-    const { errors, test_name, repo_name }
+    const repo
       = this.state.repos[this.props.match.params.id];
 
     return (
       <div className="animated fadeIn">
         <Row>
           <Col>
-            <FalsifyTest test_name={test_name} errors={errors} repo_name={repo_name}/>
+            <RepoInfo repo={repo}/>
           </Col>
         </Row>
       </div>

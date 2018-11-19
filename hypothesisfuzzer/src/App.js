@@ -16,6 +16,8 @@ class App extends Component {
     fetch(url)
     .then(result => result.json())
     .then(result => {
+      console.log("recieving data: ");
+      console.log(result.repositories);
       this.setState({repos: result.repositories})
     });
   }
