@@ -19,22 +19,12 @@ class Dashboard extends Component {
     }
   }
 
-  componentWillMount(props) {
-    const url = "http://ec2-18-130-116-158.eu-west-2.compute.amazonaws.com/all_info";
-    fetch(url)
-    .then(result => result.json())
-    .then(result => {
-      this.setState({repos: result.repositories})
-    })
+  componentDidMount(props) {
+    if(this.props.repos != []) {
+      this.setState({repos: this.props.repos});
+    }
   }
 
-  /*not in use now*/
-  // ComponentWillReceiveProps(nextProps) {
-  //   if (true) {
-  //     const newRepo = this.state.repos[nextProps.match.params.id];
-  //     this.setState({falsifyTestCase: newRepo[0]});
-  //   }
-  // }
 
   render() {
     const { errors, test_name, repo_name }

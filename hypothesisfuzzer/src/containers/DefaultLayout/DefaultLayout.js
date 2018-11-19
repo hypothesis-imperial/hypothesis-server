@@ -78,9 +78,8 @@ class DefaultLayout extends Component {
                         path={route.path}
                         exact={route.exact}
                         name={route.name}
-                        repos="repo"
                         render={props => (
-                          <route.component {...props} />
+                          <route.component {...props} repos={repos} />
                         )}
                       />)
                       : (null);
