@@ -130,8 +130,21 @@ class RepoFuzzer:
         logger.debug('Creating virtual environment for repository %s.',
                      self.name)
         virtualenv.create_environment(self.name + '/venv')
-        subprocess.call([self.name + '/venv/bin/pip',
-                        'install', '-r', self.name + '/requirements.txt'])
+
+        src_req = self.config["dependencies"]["src"]
+        tests_req = self.config["dependencies"]["tests"]
+        setup_req = self.config["dependencies"]["setup"]
+
+        if src_req:
+            subprocess.call([self.name + '/venv/bin/pip',
+                            'install', '-r', self.name + '/' + src_req])
+        if tests_req:
+            subprocess.call([self.name + '/venv/bin/pip',
+                            'install', '-r', self.name + '/' + tests_req])
+        if setup_req:
+            subprocess.call([self.name + '/venv/bin/pip',
+                            'install', setup_req])
+
         logger.debug('Virtual environment for repository %s created.',
                      self.name)
 
