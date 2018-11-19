@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { HashRouter, Route } from 'react-router-dom';
 // Containers
 import { DefaultLayout } from './containers';
-import './App.scss';
+import './scss/App.scss';
 import '@coreui/coreui';
 
 

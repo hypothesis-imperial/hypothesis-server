@@ -10,7 +10,7 @@ import {
   CardFooter,
   Progress,
  } from 'reactstrap'
-import './FalsifyTest.css'
+import './../../../css/FalsifyTest.css'
 
 const FalsifyTest = (props) => {
   const errorList = props.errors.map((variables, index) => {
