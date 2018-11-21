@@ -21,7 +21,7 @@ class RepoInfo extends Component {
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
     this.state = {
-      collapse: true,
+      collapse: false,
       fadeIn: true,
       timeout: 300,
     };

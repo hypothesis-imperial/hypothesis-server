@@ -2,13 +2,24 @@ import React, { Component } from 'react';
 import {
   Table,
 } from 'reactstrap';
-import Variable from './Variable';
 
 class Error extends Component {
 
   render() {
-    const variableList = this.props.variables.map((variable, index) => {
-      return <Variable key={index} v_name={variable.v_name} v_value={variable.v_value} />
+    const variableList = this.props.variables.map((variables, index) => {
+      return (
+        <tr>
+          <td>
+            <div>{variables.v_name}</div>
+            <div className="small text-muted">
+              <span>New</span> | some details
+            </div>
+          </td>
+          <td className="text-center">
+            <div>{variables.v_value}</div>
+          </td>
+        </tr>
+      )
     })
 
     return (
