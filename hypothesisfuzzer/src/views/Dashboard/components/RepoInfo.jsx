@@ -19,24 +19,15 @@ class RepoInfo extends Component {
     super(props);
 
     this.toggle = this.toggle.bind(this);
-    this.toggleFade = this.toggleFade.bind(this);
     this.state = {
       collapse: false,
-      fadeIn: true,
-      timeout: 300,
+      arrow_icon: "icon-arrow-down",
     };
-  }
-
-  componentDidMount(){
-
   }
 
   toggle() {
     this.setState({ collapse: !this.state.collapse });
-  }
-
-  toggleFade() {
-    this.setState((prevState) => { return { fadeIn: !prevState }});
+    this.setState({ arrow_icon: ((this.state.collapse)? "icon-arrow-down" : "icon-arrow-up")});
   }
 
 
@@ -58,7 +49,7 @@ class RepoInfo extends Component {
                     <CardHeader className="cardheader-danger" >
                       Error {index}
                       <div className="card-header-actions">
-                        <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={this.toggle}><i className="icon-arrow-up"></i></a>
+                        <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={this.toggle}><i className={this.state.arrow_icon}></i></a>
                       </div>
                     </CardHeader>
                     <CardBody>
