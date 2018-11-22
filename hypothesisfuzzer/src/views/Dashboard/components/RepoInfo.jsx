@@ -3,33 +3,15 @@ import {
   Card,
   CardTitle,
   CardBody,
-  CardHeader,
   Row,
   Col,
   CardFooter,
   Progress,
-  Collapse,
  } from 'reactstrap'
 import './../../../css/RepoInfo.css';
 import Error from './Error';
-import Errormessage from './Errormessage';
 
 class RepoInfo extends Component {
-  constructor(props) {
-    super(props);
-
-    this.toggle = this.toggle.bind(this);
-    this.state = {
-      collapse: false,
-      arrow_icon: "icon-arrow-down",
-    };
-  }
-
-  toggle() {
-    this.setState({ collapse: !this.state.collapse });
-    this.setState({ arrow_icon: ((this.state.collapse)? "icon-arrow-down" : "icon-arrow-up")});
-  }
-
 
   render() {
     return (
@@ -45,26 +27,7 @@ class RepoInfo extends Component {
             <Col style={{ marginTop: 30 + 'px' }}>
               {this.props.repo.errors.map((variables, index) => {
                 return (
-                  <Card key={index}>
-                    <CardHeader className="cardheader-danger" >
-                      Error {index}
-                      <div className="card-header-actions">
-                        <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={this.toggle}><i className={this.state.arrow_icon}></i></a>
-                      </div>
-                    </CardHeader>
-                    <CardBody>
-                      <Error key={index} variables={variables.variables} />
-                    </CardBody>
-                    <Collapse isOpen={this.state.collapse} id="collapseExample">
-                      <CardBody >
-                        <Errormessage
-                          error_message={variables.error_message}
-                          error_type={variables.error_type}
-                          traceback={variables.traceback}
-                        />
-                      </CardBody>
-                    </Collapse>
-                  </Card>
+                  <Error key={index} index={index} error={variables} />
                 )
               })}
             </Col>

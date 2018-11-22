@@ -26,7 +26,7 @@ class Dashboard extends Component {
     }
   }
 
-  componentDidMount(props) {
+  componentWillMount(props) {
     if(this.props.repos !== []) {
       this.setState({repos: this.props.repos});
     }
