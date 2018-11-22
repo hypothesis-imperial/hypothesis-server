@@ -27,14 +27,16 @@ class Dashboard extends Component {
   }
 
   componentWillMount(props) {
-    if(this.props.repos !== []) {
+    if(this.props.repos.length !== 0) {
       this.setState({repos: this.props.repos});
     }
   }
 
   render() {
-    const repo
-      = this.state.repos[this.props.match.params.id];
+    //exclude incorrect index
+    const id = this.props.match.params.id;
+    const index = (this.state.repos.length <= id) ? 0 : id;
+    const repo = this.state.repos[index];
 
     return (
       <div className="animated fadeIn">
