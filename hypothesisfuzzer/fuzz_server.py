@@ -51,7 +51,8 @@ class FuzzServer:
         self._setup_routes()
 
         for (name, owner), fuzzer in self.fuzzers.items():
-            fuzzer.start()
+            if fuzzer.config["fuzz_on_start"]:
+                fuzzer.start()
 
         self.app.run(**kwargs)
 
@@ -115,7 +116,8 @@ class FuzzServer:
 
                 return jsonify(fuzzer.get_errors())
             except KeyError:
-                logger.error('Server not configured to fuzz this repository.')
+                logger.error('Server not configured to fuzz this repository.',
+                             exc_info=True)
                 err_message = (
                     'Hypothesis server has not been configured to'
                     'fuzz this repository.'
@@ -137,9 +139,9 @@ class FuzzServer:
                 if 'repos' not in self.config:
                     logger.error('Configuration file missing repos.',
                                  exc_info=True)
-                    raise ConfigMissingOptionException("Configuration file" +
-                                                       "missing a 'repos'" +
-                                                       "attribute")
+                    raise ConfigMissingOptionException("Configuration file " +
+                                                       "missing a 'repos' " +
+                                                       "attribute.")
                 logger.info('File config_path loaded.', exc_info=True)
         except FileNotFoundError:
             logger.error('File config.yml not found.', exc_info=True)
@@ -155,7 +157,6 @@ class FuzzServer:
         self.fuzzers = {}
 
         for repo, repo_config in self.config['repos'].items():
-
             repo_name = repo_config['name']
             repo_owner = repo_config['owner']
 
