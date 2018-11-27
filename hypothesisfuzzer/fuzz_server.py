@@ -168,6 +168,3 @@ class FuzzServer:
                                                                repo_config)
 
         logger.info('Fuzzers initialised.')
-
-
-logging.shutdown()
