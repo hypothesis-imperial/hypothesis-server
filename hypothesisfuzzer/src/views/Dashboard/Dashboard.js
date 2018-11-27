@@ -11,14 +11,7 @@ class Dashboard extends Component {
     this.state = {
       repos: [
         {
-          errors: [
-            {
-              error_message: "",
-              error_type: "",
-              traceback: "",
-              variables: [],
-            }
-          ],
+          errors: [],
           test_name: "",
           repo_name: "",
         }
