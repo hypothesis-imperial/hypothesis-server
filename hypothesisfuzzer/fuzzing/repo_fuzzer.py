@@ -210,6 +210,7 @@ class RepoFuzzer:
         while getattr(self._current_fuzzing_task, "running", True):
             logger.info('Fuzzing iteration %s.', iteration)
             subprocess.call([self.name + '/venv/bin/pytest',
+                             '--hypothesis-server',
                              '--hypothesis-output=' + self.name + '.json',
                              self.name],
                             universal_newlines=True,
