@@ -25,6 +25,11 @@ class Error extends Component {
     this.setState({ arrow_icon: ((this.state.collapse)? "icon-arrow-down" : "icon-arrow-up")});
   }
 
+  componentWillReceiveProps(nextProps){
+    // fold collapse when change to new page
+    this.setState({ collapse: false });
+  }
+
   render() {
     const variableList = this.props.error.variables.map((variables, index) => {
       return (
