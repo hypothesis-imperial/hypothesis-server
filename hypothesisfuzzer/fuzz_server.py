@@ -138,9 +138,9 @@ class FuzzServer:
                 if 'repos' not in self.config:
                     logger.error('Configuration file missing repos.',
                                  exc_info=True)
-                    raise ConfigMissingOptionException("Configuration file" +
-                                                       "missing a 'repos'" +
-                                                       "attribute")
+                    raise ConfigMissingOptionException("Configuration file " +
+                                                       "missing a 'repos' " +
+                                                       "attribute.")
                 logger.info('File config_path loaded.', exc_info=True)
         except FileNotFoundError:
             logger.error('File config.yml not found.', exc_info=True)
