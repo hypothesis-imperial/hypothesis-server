@@ -29,11 +29,7 @@ class RepoFuzzer:
         except KeyError:
             pass
 
-        try:
-            self._clone_git(self.config['git_url'])
-        except Exception:
-            return generic_error(msg="Error cloning Git Repo! " +
-                                     "Please ensure you have access.")
+        self._clone_git(self.config['git_url'])
 
         self._stop_fuzzing()
         self._create_venv()
@@ -60,18 +56,17 @@ class RepoFuzzer:
 
     def _clone_git(self, git_url):
 
-        # Pull repository if already exists
-        if os.path.exists(self.name):
-            # self.log.debug('Updating existing repository %s.', self.name)
-            GitRepo(self.name).git.reset('--hard')
-            GitRepo(self.name).git.pull()
-            # self.log.debug('Existing repository %s updated.', self.name)
-        # Clone repository otherwise
-        else:
-            # self.log.debug('Creating new repository %s.', self.name)
-            os.makedirs(self.name)
-            GitRepo.clone_from(git_url, self.name)
-            # self.log.debug('New repository %s created.', self.name)
+        # Pull or clone repository
+        try:
+            if os.path.exists(self.name):
+                GitRepo(self.name).git.reset('--hard', 'origin')
+                GitRepo(self.name).git.pull()
+            else:
+                os.makedirs(self.name)
+                GitRepo.clone_from(git_url, self.name)
+        except Exception:
+            return generic_error(msg="Error cloning/pulling Git Repo! " +
+                                     "Please ensure you have access.")
 
     def _create_venv(self):
 
