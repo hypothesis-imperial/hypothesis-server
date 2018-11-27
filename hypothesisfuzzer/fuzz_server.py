@@ -14,13 +14,13 @@ from sys import platform
 
 logging.basicConfig(datefmt='%d-%b-%y %H:%M:%S',
                     filename='fuzz_server.log',
-
                     format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.DEBUG)
 
 if platform.startswith('linux'):
     handler = logging.handlers.SysLogHandler(address='/dev/log')
     logging.getLogger('logger').addHandler(handler)
+    logging.getLogger('logger').addHandler(logging.StreamHandler())
 
 logger = logging.getLogger(__name__)
 
