@@ -63,6 +63,7 @@ class RepoFuzzer:
         # Pull repository if already exists
         if os.path.exists(self.name):
             # self.log.debug('Updating existing repository %s.', self.name)
+            GitRepo(self.name).git.reset('--hard')
             GitRepo(self.name).git.pull()
             # self.log.debug('Existing repository %s updated.', self.name)
         # Clone repository otherwise
