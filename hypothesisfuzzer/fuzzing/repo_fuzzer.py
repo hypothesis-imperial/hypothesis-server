@@ -29,6 +29,8 @@ class RepoFuzzer:
         self._load_config(config)
         self._clone_git(config['git_url'])
         self._create_venv()
+        self._ready = False
+        self._status = None
 
         logger.info('Repository %s fuzzer initialised.', name)
 
@@ -127,24 +129,41 @@ class RepoFuzzer:
 
     def _create_venv(self):
 
+        def pip_install(target):
+            # Target is a string
+
+            return subprocess.run(['venv/bin/pip', 'install'] + target,
+                                  cwd=self.name)
+
         logger.debug('Creating virtual environment for repository %s.',
                      self.name)
         virtualenv.create_environment(self.name + '/venv')
 
-        src_req = self.config["dependencies"]["src"]
-        tests_req = self.config["dependencies"]["tests"]
-        setup_req = self.config["dependencies"]["setup"]
+        if "dependencies" in self.config:
+            # Install dependencies
 
-        if src_req:
-            subprocess.call([self.name + '/venv/bin/pip',
-                            'install', '-r', self.name + '/' + src_req])
-        if tests_req:
-            subprocess.call([self.name + '/venv/bin/pip',
-                            'install', '-r', self.name + '/' + tests_req])
-        if setup_req:
-            subprocess.call([self.name + '/venv/bin/pip',
-                            'install', setup_req])
+            for dep_name, target in self.config["dependencies"].items():
+                if os.path.isfile(self.name + '/' + target):
+                    to_install = "-r " + target
+                else:
+                    to_install = target
 
+                install_result = pip_install(to_install)
+
+                if install_result.returncode != 0:
+                    self._ready = False
+                    self._status = "Failed to install dependency set " \
+                        + dep_name + ': ' + target
+
+                    return
+
+        else:
+            # Look for requirements file
+
+            if os.path.isfile(self.name + '/requirements.txt'):
+                pip_install('-r requirements.txt')
+
+        self._ready = True
         logger.debug('Virtual environment for repository %s created.',
                      self.name)
 
@@ -157,6 +176,11 @@ class RepoFuzzer:
             logger.debug('Fuzzing for repository %s stopped.', self.name)
 
     def _start_fuzzing(self):
+
+        if not self._ready:
+            logger.error("Fuzzer not ready")
+
+            return
 
         logger.debug('Starting fuzzing for repository %s.', self.name)
 
