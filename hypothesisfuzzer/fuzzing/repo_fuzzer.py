@@ -59,8 +59,14 @@ class RepoFuzzer:
         # Pull or clone repository
         try:
             if os.path.exists(self.name):
-                GitRepo(self.name).git.reset('--hard', 'origin')
-                GitRepo(self.name).git.pull()
+                try:
+                    _ = GitRepo(self.name).git_dir
+                    GitRepo(self.name).git.reset('--hard', 'origin')
+                    GitRepo(self.name).git.pull()
+                except Exception:
+                    return generic_error(msg="Error updating Git Repo! " +
+                                             "Please ensure the path " +
+                                             "is a valid Git Repo.")
             else:
                 os.makedirs(self.name)
                 GitRepo.clone_from(git_url, self.name)
