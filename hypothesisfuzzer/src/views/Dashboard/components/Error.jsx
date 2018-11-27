@@ -17,8 +17,13 @@ class Error extends Component {
     this.state = {
       collapse: false,
       arrow_icon: "icon-arrow-down",
-      error: this.props.error,
-      index: this.props.index,
+      error: {
+        variables: [],
+        error_message: "",
+        error_type: "",
+        traceback: "",
+      },
+      index: 0,
     };
   }
 
@@ -27,8 +32,13 @@ class Error extends Component {
     this.setState({ arrow_icon: ((this.state.collapse)? "icon-arrow-down" : "icon-arrow-up")});
   }
 
+  componentDidMount() {
+    this.setState({ error: this.props.error });
+    this.setState({ index: this.props.index });
+  }
+
   componentWillReceiveProps(nextProps){
-    // fold collapse when change to new page
+    // reset when change to new page
     this.setState({ collapse: false });
     this.setState({ arrow_icon: "icon-arrow-down"});
     this.setState({ error: nextProps.error });
@@ -57,7 +67,7 @@ class Error extends Component {
         <CardHeader className="cardheader-danger" >
           Error {this.state.index}
           <div className="card-header-actions">
-            <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={this.toggle}><i className={this.state.arrow_icon}></i></a>
+            <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={this.toggle}><i className={this.state.arrow_icon} /></a>
           </div>
         </CardHeader>
         <CardBody>
@@ -74,7 +84,7 @@ class Error extends Component {
           </Table>
         </CardBody>
         <Collapse isOpen={this.state.collapse} id="collapseExample">
-          <CardBody >
+          <CardBody>
             <Errormessage
               error_message={this.state.error.error_message}
               error_type={this.state.error.error_type}
