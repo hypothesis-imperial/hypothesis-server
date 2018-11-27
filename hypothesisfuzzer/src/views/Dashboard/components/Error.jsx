@@ -17,6 +17,8 @@ class Error extends Component {
     this.state = {
       collapse: false,
       arrow_icon: "icon-arrow-down",
+      error: this.props.error,
+      index: this.props.index,
     };
   }
 
@@ -28,10 +30,13 @@ class Error extends Component {
   componentWillReceiveProps(nextProps){
     // fold collapse when change to new page
     this.setState({ collapse: false });
+    this.setState({ arrow_icon: "icon-arrow-down"});
+    this.setState({ error: nextProps.error });
+    this.setState({ index: nextProps.index });
   }
 
   render() {
-    const variableList = this.props.error.variables.map((variables, index) => {
+    const variableList = this.state.error.variables.map((variables, index) => {
       return (
         <tr key={index}>
           <td>
@@ -50,7 +55,7 @@ class Error extends Component {
     return (
       <Card>
         <CardHeader className="cardheader-danger" >
-          Error {this.props.index}
+          Error {this.state.index}
           <div className="card-header-actions">
             <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={this.toggle}><i className={this.state.arrow_icon}></i></a>
           </div>
@@ -71,9 +76,9 @@ class Error extends Component {
         <Collapse isOpen={this.state.collapse} id="collapseExample">
           <CardBody >
             <Errormessage
-              error_message={this.props.error.error_message}
-              error_type={this.props.error.error_type}
-              traceback={this.props.error.traceback}
+              error_message={this.state.error.error_message}
+              error_type={this.state.error.error_type}
+              traceback={this.state.error.traceback}
             />
           </CardBody>
         </Collapse>
