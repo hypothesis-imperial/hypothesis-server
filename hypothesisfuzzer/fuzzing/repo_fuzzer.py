@@ -2,7 +2,6 @@ import json
 import os
 import datetime
 import logging
-import shutil
 import subprocess
 import threading
 import virtualenv
@@ -73,7 +72,7 @@ class RepoFuzzer:
 
         if not os.path.exists(self.name):
             logger.error('When getting commit hash, path of %s not found.',
-                         self.name)
+                         self.name, exc_info=True)
 
             return no_code_dir_error()
         repo = GitRepo(self.name)
@@ -102,32 +101,39 @@ class RepoFuzzer:
 
     def _clone_git(self, git_url):
 
-        # Pull or clone repository
+        logger.debug('Cloning/pulling repository %s.', self.name)
+
         try:
             if os.path.exists(self.name):
                 try:
                     GitRepo(self.name).git.reset('--hard', 'origin')
                     GitRepo(self.name).git.pull()
+                    logger.debug('Repository %s pulled.', self.name)
                 except Exception:
+                    logger.error('Unable to pull invalid repository %s.',
+                                 self.name, exc_info=True)
                     return generic_error(msg="Error updating Git Repo! " +
                                              "Please ensure the path " +
                                              "is a valid Git Repo.")
             else:
                 os.makedirs(self.name)
                 GitRepo.clone_from(git_url, self.name)
+                logger.debug('Repository %s cloned.', self.name)
         except Exception:
+            logger.error('Unable to access repository %s.', self.name,
+                         exc_info=True)
             return generic_error(msg="Error cloning/pulling Git Repo! " +
                                      "Please ensure you have access.")
-
-        logger.debug('Repository %s cloned.', self.name)
 
     def _create_venv(self):
 
         logger.debug('Creating virtual environment for repository %s.',
                      self.name)
+
         virtualenv.create_environment(self.name + '/venv')
         subprocess.call([self.name + '/venv/bin/pip',
                         'install', '-r', self.name + '/requirements.txt'])
+
         logger.debug('Virtual environment for repository %s created.',
                      self.name)
 
@@ -175,12 +181,12 @@ class RepoFuzzer:
         if 'name' not in config:
             logger.error('Repo configuration missing name.', exc_info=True)
             raise ConfigMissingOptionException("Repo configuration" +
-                                               "missing a 'name' attribute")
+                                               "missing a 'name' attribute.")
 
         if 'owner' not in config:
             logger.error('Repo configuration missing owner.', exc_info=True)
             raise ConfigMissingOptionException("Repo configuration" +
-                                               "missing an 'owner' attribute")
+                                               "missing an 'owner' attribute.")
 
         self.config = config
 

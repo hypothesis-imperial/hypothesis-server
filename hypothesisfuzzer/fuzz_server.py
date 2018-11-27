@@ -116,7 +116,8 @@ class FuzzServer:
 
                 return jsonify(fuzzer.get_errors())
             except KeyError:
-                logger.error('Server not configured to fuzz this repository.')
+                logger.error('Server not configured to fuzz this repository.',
+                             exc_info=True)
                 err_message = (
                     'Hypothesis server has not been configured to'
                     'fuzz this repository.'
