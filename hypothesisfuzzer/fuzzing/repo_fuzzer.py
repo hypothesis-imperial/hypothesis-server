@@ -60,7 +60,7 @@ class RepoFuzzer:
         try:
             if os.path.exists(self.name):
                 try:
-                    _ = GitRepo(self.name).git_dir
+                    _ = GitRepo(self.name).git_dir # noqa
                     GitRepo(self.name).git.reset('--hard', 'origin')
                     GitRepo(self.name).git.pull()
                 except Exception:
