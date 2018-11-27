@@ -26,10 +26,10 @@ class RepoFuzzer:
 
         self.name = name
         self._load_config(config)
-        self._clone_git(config['git_url'])
-        self._create_venv()
         self._ready = False
         self._status = None
+        self._clone_git(config['git_url'])
+        self._create_venv()
 
         logger.info('Repository %s fuzzer initialised.', name)
 
