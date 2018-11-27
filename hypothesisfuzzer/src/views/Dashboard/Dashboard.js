@@ -11,8 +11,7 @@ class Dashboard extends Component {
     this.state = {
       repos: [
         {
-          errors: [],
-          test_name: "",
+          outputs: [],
           repo_name: "",
         }
       ],

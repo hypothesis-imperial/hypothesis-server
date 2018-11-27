@@ -1,42 +1,68 @@
 import React, { Component } from 'react';
+import classnames from 'classnames';
 import {
-  Card,
-  CardTitle,
-  CardBody,
-  Row,
-  Col,
-  CardFooter,
+  Nav,
+  NavItem,
+  NavLink,
+  TabContent,
+  TabPane,
  } from 'reactstrap'
 import './../../../css/RepoInfo.css';
-import Error from './Error';
-import Time from './Time';
+import Output from './Output';
 
 class RepoInfo extends Component {
+  constructor(props) {
+    super(props);
+
+    this.toggle = this.toggle.bind(this);
+    this.state = {
+      activeTab: '0',
+    };
+  }
+
+  toggle(tab) {
+    if (this.state.activeTab !== tab) {
+      this.setState({
+        activeTab: tab,
+      });
+    }
+  }
 
   render() {
+    const outputTabs = this.props.repo.outputs.map((variables, index) => {
+      if(typeof variables.test_name !== "undefined") {
+        return (
+          <NavItem key={index}>
+            <NavLink
+              className={classnames({ active: this.state.activeTab === index.toString() })}
+              onClick={() => { this.toggle(index.toString()); }}
+            >
+              Output {index}
+            </NavLink>
+          </NavItem>
+        )
+      }
+    })
+
+    const outputs =  this.props.repo.outputs.map((variables, index) => {
+      if(typeof variables.test_name !== "undefined") {
+        return (
+          <TabPane key={index} tabId={index.toString()}>
+            <Output output={variables}/>
+          </TabPane>
+        )
+      }
+    })
+
     return (
-      <Card>
-        <CardBody>
-          <Row>
-            <Col sm="5">
-              <CardTitle className="mb-0">{this.props.repo.test_name}</CardTitle>
-              <div className="small text-muted">Test Name</div>
-            </Col>
-          </Row>
-          <Row>
-            <Col style={{ marginTop: 30 + 'px' }}>
-              {this.props.repo.errors.map((variables, index) => {
-                return (
-                  <Error key={index} index={index} error={variables} />
-                )
-              })}
-            </Col>
-          </Row>
-        </CardBody>
-        <CardFooter>
-          <Time />
-        </CardFooter>
-      </Card>
+      <div>
+        <Nav tabs>
+          {outputTabs}
+        </Nav>
+        <TabContent activeTab={this.state.activeTab}>
+          {outputs}
+        </TabContent>
+      </div>
     );
   }
 }

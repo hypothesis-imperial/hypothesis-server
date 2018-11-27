@@ -22,6 +22,7 @@ class App extends Component {
 
   render() {
     const repos = this.state.repos;
+
     return (
       <HashRouter>
         <Route path="/" render={() => <DefaultLayout repos={repos} isAuthed={true} /> }/>
