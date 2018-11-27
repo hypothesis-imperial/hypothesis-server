@@ -51,7 +51,11 @@ class FuzzServer:
         self._setup_routes()
 
         for (name, owner), fuzzer in self.fuzzers.items():
-            if fuzzer.config["fuzz_on_start"]:
+
+            if "fuzz_on_start" in fuzzer.config:
+                if fuzzer.config["fuzz_on_start"]:
+                    fuzzer.start()
+            else:
                 fuzzer.start()
 
         self.app.run(**kwargs)

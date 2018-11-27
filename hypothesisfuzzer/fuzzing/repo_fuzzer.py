@@ -28,6 +28,8 @@ class RepoFuzzer:
         self._load_config(config)
         self._clone_git(config['git_url'])
         self._create_venv()
+        self._ready = False
+        self._status = None
 
         logger.info('Repository %s fuzzer initialised.', name)
 
@@ -112,6 +114,7 @@ class RepoFuzzer:
                 except Exception:
                     logger.error('Unable to pull invalid repository %s.',
                                  self.name, exc_info=True)
+
                     return generic_error(msg="Error updating Git Repo! " +
                                              "Please ensure the path " +
                                              "is a valid Git Repo.")
@@ -122,18 +125,54 @@ class RepoFuzzer:
         except Exception:
             logger.error('Unable to access repository %s.', self.name,
                          exc_info=True)
+
             return generic_error(msg="Error cloning/pulling Git Repo! " +
                                      "Please ensure you have access.")
 
     def _create_venv(self):
 
+        def pip_install(target):
+            # Target is a string
+
+            return subprocess.run(['venv/bin/pip', 'install'] + target,
+                                  cwd=self.name)
+
         logger.debug('Creating virtual environment for repository %s.',
                      self.name)
 
-        virtualenv.create_environment(self.name + '/venv')
-        subprocess.call([self.name + '/venv/bin/pip',
-                        'install', '-r', self.name + '/requirements.txt'])
+        if not os.path.isdir(self.name + '/venv'):
+            virtualenv.create_environment(self.name + '/venv')
 
+        if "dependencies" in self.config:
+            # Install dependencies
+
+            for dep_name, target in self.config["dependencies"].items():
+                if os.path.isfile(self.name + '/' + target):
+                    to_install = "-r " + target
+                else:
+                    to_install = target
+
+                install_result = pip_install(to_install)
+
+                if install_result.returncode != 0:
+                    self._ready = False
+                    msg = "Failed to install dependency set " \
+                        + dep_name + ': ' + target
+                    self._status = msg
+                    logger.error(msg)
+
+                    return
+
+        else:
+            # Look for requirements file
+
+            if os.path.isfile(self.name + '/requirements.txt'):
+                pip_install('-r requirements.txt')
+            else:
+                logger.warn("No dependencies specified for repository " +
+                            self.name + ", and no requirements.txt found.")
+
+        self._ready = True
         logger.debug('Virtual environment for repository %s created.',
                      self.name)
 
@@ -146,6 +185,11 @@ class RepoFuzzer:
             logger.debug('Fuzzing for repository %s stopped.', self.name)
 
     def _start_fuzzing(self):
+
+        if not self._ready:
+            logger.error("Fuzzer not ready")
+
+            return
 
         logger.debug('Starting fuzzing for repository %s.', self.name)
 

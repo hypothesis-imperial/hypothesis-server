@@ -5,10 +5,12 @@ repos:
      git_url: https://github.com/hypothesis-imperial/fuzzing-sample-product-poc.git
      project_root: "" # Optional; Default is just git directory root
      branch: master # optional; Default master
-     requirements_file: requirements.txt # Optional: Default in project_root normally; otherwise give path relative to project_root
      tests_folder: tests # Optional: Default is "test" in project_root
      fuzz_on_start: True # Optional: Whether to pull and start fuzzing on server start, Default True
-  
+     dependencies:
+       src: requirements.txt # Optional: Default in project_root normally; otherwise give path relative to project_root
+       tests: tests/requirements.txt
+       setup: .[tests] 
  # repo2:
   #   git_url: https://github.com/hypothesis-imperial/not-a-real-repo.git
   #   project_root: part-one
