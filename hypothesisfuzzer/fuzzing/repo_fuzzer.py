@@ -28,6 +28,9 @@ class RepoFuzzer:
         self._load_config(config)
         self._ready = False
         self._status = None
+        self.project_root = self.name
+        if self.config["project_root"]:
+            self.project_root = self.name + '/' + self.config["project_root"]
         self._clone_git(config['git_url'])
         self._create_venv()
 
@@ -130,26 +133,23 @@ class RepoFuzzer:
                                      "Please ensure you have access.")
 
     def _create_venv(self):
-        project_root = self.name 
-        if self.config["project_root"]:
-            project_root = self.name + '/' + self.config["project_root"]
 
         def pip_install(target):
             # Target is a string
             return subprocess.run(['venv/bin/pip', 'install', target],
-                                  cwd=project_root)
+                                  cwd=self.project_root)
 
         logger.debug('Creating virtual environment for repository %s.',
                      self.name)
 
-        if not os.path.isdir(project_root + '/venv'):
-            virtualenv.create_environment(project_root + '/venv')
+        if not os.path.isdir(self.project_root + '/venv'):
+            virtualenv.create_environment(self.project_root + '/venv')
 
         if "dependencies" in self.config:
             # Install dependencies
 
             for dep_name, target in self.config["dependencies"].items():
-                if os.path.isfile(project_root + '/' + target):
+                if os.path.isfile(self.project_root + '/' + target):
                     to_install = "-r" + target
                 else:
                     to_install = target
@@ -206,17 +206,12 @@ class RepoFuzzer:
     def _fuzz_task(self):
 
         logger.debug('Fuzzing task of repository %s.', self.name)
-
-        project_root = self.name 
-        if self.config["project_root"]:
-            project_root = self.name + '/' + self.config["project_root"]
-
         iteration = 0
 
         while getattr(self._current_fuzzing_task, "running", True):
             
             logger.info('Fuzzing iteration %s.', iteration)
-            subprocess.call([project_root + '/venv/bin/pytest',
+            subprocess.call([self.project_root + '/venv/bin/pytest',
                              '--hypothesis-server',
                              '--hypothesis-output=' + self.name + '.json',
                              self.name],
