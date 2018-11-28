@@ -28,6 +28,10 @@ class RepoFuzzer:
         self._load_config(config)
         self._ready = False
         self._status = None
+        self._project_root = self.name
+
+        if self.config["project_root"]:
+            self._project_root = self.name + '/' + self.config["project_root"]
         self._clone_git(config['git_url'])
         self._create_venv()
 
@@ -90,13 +94,14 @@ class RepoFuzzer:
 
         logger.debug('Getting errors for repository %s.', self.name)
 
-        if not os.path.exists(self.name):
+        if not os.path.exists(self._project_root):
             logger.error('When getting errors, path of %s not found.',
                          self.name)
 
             return no_code_dir_error()
 
-        with open(self.name + '.json', 'r') as file_data:
+        with open(self._project_root + '/' +
+                  self.name + '.json', 'r') as file_data:
             logger.debug('Errors for repository %s obtained.', self.name)
 
             return json.load(file_data)
@@ -133,20 +138,21 @@ class RepoFuzzer:
         def pip_install(target):
             # Target is a string
 
-            return subprocess.run(['venv/bin/pip', 'install'] + target.split(),
+            return subprocess.run(['venv/bin/pip', 'install'] +
+                                  target.split(),
                                   cwd=self.name)
 
         logger.debug('Creating virtual environment for repository %s.',
                      self.name)
 
-        if not os.path.isdir(self.name + '/venv'):
-            virtualenv.create_environment(self.name + '/venv')
+        if not os.path.isdir(self._project_root + '/venv'):
+            virtualenv.create_environment(self._project_root + '/venv')
 
         if "dependencies" in self.config:
             # Install dependencies
 
             for dep_name, target in self.config["dependencies"].items():
-                if os.path.isfile(self.name + '/' + target):
+                if os.path.isfile(self._project_root + '/' + target):
                     to_install = "-r" + target
                 else:
                     to_install = target
@@ -202,20 +208,24 @@ class RepoFuzzer:
     def _fuzz_task(self):
 
         logger.debug('Fuzzing task of repository %s.', self.name)
-
         iteration = 0
 
         while getattr(self._current_fuzzing_task, "running", True):
+
             logger.info('Fuzzing iteration %s.', iteration)
-            subprocess.call([self.name + '/venv/bin/pytest',
+            subprocess.call(['venv/bin/pytest',
+                             '-m hypothesis',
                              '--hypothesis-server',
-                             '--hypothesis-output=' + self.name + '.json',
-                             self.name],
+                             '--hypothesis-output=' + self.name + '.json'],
                             universal_newlines=True,
-                            stdout=subprocess.PIPE)
-            print('Fuzzing iteration: ', iteration)
+                            stdout=subprocess.PIPE,
+                            cwd=self._project_root)
+            print('Fuzzing ' + self.name +
+                  ' iteration: ' + str(iteration))
             iteration += 1
-        print('Fuzzing stopped after ', iteration, ' iterations')
+        logger.debug('Fuzzing of ' + self.name +
+                     ' stopped after ' + str(iteration) +
+                     ' iterations')
 
         logger.debug('Task of repository %s fuzzed.', self.name)
 

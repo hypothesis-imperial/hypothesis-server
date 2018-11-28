@@ -3,7 +3,7 @@ repos:
      owner: hypothesis-imperial # Mandatory
      name: fuzzing-sample-product-poc # Mandatory
      git_url: https://github.com/hypothesis-imperial/fuzzing-sample-product-poc.git
-     project_root: "" # Optional; Default is just git directory root
+     project_root: '' # Optional; Default is just git directory root
      branch: master # optional; Default master
      tests_folder: tests # Optional: Default is "test" in project_root
      fuzz_on_start: True # Optional: Whether to pull and start fuzzing on server start, Default True
