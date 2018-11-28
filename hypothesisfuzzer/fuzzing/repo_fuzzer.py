@@ -134,7 +134,7 @@ class RepoFuzzer:
         def pip_install(target):
             # Target is a string
 
-            return subprocess.run(['venv/bin/pip', 'install', 'target'],
+            return subprocess.run(['venv/bin/pip', 'install', target],
                                   cwd=self.name)
 
         logger.debug('Creating virtual environment for repository %s.',
@@ -148,7 +148,7 @@ class RepoFuzzer:
 
             for dep_name, target in self.config["dependencies"].items():
                 if os.path.isfile(self.name + '/' + target):
-                    to_install = "-r " + target
+                    to_install = "-r" + target
                 else:
                     to_install = target
 
