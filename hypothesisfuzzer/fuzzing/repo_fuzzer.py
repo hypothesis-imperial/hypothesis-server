@@ -221,7 +221,7 @@ class RepoFuzzer:
                             stdout=subprocess.PIPE,
                             cwd=self._project_root)
             print('Fuzzing ' + self.name +
-                         ' iteration: ' + str(iteration))
+                  ' iteration: ' + str(iteration))
             iteration += 1
         logger.debug('Fuzzing of ' + self.name +
                      ' stopped after ' + str(iteration) +

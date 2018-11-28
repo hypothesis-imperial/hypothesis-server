@@ -22,7 +22,7 @@ if platform.startswith('linux'):
     sysLogHandler.setLevel(logging.DEBUG)
     logging.getLogger(__name__).addHandler(sysLogHandler)
 
-streamHandler = logging.handlers.StreamHandler(sys.stdout)
+streamHandler = logging.StreamHandler(sys.stdout)
 streamHandler.setLevel(logging.INFO)
 logging.getLogger(__name__).addHandler(streamHandler)
 
