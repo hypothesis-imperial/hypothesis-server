@@ -74,7 +74,7 @@ class RepoFuzzer:
 
         if not os.path.exists(self.name):
             logger.error('When getting commit hash, path of %s not found.',
-                         self.name, exc_info=True)
+                         self.name)
 
             return no_code_dir_error()
         repo = GitRepo(self.name)
@@ -113,21 +113,20 @@ class RepoFuzzer:
                     logger.debug('Repository %s pulled.', self.name)
                 except Exception:
                     logger.error('Unable to pull invalid repository %s.',
-                                 self.name, exc_info=True)
+                                 self.name)
 
-                    return generic_error(msg="Error updating Git Repo! " +
-                                             "Please ensure the path " +
-                                             "is a valid Git Repo.")
+                    return generic_error(msg='Error updating Git Repo! ' +
+                                             'Please ensure the path ' +
+                                             'is a valid Git Repo.')
             else:
                 os.makedirs(self.name)
                 GitRepo.clone_from(git_url, self.name)
                 logger.debug('Repository %s cloned.', self.name)
         except Exception:
-            logger.error('Unable to access repository %s.', self.name,
-                         exc_info=True)
+            logger.error('Unable to access repository %s.', self.name)
 
-            return generic_error(msg="Error cloning/pulling Git Repo! " +
-                                     "Please ensure you have access.")
+            return generic_error(msg='Error cloning/pulling Git Repo! ' +
+                                     'Please ensure you have access.')
 
     def _create_venv(self):
 
@@ -156,7 +155,7 @@ class RepoFuzzer:
 
                 if install_result.returncode != 0:
                     self._ready = False
-                    msg = "Failed to install dependency set " \
+                    msg = 'Failed to install dependency set ' \
                         + dep_name + ': ' + target
                     self._status = msg
                     logger.error(msg)
@@ -169,8 +168,8 @@ class RepoFuzzer:
             if os.path.isfile(self.name + '/requirements.txt'):
                 pip_install('-r requirements.txt')
             else:
-                logger.warn("No dependencies specified for repository " +
-                            self.name + ", and no requirements.txt found.")
+                logger.warn('No dependencies specified for repository %s, ' +
+                            'and no requirements.txt found.', self.name)
 
         self._ready = True
         logger.debug('Virtual environment for repository %s created.',
@@ -187,16 +186,14 @@ class RepoFuzzer:
     def _start_fuzzing(self):
 
         if not self._ready:
-            logger.error("Fuzzer not ready")
-
+            logger.error('Fuzzer not ready.')
             return
 
         logger.debug('Starting fuzzing for repository %s.', self.name)
 
         self._fuzz_start_time = datetime.datetime.now()
         self._current_fuzzing_task = \
-            threading.Thread(target=self._fuzz_task,
-                             args=())
+            threading.Thread(target=self._fuzz_task, args=())
         self._current_fuzzing_task.start()
 
         logger.debug('Fuzzing for repository %s started.', self.name)
@@ -217,21 +214,21 @@ class RepoFuzzer:
                             stdout=subprocess.PIPE)
             print('Fuzzing iteration: ', iteration)
             iteration += 1
-        print('Fuzzing stopped after', iteration, 'iterations')
+        print('Fuzzing stopped after ', iteration, ' iterations')
 
         logger.debug('Task of repository %s fuzzed.', self.name)
 
     def _load_config(self, config):
 
         if 'name' not in config:
-            logger.error('Repo configuration missing name.', exc_info=True)
-            raise ConfigMissingOptionException("Repo configuration" +
-                                               "missing a 'name' attribute.")
+            logger.error('Repo configuration missing name.')
+            raise ConfigMissingOptionException('Repo configuration ' +
+                                               'missing a name attribute.')
 
         if 'owner' not in config:
-            logger.error('Repo configuration missing owner.', exc_info=True)
-            raise ConfigMissingOptionException("Repo configuration" +
-                                               "missing an 'owner' attribute.")
+            logger.error('Repo configuration missing owner.')
+            raise ConfigMissingOptionException('Repo configuration ' +
+                                               'missing an owner attribute.')
 
         self.config = config
 

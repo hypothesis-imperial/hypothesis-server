@@ -97,8 +97,7 @@ class FuzzServer:
 
                 return fuzzer.on_webhook(data)
             except KeyError:
-                logger.error('Server not configured to fuzz this repository.',
-                             exc_info=True)
+                logger.error('Server not configured to fuzz this repository.')
                 err_message = ('Hypothesis server has not been configured to '
                                'fuzz this repository.')
 
@@ -122,8 +121,7 @@ class FuzzServer:
 
                 return jsonify(fuzzer.get_errors())
             except KeyError:
-                logger.error('Server not configured to fuzz this repository.',
-                             exc_info=True)
+                logger.error('Server not configured to fuzz this repository.')
                 err_message = ('Hypothesis server has not been configured to '
                                'fuzz this repository.')
 
@@ -141,18 +139,17 @@ class FuzzServer:
                 self.config = yaml.load(file)
 
                 if 'repos' not in self.config:
-                    logger.error("Configuration file missing 'repos'.",
-                                 exc_info=True)
-                    raise ConfigMissingOptionException("Configuration file " +
-                                                       "missing a 'repos' " +
-                                                       "attribute.")
-                logger.info('File config_path loaded.', exc_info=True)
+                    logger.error('Configuration file missing repos.')
+                    raise ConfigMissingOptionException('Configuration file ' +
+                                                       'missing a repos ' +
+                                                       'attribute.')
+                logger.info('File config_path loaded.')
         except FileNotFoundError:
-            logger.error('File config.yml not found.', exc_info=True)
+            logger.error('File config.yml not found.')
             raise FileNotFoundError('config.yml file not found. ' +
                                     'Create one or specify config path.')
 
-        logger.info('Server configuration loaded.')
+        logger.info('Server configurations loaded.')
 
     def _init_fuzzers(self):
 
