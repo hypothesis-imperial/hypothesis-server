@@ -133,7 +133,7 @@ class RepoFuzzer:
         def pip_install(target):
             # Target is a string
 
-            return subprocess.run(['venv/bin/pip', 'install', target.split()],
+            return subprocess.run(['venv/bin/pip', 'install'] + target.split(),
                                   cwd=self.name)
 
         logger.debug('Creating virtual environment for repository %s.',
