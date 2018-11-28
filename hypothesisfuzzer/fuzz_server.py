@@ -2,6 +2,7 @@ import json
 import logging
 import logging.handlers
 import os
+import sys
 import yaml
 
 from .errors import ConfigMissingOptionException
@@ -14,14 +15,16 @@ from sys import platform
 
 logging.basicConfig(datefmt='%d-%b-%y %H:%M:%S',
                     filename='fuzz_server.log',
-                    format='%(asctime)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 if platform.startswith('linux'):
-    handler = logging.handlers.SysLogHandler(address='/dev/log')
-    logging.getLogger('logger').addHandler(handler)
+    sysLogHandler = logging.handlers.SysLogHandler(address='/dev/log')
+    sysLogHandler.setLevel(logging.DEBUG)
+    logging.getLogger(__name__).addHandler(sysLogHandler)
 
-logging.getLogger('logger').addHandler(logging.StreamHandler())
+streamHandler = logging.handlers.StreamHandler(sys.stdout)
+streamHandler.setLevel(logging.INFO)
+logging.getLogger(__name__).addHandler(streamHandler)
 
 logger = logging.getLogger(__name__)
 
@@ -96,10 +99,8 @@ class FuzzServer:
             except KeyError:
                 logger.error('Server not configured to fuzz this repository.',
                              exc_info=True)
-                err_message = (
-                    'Hypothesis server has not been configured to'
-                    'fuzz this repository.'
-                )
+                err_message = ('Hypothesis server has not been configured to '
+                               'fuzz this repository.')
 
                 return err_message, 404
 
@@ -123,10 +124,8 @@ class FuzzServer:
             except KeyError:
                 logger.error('Server not configured to fuzz this repository.',
                              exc_info=True)
-                err_message = (
-                    'Hypothesis server has not been configured to'
-                    'fuzz this repository.'
-                )
+                err_message = ('Hypothesis server has not been configured to '
+                               'fuzz this repository.')
 
                 return err_message, 404
 
@@ -134,7 +133,7 @@ class FuzzServer:
 
     def _load_config(self, config_path):
 
-        logger.debug('Loading configurations.')
+        logger.debug('Loading server configurations.')
 
         try:
             with open(config_path) as file:
@@ -142,7 +141,7 @@ class FuzzServer:
                 self.config = yaml.load(file)
 
                 if 'repos' not in self.config:
-                    logger.error('Configuration file missing repos.',
+                    logger.error("Configuration file missing 'repos'.",
                                  exc_info=True)
                     raise ConfigMissingOptionException("Configuration file " +
                                                        "missing a 'repos' " +
@@ -153,7 +152,7 @@ class FuzzServer:
             raise FileNotFoundError('config.yml file not found. ' +
                                     'Create one or specify config path.')
 
-        logger.info('Server Configuration loaded.')
+        logger.info('Server configuration loaded.')
 
     def _init_fuzzers(self):
 
