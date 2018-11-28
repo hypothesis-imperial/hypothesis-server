@@ -130,9 +130,9 @@ class RepoFuzzer:
                                      "Please ensure you have access.")
 
     def _create_venv(self):
-        project_root = self.config["project_root"]
-        if project_root:
-            project_root = self.name + '/' + project_root
+        project_root = self.name 
+        if self.config["project_root"]:
+            project_root = self.name + '/' + self.config["project_root"]
 
         def pip_install(target):
             # Target is a string
@@ -207,21 +207,21 @@ class RepoFuzzer:
 
         logger.debug('Fuzzing task of repository %s.', self.name)
 
+        project_root = self.name 
+        if self.config["project_root"]:
+            project_root = self.name + '/' + self.config["project_root"]
+
         iteration = 0
 
         while getattr(self._current_fuzzing_task, "running", True):
-            project_root = self.config["project_root"]
-            if project_root:
-                project_root = self.name + '/' + project_root
-
+            
             logger.info('Fuzzing iteration %s.', iteration)
-            subprocess.call(['/venv/bin/pytest',
+            subprocess.call([project_root + '/venv/bin/pytest',
                              '--hypothesis-server',
                              '--hypothesis-output=' + self.name + '.json',
                              self.name],
                             universal_newlines=True,
-                            stdout=subprocess.PIPE,
-                            cwd=project_root)
+                            stdout=subprocess.PIPE)
             print('Fuzzing iteration: ', iteration)
             iteration += 1
         print('Fuzzing stopped after', iteration, 'iterations')
