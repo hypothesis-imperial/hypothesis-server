@@ -133,11 +133,7 @@ class RepoFuzzer:
         def pip_install(target):
             # Target is a string
 
-<<<<<<< HEAD
-            return subprocess.run(['venv/bin/pip', 'install', target],
-=======
             return subprocess.run(['venv/bin/pip', 'install', target.split()],
->>>>>>> debug
                                   cwd=self.name)
 
         logger.debug('Creating virtual environment for repository %s.',
@@ -191,6 +187,7 @@ class RepoFuzzer:
 
         if not self._ready:
             logger.error('Fuzzer not ready.')
+
             return
 
         logger.debug('Starting fuzzing for repository %s.', self.name)
