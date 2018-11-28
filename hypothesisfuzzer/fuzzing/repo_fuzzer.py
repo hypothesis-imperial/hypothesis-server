@@ -130,25 +130,27 @@ class RepoFuzzer:
                                      "Please ensure you have access.")
 
     def _create_venv(self):
+        project_root = self.config["project_root"]
+        if project_root:
+            project_root = self.name + '/' + project_root
 
         def pip_install(target):
             # Target is a string
-
-            return subprocess.run(['venv/bin/pip', 'install', 'target'],
-                                  cwd=self.name)
+            return subprocess.run(['venv/bin/pip', 'install', target],
+                                  cwd=project_root)
 
         logger.debug('Creating virtual environment for repository %s.',
                      self.name)
 
-        if not os.path.isdir(self.name + '/venv'):
-            virtualenv.create_environment(self.name + '/venv')
+        if not os.path.isdir(project_root + '/venv'):
+            virtualenv.create_environment(project_root + '/venv')
 
         if "dependencies" in self.config:
             # Install dependencies
 
             for dep_name, target in self.config["dependencies"].items():
-                if os.path.isfile(self.name + '/' + target):
-                    to_install = "-r " + target
+                if os.path.isfile(project_root + '/' + target):
+                    to_install = "-r" + target
                 else:
                     to_install = target
 
@@ -208,13 +210,18 @@ class RepoFuzzer:
         iteration = 0
 
         while getattr(self._current_fuzzing_task, "running", True):
+            project_root = self.config["project_root"]
+            if project_root:
+                project_root = self.name + '/' + project_root
+
             logger.info('Fuzzing iteration %s.', iteration)
-            subprocess.call([self.name + '/venv/bin/pytest',
+            subprocess.call(['/venv/bin/pytest',
                              '--hypothesis-server',
                              '--hypothesis-output=' + self.name + '.json',
                              self.name],
                             universal_newlines=True,
-                            stdout=subprocess.PIPE)
+                            stdout=subprocess.PIPE,
+                            cwd=project_root)
             print('Fuzzing iteration: ', iteration)
             iteration += 1
         print('Fuzzing stopped after', iteration, 'iterations')
