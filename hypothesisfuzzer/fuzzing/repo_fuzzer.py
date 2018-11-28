@@ -29,6 +29,7 @@ class RepoFuzzer:
         self._ready = False
         self._status = None
         self._project_root = self.name
+
         if self.config["project_root"]:
             self._project_root = self.name + '/' + self.config["project_root"]
         self._clone_git(config['git_url'])
@@ -92,9 +93,11 @@ class RepoFuzzer:
     def get_errors(self):
 
         logger.debug('Getting errors for repository %s.', self.name)
+
         if not os.path.exists(self._project_root):
             logger.error('When getting errors, path of %s not found.',
                          self.name)
+
             return no_code_dir_error()
 
         with open(self._project_root + '/' +
@@ -135,6 +138,7 @@ class RepoFuzzer:
 
         def pip_install(target):
             # Target is a string
+
             return subprocess.run(['venv/bin/pip', 'install', target],
                                   cwd=self._project_root)
 
@@ -217,9 +221,12 @@ class RepoFuzzer:
                             universal_newlines=True,
                             stdout=subprocess.PIPE,
                             cwd=self._project_root)
-            print('Fuzzing iteration: ', iteration)
+            logger.trace('Fuzzing ' + self.name +
+                         ' iteration: ' + str(iteration))
             iteration += 1
-        print('Fuzzing stopped after', iteration, 'iterations')
+        logger.debug('Fuzzing of ' + self.name +
+                     ' stopped after ' + str(iteration) +
+                     ' iterations')
 
         logger.debug('Task of repository %s fuzzed.', self.name)
 
