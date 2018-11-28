@@ -209,12 +209,16 @@ class RepoFuzzer:
 
         while getattr(self._current_fuzzing_task, "running", True):
             logger.info('Fuzzing iteration %s.', iteration)
-            subprocess.call([self.name + '/venv/bin/pytest',
-                             '--hypothesis-server',
-                             '--hypothesis-output=' + self.name + '.json',
-                             self.name],
-                            universal_newlines=True,
-                            stdout=subprocess.PIPE)
+            try:
+                subprocess.call([self.name + '/venv/bin/pytest',
+                                 '--hypothesis-server',
+                                 '--hypothesis-output=' + self.name + '.json',
+                                 self.name],
+                                universal_newlines=True,
+                                stdout=subprocess.PIPE)
+            except:
+                logger.error('Pytest not found in venv.')
+                return generic_error('Pytest not found in venv.')
             print('Fuzzing iteration: ', iteration)
             iteration += 1
         print('Fuzzing stopped after', iteration, 'iterations')
