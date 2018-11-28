@@ -216,7 +216,7 @@ class RepoFuzzer:
                                  self.name],
                                 universal_newlines=True,
                                 stdout=subprocess.PIPE)
-            except:
+            except Exception:
                 logger.error('Pytest not found in venv.')
                 return generic_error('Pytest not found in venv.')
             print('Fuzzing iteration: ', iteration)
