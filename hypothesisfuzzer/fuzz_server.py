@@ -75,10 +75,9 @@ class FuzzServer:
             repositories = []
 
             for (name, owner), fuzzer in self.fuzzers.items():
-                with open(name + '.json') as f:
-                    data = json.load(f)
-                    data["repo_name"] = name
-                    repositories.append(data)
+                data = fuzzer.get_errors()
+                data["repo_name"] = name
+                repositories.append(data)
 
             return jsonify({
                 "repositories": repositories
