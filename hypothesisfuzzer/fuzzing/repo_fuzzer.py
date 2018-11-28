@@ -97,7 +97,8 @@ class RepoFuzzer:
                          self.name)
             return no_code_dir_error()
 
-        with open(self._project_root+'/'+self.name + '.json', 'r') as file_data:
+        with open(self._project_root + '/' +
+                  self.name + '.json', 'r') as file_data:
             logger.debug('Errors for repository %s obtained.', self.name)
 
             return json.load(file_data)
