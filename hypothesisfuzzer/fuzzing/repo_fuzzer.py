@@ -15,7 +15,7 @@ from ..errors import (
 )
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('fuzz_server.' + __name__)
 
 
 class RepoFuzzer:
