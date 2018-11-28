@@ -20,13 +20,13 @@ logging.basicConfig(datefmt='%d-%b-%y %H:%M:%S',
 if platform.startswith('linux'):
     sysLogHandler = logging.handlers.SysLogHandler(address='/dev/log')
     sysLogHandler.setLevel(logging.DEBUG)
-    logging.getLogger().addHandler(sysLogHandler)
+    logging.getLogger(__name__).addHandler(sysLogHandler)
 
 streamHandler = logging.handlers.StreamHandler(sys.stdout)
 streamHandler.setLevel(logging.INFO)
-logging.getLogger().addHandler(streamHandler)
+logging.getLogger(__name__).addHandler(streamHandler)
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 class FuzzServer:
