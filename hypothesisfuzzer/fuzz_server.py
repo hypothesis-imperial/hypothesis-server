@@ -15,18 +15,18 @@ from sys import platform
 
 logging.basicConfig(datefmt='%d-%b-%y %H:%M:%S',
                     filename='fuzz_server.log',
-                    format='%(asctime)s - %(levelname)s - %(message)s')
+                    format='%(asctime)s: %(name)s: %(levelname)s: %(message)s')
 
 if platform.startswith('linux'):
     sysLogHandler = logging.handlers.SysLogHandler(address='/dev/log')
     sysLogHandler.setLevel(logging.DEBUG)
-    logging.getLogger(__name__).addHandler(sysLogHandler)
+    logging.getLogger().addHandler(sysLogHandler)
 
 streamHandler = logging.handlers.StreamHandler(sys.stdout)
 streamHandler.setLevel(logging.INFO)
-logging.getLogger(__name__).addHandler(streamHandler)
+logging.getLogger().addHandler(streamHandler)
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 
 class FuzzServer:
