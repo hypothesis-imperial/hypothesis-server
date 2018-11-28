@@ -220,7 +220,7 @@ class RepoFuzzer:
                             universal_newlines=True,
                             stdout=subprocess.PIPE,
                             cwd=self._project_root)
-            logger.trace('Fuzzing ' + self.name +
+            print('Fuzzing ' + self.name +
                          ' iteration: ' + str(iteration))
             iteration += 1
         logger.debug('Fuzzing of ' + self.name +
