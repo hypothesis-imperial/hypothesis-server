@@ -92,14 +92,12 @@ class RepoFuzzer:
     def get_errors(self):
 
         logger.debug('Getting errors for repository %s.', self.name)
-
-        if not os.path.exists(self.name):
+        if not os.path.exists(self._project_root):
             logger.error('When getting errors, path of %s not found.',
                          self.name)
-
             return no_code_dir_error()
 
-        with open(self.name + '.json', 'r') as file_data:
+        with open(self._project_root + '/' + self.name + '.json', 'r') as file_data:
             logger.debug('Errors for repository %s obtained.', self.name)
 
             return json.load(file_data)
@@ -211,12 +209,12 @@ class RepoFuzzer:
         while getattr(self._current_fuzzing_task, "running", True):
 
             logger.info('Fuzzing iteration %s.', iteration)
-            subprocess.call([self._project_root + '/venv/bin/pytest',
+            subprocess.call(['venv/bin/pytest',
                              '--hypothesis-server',
-                             '--hypothesis-output=' + self.name + '.json',
-                             self.name],
+                             '--hypothesis-output=' + self.name + '.json'],
                             universal_newlines=True,
-                            stdout=subprocess.PIPE)
+                            stdout=subprocess.PIPE,
+                            cwd=self._project_root)
             print('Fuzzing iteration: ', iteration)
             iteration += 1
         print('Fuzzing stopped after', iteration, 'iterations')
