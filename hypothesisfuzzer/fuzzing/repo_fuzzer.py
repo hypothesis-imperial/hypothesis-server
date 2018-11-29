@@ -105,7 +105,7 @@ class RepoFuzzer:
         status_info['repo_name'] = self.name
         status_info['owner'] = self.config['owner']
         status_info['start'] = self._fuzz_start_time
-        status_info['duration'] = datetime.now() - self._fuzz_start_time
+        status_info['duration'] = str(datetime.now() - self._fuzz_start_time)
         status_info['iterations'] = self._iterations
         status_info['fuzzing'] = self._currently_fuzzing
         status_info['ready'] = self._ready

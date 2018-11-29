@@ -81,7 +81,7 @@ class FuzzServer:
 
             return jsonify({
                 "start_time": self._start_time,
-                "uptime": datetime.now() - self._start_time,
+                "uptime": str(datetime.now() - self._start_time),
                 "repositories": repositories
             })
 
