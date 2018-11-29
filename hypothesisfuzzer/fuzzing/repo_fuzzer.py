@@ -1,12 +1,12 @@
 import json
 import os
-import datetime
 import logging
 import subprocess
 import threading
 import virtualenv
 
 from git import Repo as GitRepo
+from datetime import datetime
 from ..errors import (
     no_code_dir_error,
     generic_error,
@@ -26,7 +26,11 @@ class RepoFuzzer:
 
         self.name = name
         self._load_config(config)
+
+        # Fuzzing status
         self._ready = False
+        self._currently_fuzzing = False
+        self._iterations = 0
         self._status = None
         self._project_root = self.name
 
@@ -35,6 +39,7 @@ class RepoFuzzer:
         self._clone_git(config['git_url'])
         self._create_venv()
         self._error_results = {}
+        self._fuzz_start_time = None
 
         logger.info('Repository %s fuzzer initialised.', name)
 
@@ -94,6 +99,16 @@ class RepoFuzzer:
     def get_errors(self):
 
         logger.debug('Getting errors for repository %s.', self.name)
+
+        status_info = self._error_results
+
+        status_info['repo_name'] = self.name
+        status_info['owner'] = self.config['owner']
+        status_info['start'] = self._fuzz_start_time
+        status_info['duration'] = datetime.now() - self._fuzz_start_time
+        status_info['iterations'] = self._iterations
+        status_info['fuzzing'] = self._currently_fuzzing
+        status_info['ready'] = self._ready
 
         return self._error_results
 
@@ -179,6 +194,7 @@ class RepoFuzzer:
             self._current_fuzzing_task.running = False
             self._current_fuzzing_task.join()
             logger.debug('Fuzzing for repository %s stopped.', self.name)
+            self._currently_fuzzing = False
 
     def _start_fuzzing(self):
 
@@ -189,7 +205,10 @@ class RepoFuzzer:
 
         logger.debug('Starting fuzzing for repository %s.', self.name)
 
-        self._fuzz_start_time = datetime.datetime.now()
+        self._currently_fuzzing = True
+        self._iterations = 0
+        self._fuzz_start_time = datetime.now()
+
         self._current_fuzzing_task = \
             threading.Thread(target=self._fuzz_task, args=())
         self._current_fuzzing_task.start()
@@ -199,11 +218,10 @@ class RepoFuzzer:
     def _fuzz_task(self):
 
         logger.debug('Fuzzing task of repository %s.', self.name)
-        iteration = 0
 
         while getattr(self._current_fuzzing_task, "running", True):
 
-            logger.info('Fuzzing iteration %s.', iteration)
+            logger.info('Fuzzing iteration %s.', self._iteration)
             subprocess.run(['venv/bin/pytest',
                             '-m hypothesis',
                             '--hypothesis-server',
@@ -222,10 +240,10 @@ class RepoFuzzer:
                              + 'not producing output json')
 
             print('Fuzzing ' + self.name +
-                  ' iteration: ' + str(iteration))
-            iteration += 1
+                  ' iteration: ' + str(self._iteration))
+            self._iteration += 1
         logger.debug('Fuzzing of ' + self.name +
-                     ' stopped after ' + str(iteration) +
+                     ' stopped after ' + str(self._iteration) +
                      ' iterations')
 
         logger.debug('Task of repository %s fuzzed.', self.name)
