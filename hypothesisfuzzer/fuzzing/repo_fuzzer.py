@@ -34,6 +34,7 @@ class RepoFuzzer:
             self._project_root = self.name + '/' + self.config["project_root"]
         self._clone_git(config['git_url'])
         self._create_venv()
+        self._error_results = {}
 
         logger.info('Repository %s fuzzer initialised.', name)
 
@@ -94,17 +95,7 @@ class RepoFuzzer:
 
         logger.debug('Getting errors for repository %s.', self.name)
 
-        if not os.path.exists(self._project_root):
-            logger.error('When getting errors, path of %s not found.',
-                         self.name)
-
-            return no_code_dir_error()
-
-        with open(self._project_root + '/' +
-                  self.name + '.json', 'r') as file_data:
-            logger.debug('Errors for repository %s obtained.', self.name)
-
-            return json.load(file_data)
+        return self._error_results
 
     def _clone_git(self, git_url):
 
@@ -213,13 +204,23 @@ class RepoFuzzer:
         while getattr(self._current_fuzzing_task, "running", True):
 
             logger.info('Fuzzing iteration %s.', iteration)
-            subprocess.call(['venv/bin/pytest',
-                             '-m hypothesis',
-                             '--hypothesis-server',
-                             '--hypothesis-output=' + self.name + '.json'],
-                            universal_newlines=True,
-                            stdout=subprocess.PIPE,
-                            cwd=self._project_root)
+            subprocess.run(['venv/bin/pytest',
+                            '-m hypothesis',
+                            '--hypothesis-server',
+                            '--hypothesis-output=' + self.name + '.json'],
+                           universal_newlines=True,
+                           stdout=subprocess.PIPE,
+                           cwd=self._project_root)
+
+            try:
+                with open(self._project_root + '/' +
+                          self.name + '.json', 'r') as file_data:
+                    self._error_results = json.load(file_data)
+            except IOError:
+                logger.error('Repository '
+                             + self.name
+                             + 'not producing output json')
+
             print('Fuzzing ' + self.name +
                   ' iteration: ' + str(iteration))
             iteration += 1
