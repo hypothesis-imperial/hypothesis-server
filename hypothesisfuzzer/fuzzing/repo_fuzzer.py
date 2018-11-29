@@ -221,7 +221,7 @@ class RepoFuzzer:
 
         while getattr(self._current_fuzzing_task, "running", True):
 
-            logger.info('Fuzzing iteration %s.', self._iteration)
+            logger.info('Fuzzing iteration %s.', self._iterations)
             subprocess.run(['venv/bin/pytest',
                             '-m hypothesis',
                             '--hypothesis-server',
@@ -239,11 +239,11 @@ class RepoFuzzer:
                              + self.name
                              + 'not producing output json')
 
+            self._iterations += 1
             print('Fuzzing ' + self.name +
-                  ' iteration: ' + str(self._iteration))
-            self._iteration += 1
+                  ' iteration: ' + str(self._iterations))
         logger.debug('Fuzzing of ' + self.name +
-                     ' stopped after ' + str(self._iteration) +
+                     ' stopped after ' + str(self._iterations) +
                      ' iterations')
 
         logger.debug('Task of repository %s fuzzed.', self.name)
