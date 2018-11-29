@@ -33,13 +33,13 @@ class RepoFuzzer:
         self._iterations = 0
         self._status = None
         self._project_root = self.name
+        self._fuzz_start_time = None
 
         if "project_root" in self.config:
             self._project_root = self.name + '/' + self.config["project_root"]
         self._clone_git(config['git_url'])
         self._create_venv()
         self._error_results = {}
-        self._fuzz_start_time = None
 
         logger.info('Repository %s fuzzer initialised.', name)
 
@@ -110,7 +110,7 @@ class RepoFuzzer:
         status_info['fuzzing'] = self._currently_fuzzing
         status_info['ready'] = self._ready
 
-        return self._error_results
+        return status_info
 
     def _clone_git(self, git_url):
 
