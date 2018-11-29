@@ -11,7 +11,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask import Flask, request, send_from_directory, jsonify
 from sys import platform
-
+from datetime import datetime
 
 logging.basicConfig(datefmt='%d-%b-%y %H:%M:%S',
                     filename='fuzz_server.log',
@@ -44,6 +44,7 @@ class FuzzServer:
         self._load_config(config_path)
         self._init_fuzzers()
         self.db = SQLAlchemy(self.app)
+        self._start_time = datetime.now()
 
         logger.info('Fuzzing server initialised.')
 
@@ -76,10 +77,11 @@ class FuzzServer:
 
             for (name, owner), fuzzer in self.fuzzers.items():
                 data = fuzzer.get_errors()
-                data["repo_name"] = name
                 repositories.append(data)
 
             return jsonify({
+                "start_time": self._start_time,
+                "uptime": datetime.now() - self._start_time,
                 "repositories": repositories
             })
 
