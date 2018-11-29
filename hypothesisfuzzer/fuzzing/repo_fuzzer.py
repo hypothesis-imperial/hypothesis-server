@@ -30,7 +30,7 @@ class RepoFuzzer:
         self._status = None
         self._project_root = self.name
 
-        if self.config["project_root"]:
+        if "project_root" in self.config:
             self._project_root = self.name + '/' + self.config["project_root"]
         self._clone_git(config['git_url'])
         self._create_venv()
@@ -140,7 +140,7 @@ class RepoFuzzer:
 
             return subprocess.run(['venv/bin/pip', 'install'] +
                                   target.split(),
-                                  cwd=self.name)
+                                  cwd=self._project_root)
 
         logger.debug('Creating virtual environment for repository %s.',
                      self.name)
@@ -153,7 +153,7 @@ class RepoFuzzer:
 
             for dep_name, target in self.config["dependencies"].items():
                 if os.path.isfile(self._project_root + '/' + target):
-                    to_install = "-r" + target
+                    to_install = "-r " + target
                 else:
                     to_install = target
 
@@ -171,7 +171,7 @@ class RepoFuzzer:
         else:
             # Look for requirements file
 
-            if os.path.isfile(self.name + '/requirements.txt'):
+            if os.path.isfile(self._project_root + '/requirements.txt'):
                 pip_install('-r requirements.txt')
             else:
                 logger.warn('No dependencies specified for repository %s, ' +
