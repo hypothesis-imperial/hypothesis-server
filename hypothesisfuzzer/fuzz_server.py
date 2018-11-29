@@ -87,14 +87,14 @@ class FuzzServer:
 
         @self.app.route('/webhook', methods=['POST'])
         def on_git_push():
-            logger.debug('Git push for repository %s occurred.',
-                         self.fuzzer.name)
             data = json.loads(request.data)
             name = data['repository']['name']
             owner = data['repository']['owner']['name']
 
             try:
                 fuzzer = self.fuzzers[(name, owner)]
+                logger.debug('Git push for repository %s occurred.',
+                             fuzzer.name)
 
                 return fuzzer.on_webhook(data)
             except KeyError:
