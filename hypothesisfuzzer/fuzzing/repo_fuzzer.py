@@ -57,7 +57,7 @@ class RepoFuzzer:
 
         # Check if repo is the same name as the one set in config
         payload_name = payload["repository"]["name"]
-        config_name = self.config['repo_name']
+        config_name = self.config['name']
         try:
             if payload_name != config_name:
                 logger.warning('Repository %s is different from %s.',
