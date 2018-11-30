@@ -35,7 +35,7 @@ class RepoFuzzer:
         self._project_root = self.name
         self._fuzz_start_time = None
 
-        if self.config["project_root"]:
+        if "project_root" in self.config:
             self._project_root = self.name + '/' + self.config["project_root"]
         self._clone_git(config['git_url'])
         self._create_venv()
@@ -221,7 +221,7 @@ class RepoFuzzer:
                       '--hypothesis-server',
                       '--hypothesis-output=' + self.name + '.json']
 
-            if self.config["tests_folder"]:
+            if "tests_folder" in self.config:
                 params.append(self.config["tests_folder"])
             result = subprocess.run(params,
                                     universal_newlines=True,
