@@ -133,6 +133,16 @@ class RepoFuzzer:
                 os.makedirs(self.name)
                 GitRepo.clone_from(git_url, self.name)
                 logger.debug('Repository %s cloned.', self.name)
+
+            if "branch" in self.config:
+                try:
+                    GitRepo(self.name).git.checkout(self.config["branch"])
+                except Exception:
+                    logger.error('Unable to find branch %s.',
+                                    self.config["branch"])
+                    return generic_error(msg='Error finding the branch! '+
+                                             'Please check your config file.')
+
         except Exception:
             logger.error('Unable to access repository %s.', self.name)
 
