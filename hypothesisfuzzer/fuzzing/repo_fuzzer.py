@@ -35,7 +35,7 @@ class RepoFuzzer:
         self._project_root = self.name
         self._fuzz_start_time = None
 
-        if "project_root" in self.config:
+        if self.config["project_root"]:
             self._project_root = self.name + '/' + self.config["project_root"]
         self._clone_git(config['git_url'])
         self._create_venv()
@@ -62,7 +62,6 @@ class RepoFuzzer:
             if payload_name != config_name:
                 logger.warning('Repository %s is different from %s.',
                                payload_name, config_name)
-
                 return 'OK'
         except KeyError:
             logger.info('Repository %s is as configured.', payload_name)
@@ -144,7 +143,6 @@ class RepoFuzzer:
 
         def pip_install(target):
             # Target is a string
-
             return subprocess.run(['venv/bin/pip', 'install'] +
                                   target.split(),
                                   cwd=self._project_root)
@@ -157,7 +155,6 @@ class RepoFuzzer:
 
         if "dependencies" in self.config:
             # Install dependencies
-
             for dep_name, target in self.config["dependencies"].items():
                 if os.path.isfile(self._project_root + '/' + target):
                     to_install = "-r " + target
@@ -172,7 +169,6 @@ class RepoFuzzer:
                         + dep_name + ': ' + target
                     self._status = msg
                     logger.error(msg)
-
                     return
 
         else:
@@ -181,8 +177,8 @@ class RepoFuzzer:
             if os.path.isfile(self._project_root + '/requirements.txt'):
                 pip_install('-r requirements.txt')
             else:
-                logger.warn('No dependencies specified for repository %s, ' +
-                            'and no requirements.txt found.', self.name)
+                logger.warning('No dependencies specified for repository %s, '
+                               'and no requirements.txt found.', self.name)
 
         self._ready = True
         logger.debug('Virtual environment for repository %s created.',
@@ -201,7 +197,6 @@ class RepoFuzzer:
 
         if not self._ready:
             logger.error('Fuzzer not ready.')
-
             return
 
         logger.debug('Starting fuzzing for repository %s.', self.name)
@@ -223,29 +218,42 @@ class RepoFuzzer:
         while getattr(self._current_fuzzing_task, "running", True):
 
             logger.info('Fuzzing iteration %s.', self._iterations)
-            subprocess.run(['venv/bin/pytest',
-                            '-m hypothesis',
-                            '--hypothesis-server',
-                            '--hypothesis-output=' + self.name + '.json'],
-                           universal_newlines=True,
-                           stdout=subprocess.PIPE,
-                           cwd=self._project_root)
+            params = ['venv/bin/pytest', '-m hypothesis',
+                      '--hypothesis-server',
+                      '--hypothesis-output=' + self.name + '.json']
+
+            if self.config["tests_folder"]:
+                params.append(self.config["tests_folder"])
+            result = subprocess.run(params,
+                                    universal_newlines=True,
+                                    stdout=subprocess.PIPE,
+                                    cwd=self._project_root)
+
+            if result.returncode == 0:
+                pass
+            elif result.returncode == 1:
+                logger.info('Some tests failed.')
+            else:
+                self._ready = False
+                self._currently_fuzzing = False
+                self._status = 'Test execution interrupted by error.'
+                logger.warning('Test execution interrupted by error.')
+                return
 
             try:
                 with open(self._project_root + '/' +
                           self.name + '.json', 'r') as file_data:
                     self._error_results = json.load(file_data)
             except IOError:
-                logger.error('Repository '
-                             + self.name
-                             + 'not producing output json')
+                logger.error('Repository %s not producing output json.',
+                             self.name)
 
             self._iterations += 1
             print('Fuzzing ' + self.name +
-                  ' iteration: ' + str(self._iterations))
-        logger.debug('Fuzzing of ' + self.name +
-                     ' stopped after ' + str(self._iterations) +
-                     ' iterations')
+                  ' iteration ' + str(self._iterations) + '.')
+
+        logger.debug('Fuzzing of ' + self.name + ' stopped after '
+                     + str(self._iterations) + ' iterations.')
 
         logger.debug('Task of repository %s fuzzed.', self.name)
 
