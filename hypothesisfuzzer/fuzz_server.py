@@ -2,6 +2,7 @@ import json
 import logging
 import logging.handlers
 import os
+import sys
 import yaml
 
 from .errors import ConfigMissingOptionException
@@ -10,18 +11,20 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask import Flask, request, send_from_directory, jsonify
 from sys import platform
-
+from datetime import datetime
 
 logging.basicConfig(datefmt='%d-%b-%y %H:%M:%S',
                     filename='fuzz_server.log',
-                    format='%(asctime)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
+                    format='%(asctime)s: %(name)s: %(levelname)s: %(message)s')
 
 if platform.startswith('linux'):
-    handler = logging.handlers.SysLogHandler(address='/dev/log')
-    logging.getLogger('logger').addHandler(handler)
+    sysLogHandler = logging.handlers.SysLogHandler(address='/dev/log')
+    sysLogHandler.setLevel(logging.DEBUG)
+    logging.getLogger(__name__).addHandler(sysLogHandler)
 
-logging.getLogger('logger').addHandler(logging.StreamHandler())
+streamHandler = logging.StreamHandler(sys.stdout)
+streamHandler.setLevel(logging.INFO)
+logging.getLogger(__name__).addHandler(streamHandler)
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +44,7 @@ class FuzzServer:
         self._load_config(config_path)
         self._init_fuzzers()
         self.db = SQLAlchemy(self.app)
+        self._start_time = datetime.now()
 
         logger.info('Fuzzing server initialised.')
 
@@ -72,34 +76,31 @@ class FuzzServer:
             repositories = []
 
             for (name, owner), fuzzer in self.fuzzers.items():
-                with open(name + '.json') as f:
-                    data = json.load(f)
-                    data["repo_name"] = name
-                    repositories.append(data)
+                data = fuzzer.get_errors()
+                repositories.append(data)
 
             return jsonify({
+                "start_time": self._start_time,
+                "uptime": str(datetime.now() - self._start_time),
                 "repositories": repositories
             })
 
         @self.app.route('/webhook', methods=['POST'])
         def on_git_push():
-            logger.debug('Git push for repository %s occurred.',
-                         self.fuzzer.name)
             data = json.loads(request.data)
             name = data['repository']['name']
             owner = data['repository']['owner']['name']
 
             try:
                 fuzzer = self.fuzzers[(name, owner)]
+                logger.debug('Git push for repository %s occurred.',
+                             fuzzer.name)
 
                 return fuzzer.on_webhook(data)
             except KeyError:
-                logger.error('Server not configured to fuzz this repository.',
-                             exc_info=True)
-                err_message = (
-                    'Hypothesis server has not been configured to'
-                    'fuzz this repository.'
-                )
+                logger.error('Server not configured to fuzz this repository.')
+                err_message = ('Hypothesis server has not been configured to '
+                               'fuzz this repository.')
 
                 return err_message, 404
 
@@ -121,12 +122,9 @@ class FuzzServer:
 
                 return jsonify(fuzzer.get_errors())
             except KeyError:
-                logger.error('Server not configured to fuzz this repository.',
-                             exc_info=True)
-                err_message = (
-                    'Hypothesis server has not been configured to'
-                    'fuzz this repository.'
-                )
+                logger.error('Server not configured to fuzz this repository.')
+                err_message = ('Hypothesis server has not been configured to '
+                               'fuzz this repository.')
 
                 return err_message, 404
 
@@ -134,7 +132,7 @@ class FuzzServer:
 
     def _load_config(self, config_path):
 
-        logger.debug('Loading configurations.')
+        logger.debug('Loading server configurations.')
 
         try:
             with open(config_path) as file:
@@ -142,18 +140,17 @@ class FuzzServer:
                 self.config = yaml.load(file)
 
                 if 'repos' not in self.config:
-                    logger.error('Configuration file missing repos.',
-                                 exc_info=True)
-                    raise ConfigMissingOptionException("Configuration file " +
-                                                       "missing a 'repos' " +
-                                                       "attribute.")
-                logger.info('File config_path loaded.', exc_info=True)
+                    logger.error('Configuration file missing repos.')
+                    raise ConfigMissingOptionException('Configuration file ' +
+                                                       'missing a repos ' +
+                                                       'attribute.')
+                logger.info('File config_path loaded.')
         except FileNotFoundError:
-            logger.error('File config.yml not found.', exc_info=True)
+            logger.error('File config.yml not found.')
             raise FileNotFoundError('config.yml file not found. ' +
                                     'Create one or specify config path.')
 
-        logger.info('Server Configuration loaded.')
+        logger.info('Server configurations loaded.')
 
     def _init_fuzzers(self):
 
