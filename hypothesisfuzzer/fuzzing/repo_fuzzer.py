@@ -217,11 +217,14 @@ class RepoFuzzer:
         while getattr(self._current_fuzzing_task, "running", True):
 
             logger.info('Fuzzing iteration %s.', self._iterations)
+            params = ['venv/bin/pytest', '-m hypothesis',
+                        '--hypothesis-server',
+                        '--hypothesis-output=' + self.name + '.json']
 
-            result = subprocess.run(['venv/bin/pytest', '-m hypothesis',
-                                     '--hypothesis-server',
-                                     '--hypothesis-output=' + self.name
-                                     + '.json'],
+            if self.config["tests_folder"]:
+                params.append(self.config["tests_folder"])
+            print(params)
+            result = subprocess.run(params,
                                     universal_newlines=True,
                                     stdout=subprocess.PIPE,
                                     cwd=self._project_root)
