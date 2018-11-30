@@ -218,12 +218,11 @@ class RepoFuzzer:
 
             logger.info('Fuzzing iteration %s.', self._iterations)
             params = ['venv/bin/pytest', '-m hypothesis',
-                        '--hypothesis-server',
-                        '--hypothesis-output=' + self.name + '.json']
+                      '--hypothesis-server',
+                      '--hypothesis-output=' + self.name + '.json']
 
             if self.config["tests_folder"]:
                 params.append(self.config["tests_folder"])
-            print(params)
             result = subprocess.run(params,
                                     universal_newlines=True,
                                     stdout=subprocess.PIPE,
