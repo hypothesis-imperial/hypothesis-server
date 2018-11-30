@@ -4,6 +4,7 @@ import { HashRouter, Route } from 'react-router-dom';
 import { DefaultLayout } from './containers';
 import './scss/App.scss';
 import '@coreui/coreui';
+import example from './example3.json'
 
 
 class App extends Component {
@@ -12,12 +13,13 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const url = "http://ec2-18-130-116-158.eu-west-2.compute.amazonaws.com/all_info";
-    fetch(url)
-    .then(result => result.json())
-    .then(result => {
-      this.setState({repos: result.repositories})
-    });
+    // const url = "http://ec2-18-130-116-158.eu-west-2.compute.amazonaws.com/all_info";
+    // fetch(url)
+    // .then(result => result.json())
+    // .then(result => {
+    //   this.setState({repos: result.repositories})
+    // });
+    this.setState({repos: example.repositories})
   }
 
   render() {

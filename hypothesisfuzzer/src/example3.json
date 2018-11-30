@@ -31,9 +31,7 @@
                      ]
                   }
                ],
-               "note":[
-
-               ],
+               "note":"test note",
                "test_name":"test_carmichael"
             },
             {
@@ -57,6 +55,75 @@
             }
          ],
          "repo_name":"fuzzing-sample-product-poc"
+      },
+      {
+         "outputs":[
+            {
+               "note":[
+
+               ]
+            },
+            {
+               "note":[
+
+               ]
+            },
+            {
+               "note":[
+
+               ]
+            },
+            {
+               "errors":[
+                  {
+                     "error_message":"Catch a Carmichael number 561\nassert False == True\n +  where False = is_prime(561)\n +  and   True = is_probably_prime(561)",
+                     "error_type":"AssertionError",
+                     "traceback":"Traceback (most recent call last):\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/tests/test_carmichael.py\", line 57, in test_carmichael\n    assert is_prime(v) == is_probably_prime(v), \"Catch a Carmichael number \" + str(v)\nAssertionError: Catch a Carmichael number 561\nassert False == True\n +  where False = is_prime(561)\n +  and   True = is_probably_prime(561)\n",
+                     "variables":[
+                        {
+                           "v_name":"v",
+                           "v_value":"561"
+                        }
+                     ]
+                  }
+               ],
+               "note":[
+
+               ],
+               "test_name":"test_carmichael"
+            },
+            {
+               "errors":[
+                  {
+                     "error_message":"local variable 'character' referenced before assignment",
+                     "error_type":"UnboundLocalError",
+                     "traceback":"Traceback (most recent call last):\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/tests/test_different_error.py\", line 31, in test_decode_inverts_encode\n    assert decode(encode(s)) == s\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/tests/test_different_error.py\", line 18, in encode\n    entry = (character, count)\nUnboundLocalError: local variable 'character' referenced before assignment\n",
+                     "variables":[
+                        {
+                           "v_name":"s",
+                           "v_value":"''"
+                        }
+                     ]
+                  },
+                  {
+                     "error_message":"local variable 'character' referenced before assignment",
+                     "error_type":"UnboundLocalError",
+                     "traceback":"Traceback (most recent call last):\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/tests/test_different_error.py\", line 31, in test_decode_inverts_encode\n    assert decode(encode(s)) == s\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/tests/test_different_error.py\", line 18, in encode\n    entry = (character, count)\nUnboundLocalError: local variable 'character' referenced before assignment\n",
+                     "variables":[
+                        {
+                           "v_name":"s",
+                           "v_value":"''"
+                        }
+                     ]
+                  }
+               ],
+               "note":[
+
+               ],
+               "test_name":"test_decode_inverts_encode"
+            }
+         ],
+         "repo_name":"repo2"
       }
    ]
 }

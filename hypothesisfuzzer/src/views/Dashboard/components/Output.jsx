@@ -32,6 +32,10 @@ class Output extends Component {
             </Col>
           </Row>
         </CardBody>
+        <CardBody>
+          <div>Note: </div>
+          <div>{this.props.output.note}</div>
+        </CardBody>
         <CardFooter>
           <Time />
         </CardFooter>
