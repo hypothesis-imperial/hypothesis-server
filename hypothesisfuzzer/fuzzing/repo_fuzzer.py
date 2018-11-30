@@ -35,7 +35,7 @@ class RepoFuzzer:
         self._project_root = self.name
         self._fuzz_start_time = None
 
-        if "project_root" in self.config:
+        if self.config["project_root"]:
             self._project_root = self.name + '/' + self.config["project_root"]
         self._clone_git(config['git_url'])
         self._create_venv()
@@ -142,7 +142,6 @@ class RepoFuzzer:
 
         def pip_install(target):
             # Target is a string
-
             return subprocess.run(['venv/bin/pip', 'install'] +
                                   target.split(),
                                   cwd=self._project_root)
@@ -155,7 +154,6 @@ class RepoFuzzer:
 
         if "dependencies" in self.config:
             # Install dependencies
-
             for dep_name, target in self.config["dependencies"].items():
                 if os.path.isfile(self._project_root + '/' + target):
                     to_install = "-r " + target
