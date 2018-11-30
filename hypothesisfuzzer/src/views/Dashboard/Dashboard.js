@@ -11,17 +11,17 @@ class Dashboard extends Component {
     this.state = {
       repos: [
         {
-          outputs: [],
+          fail: [],
+          pass: [],
+          note: [],
           repo_name: "",
         }
       ],
     }
   }
 
-  componentWillMount(props) {
-    if(this.props.repos.length !== 0) {
-      this.setState({repos: this.props.repos});
-    }
+  componentDidMount() {
+    this.setState({repos: this.props.repos});
   }
 
   render() {
@@ -30,15 +30,20 @@ class Dashboard extends Component {
     const index = (this.state.repos.length <= id) ? 0 : id;
     const repo = this.state.repos[index];
 
-    return (
-      <div className="animated fadeIn">
-        <Row>
-          <Col>
-            <RepoInfo repo={repo}/>
-          </Col>
-        </Row>
-      </div>
-    );
+    if(!repo.hasOwnProperty('fail') &&
+      !repo.hasOwnProperty('pass')) {
+      return(<div>empty</div>);
+    } else {
+      return (
+        <div className="animated fadeIn">
+          <Row>
+            <Col>
+              <RepoInfo repo={repo}/>
+            </Col>
+          </Row>
+        </div>
+      );
+    }
   }
 }
 

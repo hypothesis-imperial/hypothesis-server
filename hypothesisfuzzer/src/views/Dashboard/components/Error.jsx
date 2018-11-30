@@ -51,9 +51,6 @@ class Error extends Component {
         <tr key={index}>
           <td>
             <div>{variables.v_name}</div>
-            <div className="small text-muted">
-              <span>New</span> | some details
-            </div>
           </td>
           <td className="text-center">
             <div>{variables.v_value}</div>

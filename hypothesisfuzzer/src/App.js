@@ -4,6 +4,7 @@ import { HashRouter, Route } from 'react-router-dom';
 import { DefaultLayout } from './containers';
 import './scss/App.scss';
 import '@coreui/coreui';
+import example from './example3.json'
 
 
 class App extends Component {
@@ -18,6 +19,7 @@ class App extends Component {
     .then(result => {
       this.setState({repos: result.repositories})
     });
+
   }
 
   render() {

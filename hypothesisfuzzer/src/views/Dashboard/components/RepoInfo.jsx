@@ -8,7 +8,7 @@ import {
   TabPane,
  } from 'reactstrap'
 import './../../../css/RepoInfo.css';
-import Output from './Output';
+import Fail from './Fail';
 import Pass from './Pass';
 
 class RepoInfo extends Component {
@@ -21,60 +21,83 @@ class RepoInfo extends Component {
     };
   }
 
+  componentWillReceiveProps(newprops) {
+    var n = '1';
+    if(newprops.repo.fail.length !== 0) {
+      n = '0';
+    }
+    //if there is no failing test, show passes test page
+    this.setState({ activeTab: n });
+  }
+
   toggle(tab) {
-    if (this.state.activeTab !== tab) {
+    if(this.state.activeTab !== tab) {
       this.setState({
         activeTab: tab,
       });
     }
   }
 
+  failtest_tabs() {
+    if(this.props.repo.fail.length !== 0) {
+      return(
+        <NavItem>
+          <NavLink
+            className={classnames({ active: this.state.activeTab === '0' })}
+            onClick={() => { this.toggle('0'); }}
+          >
+            Failed Tests
+          </NavLink>
+        </NavItem>
+      );
+    }
+  }
+
+  passtest_tabs() {
+    if(this.props.repo.pass.length !== 0) {
+      return(
+        <NavItem>
+          <NavLink
+            className={classnames({ active: this.state.activeTab === '1' })}
+            onClick={() => { this.toggle('1'); }}
+          >
+            Passed Tests
+          </NavLink>
+        </NavItem>
+      );
+    }
+  }
+
+  failtest_tabpane() {
+    if(this.props.repo.fail.length !== 0) {
+      return(
+        <TabPane tabId={'0'}>
+          <Fail tests={this.props.repo.fail}/>
+        </TabPane>
+      );
+    }
+  }
+
+  passtest_tabpane() {
+    if(this.props.repo.pass.length !== 0) {
+      return(
+        <TabPane tabId={'1'}>
+          <Pass tests={this.props.repo.pass}/>
+        </TabPane>
+      );
+    }
+  }
+
   render() {
-    const n = this.props.repo.fail.length
-
-    const outputTabs = this.props.repo.fail.map((variables, index) => {
-      if(typeof variables.test_name !== "undefined") {
-        return (
-          <NavItem key={index}>
-            <NavLink
-              className={classnames({ active: this.state.activeTab === index.toString() })}
-              onClick={() => { this.toggle(index.toString()); }}
-            >
-              Output {index}
-            </NavLink>
-          </NavItem>
-        )
-      }
-    })
-
-    const outputs =  this.props.repo.fail.map((variables, index) => {
-      if(typeof variables.test_name !== "undefined") {
-        return (
-          <TabPane key={index} tabId={index.toString()}>
-            <Output output={variables}/>
-          </TabPane>
-        )
-      }
-    })
-
     return (
       <div>
         <Nav tabs>
-          {outputTabs}
-          <NavItem>
-            <NavLink
-              className={classnames({ active: this.state.activeTab === n.toString() })}
-              onClick={() => { this.toggle(n.toString()); }}
-            >
-              Passed
-            </NavLink>
-          </NavItem>
+          {this.failtest_tabs()}
+          {this.passtest_tabs()}
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
-          {outputs}
-          <TabPane tabId={n.toString()}>
-            <Pass pass={this.props.repo.pass}/>
-          </TabPane>
+          {this.failtest_tabpane()}
+          {this.passtest_tabpane()}
         </TabContent>
       </div>
     );

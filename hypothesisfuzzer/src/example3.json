@@ -1,14 +1,14 @@
 {
    "repositories":[
       {
-         "duration":"18:12:52.463208",
+         "duration":"0:12:52.596408",
          "fail":[
             {
                "errors":[
                   {
                      "error_message":"Catch a Carmichael number 2821\nassert False == True\n +  where False = is_prime(2821)\n +  and   True = is_probably_prime(2821)",
                      "error_type":"AssertionError",
-                     "traceback":"Traceback (most recent call last):\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/project_root/tests/test_carmichael.py\", line 58, in test_carmichael\n    assert is_prime(v) == is_probably_prime(v), \"Catch a Carmichael number \" + str(v)\nAssertionError: Catch a Carmichael number 2821\nassert False == True\n +  where False = is_prime(2821)\n +  and   True = is_probably_prime(2821)\n",
+                     "traceback":"Traceback (most recent call last):\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/project_root/tests/test_carmichael.py\", line 59, in test_carmichael\n    assert is_prime(v) == is_probably_prime(v), \"Catch a Carmichael number \" + str(v)\nAssertionError: Catch a Carmichael number 2821\nassert False == True\n +  where False = is_prime(2821)\n +  and   True = is_probably_prime(2821)\n",
                      "variables":[
                         {
                            "v_name":"v",
@@ -18,7 +18,7 @@
                   }
                ],
                "note":[
-
+                  "Below 10000 only 561, 1105, 1729, 2465, 2821, 6601, 8911 are Carmichael"
                ],
                "statistics":{
                   "failing_examples":7,
@@ -46,7 +46,7 @@
 
                ],
                "statistics":{
-                  "failing_examples":11,
+                  "failing_examples":19,
                   "invalid_examples":0,
                   "passing_examples":100,
                   "runtimes":"0-1 ms"
@@ -74,7 +74,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"0-1 ms"
+                  "runtimes":"0-2 ms"
                },
                "test_name":"test_decodes_to_starting_sequence"
             },
@@ -97,7 +97,7 @@
                ],
                "statistics":{
                   "failing_examples":0,
-                  "invalid_examples":19,
+                  "invalid_examples":11,
                   "passing_examples":100,
                   "runtimes":"0-1 ms"
                },
@@ -105,7 +105,7 @@
             }
          ],
          "fuzzing":true,
-         "iterations":29015,
+         "iterations":323,
          "owner":"hypothesis-imperial",
          "pass":[
             {
@@ -140,22 +140,23 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"0-1 ms"
+                  "runtimes":"0-2 ms"
                },
                "test_name":"test_inserts_into_same_place_twice"
             }
          ],
          "ready":true,
          "repo_name":"fuzzing-sample-product-poc",
-         "start":"Thu, 29 Nov 2018 17:06:04 GMT"
+         "start":"Fri, 30 Nov 2018 15:13:37 GMT",
+         "status":"Ok"
       },
       {
-         "duration":"18:12:52.463016",
+         "duration":"0:12:52.596227",
          "fail":[
 
          ],
          "fuzzing":true,
-         "iterations":4055,
+         "iterations":44,
          "owner":"hypothesis-imperial",
          "pass":[
             {
@@ -322,7 +323,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"1-41 ms"
+                  "runtimes":"1-45 ms"
                },
                "test_name":"test_recurse_property"
             },
@@ -382,7 +383,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"1-22 ms"
+                  "runtimes":"0-20 ms"
                },
                "test_name":"test_roundtrip"
             },
@@ -394,7 +395,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"0-20 ms"
+                  "runtimes":"1-19 ms"
                },
                "test_name":"test_asdict_preserve_order"
             },
@@ -430,7 +431,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"1-40 ms"
+                  "runtimes":"1-37 ms"
                },
                "test_name":"test_recurse_property"
             },
@@ -442,7 +443,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"1-36 ms"
+                  "runtimes":"1-45 ms"
                },
                "test_name":"test_recurse_retain"
             },
@@ -514,7 +515,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"0-17 ms"
+                  "runtimes":"0-16 ms"
                },
                "test_name":"test_roundtrip"
             },
@@ -538,7 +539,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"1-15 ms"
+                  "runtimes":"0-25 ms"
                },
                "test_name":"test_no_changes"
             },
@@ -548,9 +549,9 @@
                ],
                "statistics":{
                   "failing_examples":0,
-                  "invalid_examples":21,
+                  "invalid_examples":25,
                   "passing_examples":100,
-                  "runtimes":"0-28 ms"
+                  "runtimes":"0-18 ms"
                },
                "test_name":"test_change"
             },
@@ -562,7 +563,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"1-18 ms"
+                  "runtimes":"1-19 ms"
                },
                "test_name":"test_unknown"
             },
@@ -574,7 +575,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":4,
-                  "runtimes":"0-8 ms"
+                  "runtimes":"< 1ms"
                },
                "test_name":"test_empty"
             },
@@ -586,7 +587,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"0-16 ms"
+                  "runtimes":"0-19 ms"
                },
                "test_name":"test_no_changes"
             },
@@ -596,9 +597,9 @@
                ],
                "statistics":{
                   "failing_examples":0,
-                  "invalid_examples":26,
+                  "invalid_examples":17,
                   "passing_examples":100,
-                  "runtimes":"1-13 ms"
+                  "runtimes":"0-18 ms"
                },
                "test_name":"test_change"
             },
@@ -610,7 +611,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"1-16 ms"
+                  "runtimes":"0-21 ms"
                },
                "test_name":"test_unknown"
             },
@@ -622,7 +623,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"0-7 ms"
+                  "runtimes":"0-5 ms"
                },
                "test_name":"test_immutable"
             },
@@ -658,7 +659,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":4,
-                  "runtimes":"0-1 ms"
+                  "runtimes":"0-2 ms"
                },
                "test_name":"test_name_not_overridden"
             },
@@ -682,7 +683,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"0-20 ms"
+                  "runtimes":"0-25 ms"
                },
                "test_name":"test_fields"
             },
@@ -694,7 +695,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"0-23 ms"
+                  "runtimes":"0-16 ms"
                },
                "test_name":"test_fields_properties"
             },
@@ -706,7 +707,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"0-18 ms"
+                  "runtimes":"0-16 ms"
                },
                "test_name":"test_fields_dict"
             },
@@ -742,7 +743,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"0-18 ms"
+                  "runtimes":"0-22 ms"
                },
                "test_name":"test_metadata_present"
             },
@@ -754,7 +755,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"1-15 ms"
+                  "runtimes":"1-33 ms"
                },
                "test_name":"test_metadata_immutability"
             },
@@ -766,7 +767,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"1-10 ms"
+                  "runtimes":"1-11 ms"
                },
                "test_name":"test_empty_metadata_singleton"
             },
@@ -778,7 +779,7 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"0-15 ms"
+                  "runtimes":"0-12 ms"
                },
                "test_name":"test_empty_countingattr_metadata_independent"
             },
@@ -790,16 +791,27 @@
                   "failing_examples":0,
                   "invalid_examples":0,
                   "passing_examples":100,
-                  "runtimes":"3-39 ms"
+                  "runtimes":"4-31 ms"
                },
                "test_name":"test_not_none_metadata"
             }
          ],
          "ready":true,
          "repo_name":"attrs",
-         "start":"Thu, 29 Nov 2018 17:06:04 GMT"
+         "start":"Fri, 30 Nov 2018 15:13:37 GMT",
+         "status":"Ok"
+      },
+      {
+         "duration":"0:05:38.810797",
+         "fuzzing":false,
+         "iterations":0,
+         "owner":"hypothesis-imperial",
+         "ready":false,
+         "repo_name":"cryptography",
+         "start":"Fri, 30 Nov 2018 15:20:50 GMT",
+         "status":"Test execution interrupted by error."
       }
    ],
-   "start_time":"Thu, 29 Nov 2018 17:06:04 GMT",
-   "uptime":"18:12:52.471197"
+   "start_time":"Fri, 30 Nov 2018 15:13:37 GMT",
+   "uptime":"0:12:52.604448"
 }
