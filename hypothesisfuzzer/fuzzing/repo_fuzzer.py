@@ -237,7 +237,7 @@ class RepoFuzzer:
                 self._currently_fuzzing = False
                 self._status = 'Test execution interrupted by error.'
                 logger.warning('Test execution interrupted by error.')
-                return generic_error('Test execution interrupted by error.')
+                return
 
             try:
                 with open(self._project_root + '/' +
