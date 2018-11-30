@@ -8,7 +8,7 @@ import {
   CardFooter,
 } from 'reactstrap';
  import Error from './Error';
- import Time from './Time';
+ import Stats from './Stats';
 
  class Fail extends Component {
   shownote(note) {
@@ -44,7 +44,7 @@ import {
            </CardBody>
            {this.shownote(variables.note)}
            <CardFooter>
-             <Time />
+             <Stats stats={variables.statistics}/>
            </CardFooter>
          </Card>
        )
