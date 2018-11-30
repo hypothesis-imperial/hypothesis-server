@@ -1,37 +1,31 @@
 {
    "repositories":[
       {
-         "outputs":[
-            {
-               "note":[
-
-               ]
-            },
-            {
-               "note":[
-
-               ]
-            },
-            {
-               "note":[
-
-               ]
-            },
+         "duration":"18:12:52.463208",
+         "fail":[
             {
                "errors":[
                   {
-                     "error_message":"Catch a Carmichael number 561\nassert False == True\n +  where False = is_prime(561)\n +  and   True = is_probably_prime(561)",
+                     "error_message":"Catch a Carmichael number 2821\nassert False == True\n +  where False = is_prime(2821)\n +  and   True = is_probably_prime(2821)",
                      "error_type":"AssertionError",
-                     "traceback":"Traceback (most recent call last):\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/tests/test_carmichael.py\", line 57, in test_carmichael\n    assert is_prime(v) == is_probably_prime(v), \"Catch a Carmichael number \" + str(v)\nAssertionError: Catch a Carmichael number 561\nassert False == True\n +  where False = is_prime(561)\n +  and   True = is_probably_prime(561)\n",
+                     "traceback":"Traceback (most recent call last):\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/project_root/tests/test_carmichael.py\", line 58, in test_carmichael\n    assert is_prime(v) == is_probably_prime(v), \"Catch a Carmichael number \" + str(v)\nAssertionError: Catch a Carmichael number 2821\nassert False == True\n +  where False = is_prime(2821)\n +  and   True = is_probably_prime(2821)\n",
                      "variables":[
                         {
                            "v_name":"v",
-                           "v_value":"561"
+                           "v_value":"2821"
                         }
                      ]
                   }
                ],
-               "note":"test note",
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":7,
+                  "invalid_examples":1,
+                  "passing_examples":100,
+                  "runtimes":"0-5 ms"
+               },
                "test_name":"test_carmichael"
             },
             {
@@ -39,7 +33,7 @@
                   {
                      "error_message":"local variable 'character' referenced before assignment",
                      "error_type":"UnboundLocalError",
-                     "traceback":"Traceback (most recent call last):\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/tests/test_different_error.py\", line 31, in test_decode_inverts_encode\n    assert decode(encode(s)) == s\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/tests/test_different_error.py\", line 18, in encode\n    entry = (character, count)\nUnboundLocalError: local variable 'character' referenced before assignment\n",
+                     "traceback":"Traceback (most recent call last):\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/project_root/tests/test_different_error.py\", line 31, in test_decode_inverts_encode\n    assert decode(encode(s)) == s\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/project_root/tests/test_different_error.py\", line 18, in encode\n    entry = (character, count)\nUnboundLocalError: local variable 'character' referenced before assignment\n",
                      "variables":[
                         {
                            "v_name":"s",
@@ -51,79 +45,761 @@
                "note":[
 
                ],
+               "statistics":{
+                  "failing_examples":11,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"0-1 ms"
+               },
                "test_name":"test_decode_inverts_encode"
+            },
+            {
+               "errors":[
+                  {
+                     "error_message":"local variable 'character' referenced before assignment",
+                     "error_type":"UnboundLocalError",
+                     "traceback":"Traceback (most recent call last):\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/project_root/tests/test_different_error.py\", line 31, in test_decode_inverts_encode\n    assert decode(encode(s)) == s\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/project_root/tests/test_different_error.py\", line 18, in encode\n    entry = (character, count)\nUnboundLocalError: local variable 'character' referenced before assignment\n",
+                     "variables":[
+                        {
+                           "v_name":"s",
+                           "v_value":"''"
+                        }
+                     ]
+                  }
+               ],
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"0-1 ms"
+               },
+               "test_name":"test_decodes_to_starting_sequence"
+            },
+            {
+               "errors":[
+                  {
+                     "error_message":"local variable 'character' referenced before assignment",
+                     "error_type":"UnboundLocalError",
+                     "traceback":"Traceback (most recent call last):\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/project_root/tests/test_different_error.py\", line 31, in test_decode_inverts_encode\n    assert decode(encode(s)) == s\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/project_root/tests/test_different_error.py\", line 18, in encode\n    entry = (character, count)\nUnboundLocalError: local variable 'character' referenced before assignment\n",
+                     "variables":[
+                        {
+                           "v_name":"s",
+                           "v_value":"''"
+                        }
+                     ]
+                  }
+               ],
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":19,
+                  "passing_examples":100,
+                  "runtimes":"0-1 ms"
+               },
+               "test_name":"test_duplicating_an_element_does_not_increase_length"
             }
          ],
-         "repo_name":"fuzzing-sample-product-poc"
+         "fuzzing":true,
+         "iterations":29015,
+         "owner":"hypothesis-imperial",
+         "pass":[
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"0-2 ms"
+               },
+               "test_name":"test_insert_is_sorted"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"0-2 ms"
+               },
+               "test_name":"test_is_minimal"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"0-1 ms"
+               },
+               "test_name":"test_inserts_into_same_place_twice"
+            }
+         ],
+         "ready":true,
+         "repo_name":"fuzzing-sample-product-poc",
+         "start":"Thu, 29 Nov 2018 17:06:04 GMT"
       },
       {
-         "outputs":[
+         "duration":"18:12:52.463016",
+         "fail":[
+
+         ],
+         "fuzzing":true,
+         "iterations":4055,
+         "owner":"hypothesis-imperial",
+         "pass":[
             {
                "note":[
 
-               ]
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"0-1 ms"
+               },
+               "test_name":"test_renaming"
             },
             {
                "note":[
 
-               ]
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":4,
+                  "runtimes":"0-1 ms"
+               },
+               "test_name":"test_programmatic"
             },
             {
                "note":[
 
-               ]
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"< 1ms"
+               },
+               "test_name":"test_cmp"
             },
             {
-               "errors":[
-                  {
-                     "error_message":"Catch a Carmichael number 561\nassert False == True\n +  where False = is_prime(561)\n +  and   True = is_probably_prime(561)",
-                     "error_type":"AssertionError",
-                     "traceback":"Traceback (most recent call last):\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/tests/test_carmichael.py\", line 57, in test_carmichael\n    assert is_prime(v) == is_probably_prime(v), \"Catch a Carmichael number \" + str(v)\nAssertionError: Catch a Carmichael number 561\nassert False == True\n +  where False = is_prime(561)\n +  and   True = is_probably_prime(561)\n",
-                     "variables":[
-                        {
-                           "v_name":"v",
-                           "v_value":"561"
-                        }
-                     ]
-                  }
-               ],
                "note":[
 
                ],
-               "test_name":"test_carmichael"
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":4,
+                  "runtimes":"0-1 ms"
+               },
+               "test_name":"test_str"
             },
             {
-               "errors":[
-                  {
-                     "error_message":"local variable 'character' referenced before assignment",
-                     "error_type":"UnboundLocalError",
-                     "traceback":"Traceback (most recent call last):\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/tests/test_different_error.py\", line 31, in test_decode_inverts_encode\n    assert decode(encode(s)) == s\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/tests/test_different_error.py\", line 18, in encode\n    entry = (character, count)\nUnboundLocalError: local variable 'character' referenced before assignment\n",
-                     "variables":[
-                        {
-                           "v_name":"s",
-                           "v_value":"''"
-                        }
-                     ]
-                  },
-                  {
-                     "error_message":"local variable 'character' referenced before assignment",
-                     "error_type":"UnboundLocalError",
-                     "traceback":"Traceback (most recent call last):\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/tests/test_different_error.py\", line 31, in test_decode_inverts_encode\n    assert decode(encode(s)) == s\n  File \"/fuzzer/fuzzing-server-poc/fuzzing-sample-product-poc/tests/test_different_error.py\", line 18, in encode\n    entry = (character, count)\nUnboundLocalError: local variable 'character' referenced before assignment\n",
-                     "variables":[
-                        {
-                           "v_name":"s",
-                           "v_value":"''"
-                        }
-                     ]
-                  }
-               ],
                "note":[
 
                ],
-               "test_name":"test_decode_inverts_encode"
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":4,
+                  "runtimes":"0-1 ms"
+               },
+               "test_name":"test_hash_attribute"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"0-1 ms"
+               },
+               "test_name":"test_hash_attribute_mirrors_cmp"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"< 1ms"
+               },
+               "test_name":"test_hash_mirrors_cmp"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":4,
+                  "runtimes":"0-1 ms"
+               },
+               "test_name":"test_init"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":4,
+                  "runtimes":"~ 1ms"
+               },
+               "test_name":"test_no_init_default"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":4,
+                  "runtimes":"0-1 ms"
+               },
+               "test_name":"test_no_init_order"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"0-1 ms"
+               },
+               "test_name":"test_validator_others"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"< 1ms"
+               },
+               "test_name":"test_shallow"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"< 1ms"
+               },
+               "test_name":"test_recurse"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"1-41 ms"
+               },
+               "test_name":"test_recurse_property"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"< 1ms"
+               },
+               "test_name":"test_filter"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"< 1ms"
+               },
+               "test_name":"test_lists_tuples"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"< 1ms"
+               },
+               "test_name":"test_lists_tuples_retain_type"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"< 1ms"
+               },
+               "test_name":"test_dicts"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"1-22 ms"
+               },
+               "test_name":"test_roundtrip"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"0-20 ms"
+               },
+               "test_name":"test_asdict_preserve_order"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"< 1ms"
+               },
+               "test_name":"test_shallow"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"< 1ms"
+               },
+               "test_name":"test_recurse"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"1-40 ms"
+               },
+               "test_name":"test_recurse_property"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"1-36 ms"
+               },
+               "test_name":"test_recurse_retain"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"< 1ms"
+               },
+               "test_name":"test_filter"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"< 1ms"
+               },
+               "test_name":"test_lists_tuples"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"< 1ms"
+               },
+               "test_name":"test_dicts"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"< 1ms"
+               },
+               "test_name":"test_lists_tuples_retain_type"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"< 1ms"
+               },
+               "test_name":"test_dicts_retain_type"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"0-17 ms"
+               },
+               "test_name":"test_roundtrip"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":4,
+                  "runtimes":"0-1 ms"
+               },
+               "test_name":"test_empty"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"1-15 ms"
+               },
+               "test_name":"test_no_changes"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":21,
+                  "passing_examples":100,
+                  "runtimes":"0-28 ms"
+               },
+               "test_name":"test_change"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"1-18 ms"
+               },
+               "test_name":"test_unknown"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":4,
+                  "runtimes":"0-8 ms"
+               },
+               "test_name":"test_empty"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"0-16 ms"
+               },
+               "test_name":"test_no_changes"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":26,
+                  "passing_examples":100,
+                  "runtimes":"1-13 ms"
+               },
+               "test_name":"test_change"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"1-16 ms"
+               },
+               "test_name":"test_unknown"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"0-7 ms"
+               },
+               "test_name":"test_immutable"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":4,
+                  "runtimes":"0-1 ms"
+               },
+               "test_name":"test_repr_qualname"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":4,
+                  "runtimes":"0-1 ms"
+               },
+               "test_name":"test_repr_fake_qualname"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":4,
+                  "runtimes":"0-1 ms"
+               },
+               "test_name":"test_name_not_overridden"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":2,
+                  "runtimes":"0-1 ms"
+               },
+               "test_name":"test_post_init"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"0-20 ms"
+               },
+               "test_name":"test_fields"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"0-23 ms"
+               },
+               "test_name":"test_fields_properties"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"0-18 ms"
+               },
+               "test_name":"test_fields_dict"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"0-1 ms"
+               },
+               "test_name":"test_convert_property"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"0-1 ms"
+               },
+               "test_name":"test_convert_factory_property"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"0-18 ms"
+               },
+               "test_name":"test_metadata_present"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"1-15 ms"
+               },
+               "test_name":"test_metadata_immutability"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"1-10 ms"
+               },
+               "test_name":"test_empty_metadata_singleton"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"0-15 ms"
+               },
+               "test_name":"test_empty_countingattr_metadata_independent"
+            },
+            {
+               "note":[
+
+               ],
+               "statistics":{
+                  "failing_examples":0,
+                  "invalid_examples":0,
+                  "passing_examples":100,
+                  "runtimes":"3-39 ms"
+               },
+               "test_name":"test_not_none_metadata"
             }
          ],
-         "repo_name":"repo2"
+         "ready":true,
+         "repo_name":"attrs",
+         "start":"Thu, 29 Nov 2018 17:06:04 GMT"
       }
-   ]
+   ],
+   "start_time":"Thu, 29 Nov 2018 17:06:04 GMT",
+   "uptime":"18:12:52.471197"
 }

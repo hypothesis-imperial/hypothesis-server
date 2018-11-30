@@ -9,6 +9,7 @@ import {
  } from 'reactstrap'
 import './../../../css/RepoInfo.css';
 import Output from './Output';
+import Pass from './Pass';
 
 class RepoInfo extends Component {
   constructor(props) {
@@ -29,7 +30,9 @@ class RepoInfo extends Component {
   }
 
   render() {
-    const outputTabs = this.props.repo.outputs.map((variables, index) => {
+    const n = this.props.repo.fail.length
+
+    const outputTabs = this.props.repo.fail.map((variables, index) => {
       if(typeof variables.test_name !== "undefined") {
         return (
           <NavItem key={index}>
@@ -44,7 +47,7 @@ class RepoInfo extends Component {
       }
     })
 
-    const outputs =  this.props.repo.outputs.map((variables, index) => {
+    const outputs =  this.props.repo.fail.map((variables, index) => {
       if(typeof variables.test_name !== "undefined") {
         return (
           <TabPane key={index} tabId={index.toString()}>
@@ -58,9 +61,20 @@ class RepoInfo extends Component {
       <div>
         <Nav tabs>
           {outputTabs}
+          <NavItem>
+            <NavLink
+              className={classnames({ active: this.state.activeTab === n.toString() })}
+              onClick={() => { this.toggle(n.toString()); }}
+            >
+              Passed
+            </NavLink>
+          </NavItem>
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
           {outputs}
+          <TabPane tabId={n.toString()}>
+            <Pass pass={this.props.repo.pass}/>
+          </TabPane>
         </TabContent>
       </div>
     );
