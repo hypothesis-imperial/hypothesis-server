@@ -169,8 +169,8 @@ class RepoFuzzer:
             if os.path.isfile(self.name + '/requirements.txt'):
                 pip_install('-r requirements.txt')
             else:
-                logger.warn("No dependencies specified for repository " +
-                            self.name + ", and no requirements.txt found.")
+                logger.warning('No dependencies specified for repository %s, '
+                               'and no requirements.txt found.', self.name)
 
         self._ready = True
         logger.debug('Virtual environment for repository %s created.',
@@ -188,7 +188,6 @@ class RepoFuzzer:
 
         if not self._ready:
             logger.error("Fuzzer not ready")
-
             return
 
         logger.debug('Starting fuzzing for repository %s.', self.name)
@@ -209,19 +208,25 @@ class RepoFuzzer:
 
         while getattr(self._current_fuzzing_task, "running", True):
             logger.info('Fuzzing iteration %s.', iteration)
-            try:
-                subprocess.call([self.name + '/venv/bin/pytest',
-                                 '--hypothesis-server',
-                                 '--hypothesis-output=' + self.name + '.json',
-                                 self.name],
-                                universal_newlines=True,
-                                stdout=subprocess.PIPE)
-            except Exception:
-                logger.error('Pytest not found in venv.')
-                return generic_error('Pytest not found in venv.')
+            pytest_exit = subprocess.call([self.name + '/venv/bin/pytest',
+                                           '--hypothesis-server',
+                                           '--hypothesis-output=' + self.name
+                                           + '.json', self.name],
+                                          universal_newlines=True,
+                                          stdout=subprocess.PIPE)
+            if pytest_exit == 0:
+                pass
+            elif pytest_exit == 1:
+                logger.info('Some tests failed.')
+            elif pytest_exit == 2:
+                logger.warning('Test execution interrupted.')
+            elif pytest_exit == 3:
+                logger.error('Internal error happened.')
+            else:
+                logger.error('Pytest command error.')
             print('Fuzzing iteration: ', iteration)
             iteration += 1
-        print('Fuzzing stopped after', iteration, 'iterations')
+        print('Fuzzing stopped after ', iteration, ' iterations.')
 
         logger.debug('Task of repository %s fuzzed.', self.name)
 
