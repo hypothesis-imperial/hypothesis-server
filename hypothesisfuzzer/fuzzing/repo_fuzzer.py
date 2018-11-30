@@ -6,7 +6,7 @@ import threading
 import virtualenv
 
 from git import Repo as GitRepo
-from datetime import datetime
+from datetime import datetime, timedelta
 from ..errors import (
     no_code_dir_error,
     generic_error,
@@ -104,7 +104,10 @@ class RepoFuzzer:
         status_info['repo_name'] = self.name
         status_info['owner'] = self.config['owner']
         status_info['start'] = self._fuzz_start_time
-        status_info['duration'] = str(datetime.now() - self._fuzz_start_time)
+        if self._currently_fuzzing:
+            status_info['duration'] = str(datetime.now() - self._fuzz_start_time)
+        else:
+            status_info['duration'] = str(timedelta(0))
         status_info['iterations'] = self._iterations
         status_info['fuzzing'] = self._currently_fuzzing
         status_info['ready'] = self._ready
@@ -140,8 +143,9 @@ class RepoFuzzer:
                 except Exception:
                     logger.error('Unable to find branch %s.',
                                     self.config["branch"])
-                    return generic_error(msg='Error finding the branch! '+
-                                             'Please check your config file.')
+                    self._ready = False
+                    self._currently_fuzzing = False
+                    self._status = 'Unable to find branch from config file.'
 
         except Exception:
             logger.error('Unable to access repository %s.', self.name)
