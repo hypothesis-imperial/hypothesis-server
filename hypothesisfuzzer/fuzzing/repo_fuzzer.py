@@ -31,7 +31,7 @@ class RepoFuzzer:
         self._ready = False
         self._currently_fuzzing = False
         self._iterations = 0
-        self._status = None
+        self._status = 'Ok'
         self._project_root = self.name
         self._fuzz_start_time = None
 
@@ -108,6 +108,7 @@ class RepoFuzzer:
         status_info['iterations'] = self._iterations
         status_info['fuzzing'] = self._currently_fuzzing
         status_info['ready'] = self._ready
+        status_info['status'] = self._status
 
         return status_info
 
