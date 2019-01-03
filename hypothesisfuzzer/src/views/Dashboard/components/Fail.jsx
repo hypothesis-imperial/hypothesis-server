@@ -7,8 +7,8 @@ import {
   Col,
   CardFooter,
 } from 'reactstrap';
- import Error from './Error';
- import Stats from './Stats';
+import Error from './Error';
+import Stats from './Stats';
 
  class Fail extends Component {
   shownote(note) {

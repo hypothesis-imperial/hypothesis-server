@@ -3,7 +3,9 @@ import {
   Card,
   CardBody,
   CardHeader,
- } from 'reactstrap'
+  CardFooter,
+} from 'reactstrap';
+import Stats from './Stats';
 
  class Pass extends Component {
    shownote(note) {
@@ -24,6 +26,9 @@ import {
              {variables.test_name}
            </CardHeader>
            {this.shownote(variables.note)}
+           <CardFooter>
+             <Stats stats={variables.statistics}/>
+           </CardFooter>
          </Card>
        )
      })

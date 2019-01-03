@@ -5,7 +5,7 @@ import {
   Progress,
  } from 'reactstrap'
 
-class Time extends Component {
+class Stats extends Component {
   constructor(props) {
     super(props);
 
@@ -44,4 +44,4 @@ class Time extends Component {
   }
 }
 
-export default Time
+export default Stats
