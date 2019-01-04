@@ -20,6 +20,7 @@ class Stats extends Component {
     const failing = this.props.stats.failing_examples;
     const invalid = this.props.stats.invalid_examples;
     const passing = this.props.stats.passing_examples;
+    const runtimes = this.props.stats.runtimes;
     const total = failing + invalid + passing;
     const fail_percentage = (failing*100/total).toFixed(2);
     const invalid_percentage = (invalid*100/total).toFixed(2);
@@ -38,6 +39,10 @@ class Stats extends Component {
         <Col sm={12} md className="mb-sm-2 mb-0">
           <strong>{passing} Pass ({pass_percentage}%)</strong>
           <Progress className="progress-xs mt-2" color="success" value={pass_percentage.toString()} />
+        </Col>
+        <Col sm={12} md className="mb-sm-2 mb-0">
+          <strong> Runtimes </strong>
+          <div>{runtimes}</div>
         </Col>
       </Row>
     );
