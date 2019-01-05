@@ -28,10 +28,12 @@ class RepoInfo extends Component {
 
   componentWillReceiveProps(newprops) {
     var n = '1';
-    if(newprops.repo.fail.length !== 0) {
-      n = '0';
+    if (newprops.repo.hasOwnProperty('fail')) {
+      if(newprops.repo.fail.length !== 0) {
+        n = '0';
+      }
+      //if there is no failing test, show passes test page
     }
-    //if there is no failing test, show passes test page
     this.setState({ activeTab: n });
   }
 
@@ -100,54 +102,63 @@ class RepoInfo extends Component {
 
   render() {
     const repo = this.props.repo;
-    return (
-      <div>
-        <Card>
-          <CardBody>
-            <Table responsive striped size="sm">
-              <tbody>
-              <tr>
-                <th>duration</th>
-                <td>{repo.duration}</td>
-              </tr>
-              <tr>
-                <th>fuzzing</th>
-                <td>{this.state_badge(repo.fuzzing)}</td>
-              </tr>
-              <tr>
-                <th>iterations</th>
-                <td>{repo.iterations}</td>
-              </tr>
-              <tr>
-                <th>owner</th>
-                <td>{repo.owner}</td>
-              </tr>
-              <tr>
-                <th>ready</th>
-                <td>{this.state_badge(repo.ready)}</td>
-              </tr>
-              <tr>
-                <th>start</th>
-                <td>{repo.start}</td>
-              </tr>
-              <tr>
-                <th>status</th>
-                <td>{repo.status}</td>
-              </tr>
-              </tbody>
-            </Table>
-          </CardBody>
-        </Card>
-        <Nav tabs>
-          {this.failtest_tabs()}
-          {this.passtest_tabs()}
-        </Nav>
-        <TabContent activeTab={this.state.activeTab}>
-          {this.failtest_tabpane()}
-          {this.passtest_tabpane()}
-        </TabContent>
-      </div>
+    const states = (
+      <Card>
+        <CardBody>
+          <Table responsive striped size="sm">
+            <tbody>
+            <tr>
+              <th>duration</th>
+              <td>{repo.duration}</td>
+            </tr>
+            <tr>
+              <th>fuzzing</th>
+              <td>{this.state_badge(repo.fuzzing)}</td>
+            </tr>
+            <tr>
+              <th>iterations</th>
+              <td>{repo.iterations}</td>
+            </tr>
+            <tr>
+              <th>owner</th>
+              <td>{repo.owner}</td>
+            </tr>
+            <tr>
+              <th>ready</th>
+              <td>{this.state_badge(repo.ready)}</td>
+            </tr>
+            <tr>
+              <th>start</th>
+              <td>{repo.start}</td>
+            </tr>
+            <tr>
+              <th>status</th>
+              <td>{repo.status}</td>
+            </tr>
+            </tbody>
+          </Table>
+        </CardBody>
+      </Card>
     );
+
+    if(!repo.hasOwnProperty('fail') &&
+      !repo.hasOwnProperty('pass')) {
+      return(<div>{states}</div>);
+    } else {
+      return (
+        <div>
+          {states}
+          <Nav tabs>
+            {this.failtest_tabs()}
+            {this.passtest_tabs()}
+          </Nav>
+          <TabContent activeTab={this.state.activeTab}>
+            {this.failtest_tabpane()}
+            {this.passtest_tabpane()}
+          </TabContent>
+        </div>
+      );
+    }
   }
 }
 

@@ -30,20 +30,15 @@ class Dashboard extends Component {
     const index = (this.state.repos.length <= id) ? 0 : id;
     const repo = this.state.repos[index];
 
-    if(!repo.hasOwnProperty('fail') &&
-      !repo.hasOwnProperty('pass')) {
-      return(<div>empty</div>);
-    } else {
-      return (
-        <div className="animated fadeIn">
-          <Row>
-            <Col>
-              <RepoInfo repo={repo}/>
-            </Col>
-          </Row>
-        </div>
-      );
-    }
+    return (
+      <div className="animated fadeIn">
+        <Row>
+          <Col>
+            <RepoInfo repo={repo}/>
+          </Col>
+        </Row>
+      </div>
+    );
   }
 }
 
