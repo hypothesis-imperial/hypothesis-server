@@ -9,6 +9,10 @@ import '@coreui/coreui';
 class App extends Component {
   state = {
     repos: [],
+    stats: {
+      start_time: "",
+      uptime: "",
+    }
   }
 
   fetch_data() {
@@ -16,13 +20,19 @@ class App extends Component {
     fetch(url)
     .then(result => result.json())
     .then(result => {
-      this.setState({repos: result.repositories})
+      this.setState({
+        repos: result.repositories,
+        stats: {
+          start_time: result.start_time,
+          uptime: result.uptime,
+        }
+      })
     });
   }
 
   componentDidMount() {
     this.fetch_data();
-    this.interval = setInterval(() => this.fetch_data(), 60*1000);
+    this.interval = setInterval(() => this.fetch_data(), 5*1000);
   }
 
   componentWillUnmount() {
@@ -31,9 +41,10 @@ class App extends Component {
 
   render() {
     const repos = this.state.repos;
+    const stats = this.state.stats;
     return (
       <HashRouter>
-        <Route path="/" render={() => <DefaultLayout repos={repos} isAuthed={true} /> }/>
+        <Route path="/" render={() => <DefaultLayout repos={repos} stats={stats} isAuthed={true} /> }/>
       </HashRouter>
     );
   }

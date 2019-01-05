@@ -21,6 +21,7 @@ class DefaultLayout extends Component {
   render() {
     //get repo list
     const repos = this.props.repos;
+    const stats = this.props.stats;
     const repolist = [];
 
     repos.map((variables, index) =>{
@@ -59,7 +60,7 @@ class DefaultLayout extends Component {
             <AppSidebarHeader />
             <AppSidebarForm />
             <AppSidebarNav navConfig={navigation} {...this.props} />
-            <AppSidebarFooter />
+            <AppSidebarFooter  />
           </AppSidebar>
           <main style={{ backgroundColor: "#F6F5F5" }} className="main">
             <Row>
@@ -89,7 +90,7 @@ class DefaultLayout extends Component {
           </main>
         </div>
         <AppFooter>
-          <DefaultFooter />
+          <DefaultFooter stats={stats}/>
         </AppFooter>
       </div>
     );
