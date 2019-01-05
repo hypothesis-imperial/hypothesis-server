@@ -9,7 +9,6 @@ import {
   TabPane,
   Card,
   CardBody,
-  CardHeader,
   Table,
  } from 'reactstrap'
 import './../../../css/RepoInfo.css';

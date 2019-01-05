@@ -21,7 +21,9 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    this.setState({repos: this.props.repos});
+    this.setState({
+      repos: this.props.repos,
+    });
   }
 
   render() {
