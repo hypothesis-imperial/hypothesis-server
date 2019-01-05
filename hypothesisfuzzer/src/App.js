@@ -9,6 +9,10 @@ import '@coreui/coreui';
 class App extends Component {
   state = {
     repos: [],
+    stats: {
+      start_time: "",
+      uptime: "",
+    }
   }
 
   iterate_fetching() {
@@ -22,7 +26,13 @@ class App extends Component {
     fetch(url)
     .then(result => result.json())
     .then(result => {
-      this.setState({repos: result.repositories})
+      this.setState({
+        repos: result.repositories,
+        stats: {
+          start_time: result.start_time,
+          uptime: result.uptime,
+        }
+      })
     });
   }
 
@@ -32,10 +42,11 @@ class App extends Component {
 
   render() {
     const repos = this.state.repos;
+    const stats = this.state.stats;
     this.iterate_fetching();
     return (
       <HashRouter>
-        <Route path="/" render={() => <DefaultLayout repos={repos} isAuthed={true} /> }/>
+        <Route path="/" render={() => <DefaultLayout repos={repos} stats={stats} isAuthed={true} /> }/>
       </HashRouter>
     );
   }
