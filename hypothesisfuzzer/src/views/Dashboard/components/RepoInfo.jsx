@@ -99,7 +99,6 @@ class RepoInfo extends Component {
   }
 
   render() {
-    console.log(this.props.repo);
     const repo = this.props.repo;
     return (
       <div>
