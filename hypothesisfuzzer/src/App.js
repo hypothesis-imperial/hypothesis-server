@@ -11,12 +11,6 @@ class App extends Component {
     repos: [],
   }
 
-  iterate_fetching() {
-    setInterval(() => {
-      this.fetch_data();
-    },30*1000);
-  }
-
   fetch_data() {
     const url = "http://ec2-18-130-116-158.eu-west-2.compute.amazonaws.com/all_info";
     fetch(url)
@@ -28,11 +22,15 @@ class App extends Component {
 
   componentDidMount() {
     this.fetch_data();
+    this.interval = setInterval(() => this.fetch_data(), 60*1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   render() {
     const repos = this.state.repos;
-    this.iterate_fetching();
     return (
       <HashRouter>
         <Route path="/" render={() => <DefaultLayout repos={repos} isAuthed={true} /> }/>
