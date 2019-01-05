@@ -23,7 +23,6 @@ class Error extends Component {
         error_type: "",
         traceback: "",
       },
-      index: 0,
     };
   }
 
@@ -34,7 +33,6 @@ class Error extends Component {
 
   componentDidMount() {
     this.setState({ error: this.props.error });
-    this.setState({ index: this.props.index });
   }
 
   componentWillReceiveProps(nextProps){
@@ -42,7 +40,6 @@ class Error extends Component {
     this.setState({ collapse: false });
     this.setState({ arrow_icon: "icon-arrow-down"});
     this.setState({ error: nextProps.error });
-    this.setState({ index: nextProps.index });
   }
 
   render() {
@@ -62,7 +59,7 @@ class Error extends Component {
     return (
       <Card>
         <CardHeader className="cardheader-danger" >
-          Error {this.state.index}
+          Error
           <div className="card-header-actions">
             <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={this.toggle}><i className={this.state.arrow_icon} /></a>
           </div>
