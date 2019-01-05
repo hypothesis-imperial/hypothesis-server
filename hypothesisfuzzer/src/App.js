@@ -5,6 +5,7 @@ import { DefaultLayout } from './containers';
 import './scss/App.scss';
 import '@coreui/coreui';
 
+import result from './example3.json'
 
 class App extends Component {
   state = {
@@ -16,23 +17,31 @@ class App extends Component {
   }
 
   fetch_data() {
-    const url = "http://ec2-18-130-116-158.eu-west-2.compute.amazonaws.com/all_info";
-    fetch(url)
-    .then(result => result.json())
-    .then(result => {
-      this.setState({
+    // const url = "http://ec2-18-130-116-158.eu-west-2.compute.amazonaws.com/all_info";
+    // fetch(url)
+    // .then(result => result.json())
+    // .then(result => {
+    //   this.setState({
+    //     repos: result.repositories,
+    //     stats: {
+    //       start_time: result.start_time,
+    //       uptime: result.uptime,
+    //     }
+    //   })
+    // });
+    this.setState({
         repos: result.repositories,
         stats: {
           start_time: result.start_time,
           uptime: result.uptime,
         }
-      })
     });
+    console.log('hi!');
   }
 
   componentDidMount() {
     this.fetch_data();
-    this.interval = setInterval(() => this.fetch_data(), 5*1000);
+    this.interval = setInterval(() => this.fetch_data(), 60*1000);
   }
 
   componentWillUnmount() {
