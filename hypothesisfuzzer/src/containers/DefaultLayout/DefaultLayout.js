@@ -89,7 +89,7 @@ class DefaultLayout extends Component {
             </Container>
           </main>
         </div>
-        <AppFooter>
+        <AppFooter fixed>
           <DefaultFooter stats={stats}/>
         </AppFooter>
       </div>
