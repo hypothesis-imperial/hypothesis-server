@@ -11,7 +11,7 @@ import {
   CardBody,
   Table,
  } from 'reactstrap'
-import './../../../css/RepoInfo.css';
+
 import Fail from './Fail';
 import Pass from './Pass';
 

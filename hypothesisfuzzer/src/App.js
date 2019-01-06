@@ -13,7 +13,7 @@ class App extends Component {
     stats: {
       start_time: "",
       uptime: "",
-    }
+    },
   }
 
   fetch_data() {

@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import {
   Col,
   Row,
+  Alert,
 } from 'reactstrap';
 import RepoInfo from './components/RepoInfo';
+import './../../css/Dashboard.css';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -17,6 +19,7 @@ class Dashboard extends Component {
           repo_name: "",
         }
       ],
+      loading: false,
     }
   }
 
@@ -24,6 +27,15 @@ class Dashboard extends Component {
     this.setState({
       repos: this.props.repos,
     });
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timer);
+  }
+
+  componentWillReceiveProps(newprops) {
+    this.setState({ loading: true });
+    this.timer = setTimeout(() => { this.setState({ loading: false }) }, 1000);
   }
 
   render() {
@@ -34,6 +46,11 @@ class Dashboard extends Component {
 
     return (
       <div className="animated fadeIn">
+        <div>
+          <Alert color="info" isOpen={this.state.loading}>
+            refetching data...
+          </Alert>
+        </div>
         <Row>
           <Col>
             <RepoInfo repo={repo}/>
