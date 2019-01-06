@@ -5,7 +5,6 @@ import { DefaultLayout } from './containers';
 import './scss/App.scss';
 import '@coreui/coreui';
 
-import result from './example3.json'
 
 class App extends Component {
   state = {

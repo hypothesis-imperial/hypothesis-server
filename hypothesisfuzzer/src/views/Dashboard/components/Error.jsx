@@ -5,6 +5,7 @@ import {
   CardBody,
   CardHeader,
   Collapse,
+  Button,
 } from 'reactstrap';
 import Errormessage from './Errormessage';
 
@@ -61,7 +62,7 @@ class Error extends Component {
         <CardHeader className="cardheader-danger" >
           Error
           <div className="card-header-actions">
-            <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={this.toggle}><i className={this.state.arrow_icon} /></a>
+            <Button block color="danger" className="card-header-action btn btn-minimize" data-target="#details" onClick={this.toggle}><i className={this.state.arrow_icon} /></Button>
           </div>
         </CardHeader>
         <CardBody>
@@ -77,7 +78,7 @@ class Error extends Component {
             </tbody>
           </Table>
         </CardBody>
-        <Collapse isOpen={this.state.collapse} id="collapseExample">
+        <Collapse isOpen={this.state.collapse} id="details">
           <CardBody>
             <Errormessage
               error_message={this.state.error.error_message}
