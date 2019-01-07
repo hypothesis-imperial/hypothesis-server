@@ -29,9 +29,9 @@ class RepoInfo extends Component {
     var n = '1';
     if (newprops.repo.hasOwnProperty('fail')) {
       if(newprops.repo.fail.length !== 0) {
+        //if there is no failing test, show passes test page
         n = '0';
       }
-      //if there is no failing test, show passes test page
     }
     this.setState({ activeTab: n });
   }

@@ -32,7 +32,7 @@ class App extends Component {
 
   componentDidMount() {
     this.fetch_data();
-    this.interval = setInterval(() => this.fetch_data(), 60*1000);
+    this.interval = setInterval(() => this.fetch_data(), 30*1000);
   }
 
   componentWillUnmount() {
@@ -42,6 +42,12 @@ class App extends Component {
   render() {
     const repos = this.state.repos;
     const stats = this.state.stats;
+    
+    //wait until data been fetched
+    if(repos.length === 0) {
+      return null;
+    }
+
     return (
       <HashRouter>
         <Route path="/" render={() => <DefaultLayout repos={repos} stats={stats} isAuthed={true} /> }/>
