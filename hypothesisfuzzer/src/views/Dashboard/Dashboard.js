@@ -6,6 +6,7 @@ import {
 } from 'reactstrap';
 import RepoInfo from './components/RepoInfo';
 import './../../css/Dashboard.css';
+import { ClipLoader } from 'react-spinners';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -20,6 +21,7 @@ class Dashboard extends Component {
         }
       ],
       loading: false,
+      refuzzing: false,
     }
   }
 
@@ -48,7 +50,13 @@ class Dashboard extends Component {
       <div className="animated fadeIn">
         <div>
           <Alert color="info" isOpen={this.state.loading}>
-            refetching data...
+            <ClipLoader
+               sizeUnit={"px"}
+               size={15}
+               color={'#17a2b8'}
+               loading={!this.state.refuzzing}
+             />
+           {' '}refetching data...
           </Alert>
         </div>
         <Row>

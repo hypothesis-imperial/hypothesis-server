@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import {
+  Alert,
   Badge,
   Nav,
   NavItem,
@@ -10,7 +11,8 @@ import {
   Card,
   CardBody,
   Table,
- } from 'reactstrap'
+} from 'reactstrap';
+import { ClipLoader } from 'react-spinners';
 
 import Fail from './Fail';
 import Pass from './Pass';
@@ -22,6 +24,7 @@ class RepoInfo extends Component {
     this.toggle = this.toggle.bind(this);
     this.state = {
       activeTab: '0',
+      refuzzing: false,
     };
   }
 
@@ -34,6 +37,13 @@ class RepoInfo extends Component {
       }
     }
     this.setState({ activeTab: n });
+
+    //alert for refuzzing
+    if(this.props.repo.fuzzing && !newprops.repo.fuzzing) {
+      this.setState({ refuzzing: true });
+    } else {
+      this.setState({ refuzzing: false });
+    }
   }
 
   toggle(tab) {
@@ -99,6 +109,7 @@ class RepoInfo extends Component {
       );
   }
 
+
   render() {
     const repo = this.props.repo;
     const states = (
@@ -140,12 +151,30 @@ class RepoInfo extends Component {
       </Card>
     );
 
+    const refuzzing = (
+      <Alert color="warning" isOpen={this.state.refuzzing}>
+        <ClipLoader
+           sizeUnit={"px"}
+           size={15}
+           color={'#ffc107'}
+           loading={this.state.refuzzing}
+         />
+       {' '}refuzzing...
+      </Alert>
+    );
+
     if(!repo.hasOwnProperty('fail') &&
       !repo.hasOwnProperty('pass')) {
-      return(<div>{states}</div>);
+      return(
+        <div>
+          {refuzzing}
+          {states}
+        </div>
+      );
     } else {
       return (
         <div>
+          {refuzzing}
           {states}
           <Nav tabs>
             {this.failtest_tabs()}

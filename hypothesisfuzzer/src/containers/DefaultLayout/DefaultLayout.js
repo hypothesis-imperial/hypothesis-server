@@ -7,9 +7,6 @@ import {
   AppFooter,
   AppHeader,
   AppSidebar,
-  AppSidebarFooter,
-  AppSidebarForm,
-  AppSidebarHeader,
   AppSidebarNav,
 } from '@coreui/react';
 // routes config
@@ -57,10 +54,7 @@ class DefaultLayout extends Component {
         </AppHeader>
         <div className="app-body">
           <AppSidebar fixed display="lg">
-            <AppSidebarHeader />
-            <AppSidebarForm />
             <AppSidebarNav navConfig={navigation} {...this.props} />
-            <AppSidebarFooter  />
           </AppSidebar>
           <main style={{ backgroundColor: "#F6F5F5" }} className="main">
             <Row>

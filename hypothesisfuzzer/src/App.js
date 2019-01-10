@@ -5,7 +5,6 @@ import { DefaultLayout } from './containers';
 import './scss/App.scss';
 import '@coreui/coreui';
 
-
 class App extends Component {
   state = {
     repos: [],
@@ -42,7 +41,7 @@ class App extends Component {
   render() {
     const repos = this.state.repos;
     const stats = this.state.stats;
-    
+
     //wait until data been fetched
     if(repos.length === 0) {
       return null;
