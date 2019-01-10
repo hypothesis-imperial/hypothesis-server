@@ -24,7 +24,6 @@ class RepoInfo extends Component {
     this.toggle = this.toggle.bind(this);
     this.state = {
       activeTab: '0',
-      refuzzing: false,
     };
   }
 
@@ -37,13 +36,6 @@ class RepoInfo extends Component {
       }
     }
     this.setState({ activeTab: n });
-
-    //alert for refuzzing
-    if(this.props.repo.fuzzing && !newprops.repo.fuzzing) {
-      this.setState({ refuzzing: true });
-    } else {
-      this.setState({ refuzzing: false });
-    }
   }
 
   toggle(tab) {
@@ -151,6 +143,7 @@ class RepoInfo extends Component {
       </Card>
     );
 
+    // refuzzing for fuzzing == false && ready ==true
     const IsRefuzzing = (!this.props.repo.fuzzing && this.props.repo.ready);
 
     const refuzzing = (
@@ -159,7 +152,7 @@ class RepoInfo extends Component {
            sizeUnit={"px"}
            size={15}
            color={'#ffc107'}
-           loading={this.state.refuzzing}
+           loading={IsRefuzzing}
          />
        {' '}refuzzing...
       </Alert>

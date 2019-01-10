@@ -36,6 +36,7 @@ class Dashboard extends Component {
   }
 
   componentWillReceiveProps(newprops) {
+    this.setState({ repos: newprops.repos });
     this.setState({ loading: true });
     this.timer = setTimeout(() => { this.setState({ loading: false }) }, 1000);
   }
