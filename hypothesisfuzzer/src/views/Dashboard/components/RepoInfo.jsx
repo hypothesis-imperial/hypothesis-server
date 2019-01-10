@@ -151,8 +151,10 @@ class RepoInfo extends Component {
       </Card>
     );
 
+    const IsRefuzzing = (!this.props.repo.fuzzing && this.props.repo.ready);
+
     const refuzzing = (
-      <Alert color="warning" isOpen={this.state.refuzzing}>
+      <Alert color="warning" isOpen={IsRefuzzing}>
         <ClipLoader
            sizeUnit={"px"}
            size={15}
@@ -167,15 +169,21 @@ class RepoInfo extends Component {
       !repo.hasOwnProperty('pass')) {
       return(
         <div>
-          {refuzzing}
           {states}
+        </div>
+      );
+    } else if(IsRefuzzing) {
+      return(
+        <div>
+          {states}
+          {refuzzing}
         </div>
       );
     } else {
       return (
         <div>
-          {refuzzing}
           {states}
+          {refuzzing}
           <Nav tabs>
             {this.failtest_tabs()}
             {this.passtest_tabs()}
