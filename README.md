@@ -63,6 +63,7 @@ To get started fuzzing, add a webhook to your GitHub repository pointing to the 
 * **David Kurniadi Angdinata** [Multramate](https://github.com/Multramate)
 * **Cassie Ying** [cassie-ying](https://github.com/cassie-ying)
 * **Lan Yi** [lanyielaine](https://github.com/lanyielaine)
+* **Zicong Ma** [zicongma](https://github.com/zicongma)
 
 See also the list of [contributors](https://github.com/hypothesis-imperial/hypothesis-server/contributors) who participated in this project.
 
